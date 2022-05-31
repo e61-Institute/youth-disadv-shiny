@@ -1,0 +1,5 @@
+.radial { background: rgb(255,255,255);
+                                    background: linear-gradient(200deg, 
+                                    rgba(255,255,255,0.8099614845938375) 0%, 
+                                    rgba(0,48,57,1) 25%);
+                                  }
