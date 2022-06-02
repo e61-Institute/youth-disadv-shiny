@@ -13,10 +13,12 @@ ui <- shinyUI(
     tags$head(
       tags$link(rel = "stylesheet", type = "text/css", href = "style.css"),
     ),
+    
+    # Title and subtitle
     fluidRow(column(
       fluidRow(column(
         h1(
-          "Tracking the COVID-19 recovery for Australia's vulnerable youth:",
+          "Tracking Australia's vulnerable youth in the COVID-19 recovery",
           id = "main-title"
         ),
         width = 8,
@@ -31,6 +33,7 @@ ui <- shinyUI(
     ),
     class = "mb-5 radial"),
     
+    # Section 1
     fluidRow(column(
       h6("The pandemic recovery has left behind vulnerable groups", class = "display-6"),
       fluidRow(
@@ -43,7 +46,7 @@ ui <- shinyUI(
             class = "card",
             style = ""
           ),
-          width = 6,
+          width = 5,
           class = "m-2"
         ),
         
@@ -56,7 +59,7 @@ ui <- shinyUI(
             class = "card",
             style = ""
           ),
-          width = 6,
+          width = 5,
           class = "m-2"
         )
         
@@ -65,6 +68,7 @@ ui <- shinyUI(
     ),
     class = "m-3 justify-content-center"),
     
+    # Section 2
     fluidRow(
       column(
         h6("Job mismatch is exacerbated by recessions", class = "display-6"),
@@ -77,7 +81,7 @@ ui <- shinyUI(
             class = "card",
             style = ""
           ),
-          width = 6,
+          width = 5,
           class = "m-2"
         ),
         column(
@@ -89,7 +93,7 @@ ui <- shinyUI(
             class = "card",
             style = ""
           ),
-          width = 6,
+          width = 5,
           class = "m-2"
         )),
         width = 12,
@@ -97,6 +101,7 @@ ui <- shinyUI(
       )
     ),
     
+    # Section 3
     fluidRow(
       column(
         h6("Outcomes have worsened for the long - term unemployed", class = "display-6"),
@@ -109,7 +114,7 @@ ui <- shinyUI(
             class = "card",
             style = ""
           ),
-          width = 6,
+          width = 5,
           class = "m-2"
         ),
         column(
@@ -121,7 +126,7 @@ ui <- shinyUI(
             class = "card",
             style = ""
           ),
-          width = 6,
+          width = 5,
           class = "m-2"
         )),
         width = 12,
@@ -129,6 +134,7 @@ ui <- shinyUI(
       )
     ),
     
+    # Section 4
     fluidRow(
       column(
         h6("... and those in disadvantaged areas", class = "display-6"),
@@ -141,7 +147,7 @@ ui <- shinyUI(
             class = "card",
             style = ""
           ),
-          width = 6,
+          width = 5,
           class = "m-2"
         )),
         width = 12,
@@ -149,6 +155,7 @@ ui <- shinyUI(
       )
     ),
     
+    # Section 5
     fluidRow(
       column(
         h6("Youth NEET in disadvantaged areas is of concern", class = "display-6"),
@@ -161,7 +168,7 @@ ui <- shinyUI(
             class = "card",
             style = ""
           ),
-          width = 6,
+          width = 5,
           class = "m-2"
         )),
         width = 12,
@@ -169,6 +176,7 @@ ui <- shinyUI(
       )
     ),
     
+    # Section 6
     fluidRow(
       column(
         h6("What opportuntities are there to exit disadvantage", class = "display-6"),
@@ -181,7 +189,7 @@ ui <- shinyUI(
             class = "card",
             style = ""
           ),
-          width = 6,
+          width = 5,
           class = "m-2"
         )),
         width = 12,
