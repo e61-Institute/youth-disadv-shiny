@@ -8,7 +8,7 @@ mpg <- read.csv("http://goo.gl/uEeRGu")
 ui <- shinyUI(
   fluidPage(
     theme = bs_theme(version = 5,
-                     bg = "#003039",
+                     bg = "#008080",
                      fg = "#ffffff"),
     tags$head(
       tags$link(rel = "stylesheet", type = "text/css", href = "style.css"),
