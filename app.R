@@ -15,17 +15,15 @@ ui <- shinyUI(
     ),
     fluidRow(column(
       fluidRow(column(
-        h1("Tracking the COVID-19 Recovery:", class = "display-1"),
+        h1(
+          "Tracking the COVID-19 recovery for Australia's vulnerable youth:",
+          id = "main-title"
+        ),
         width = 8,
         offset = 2
       )),
       fluidRow(column(
-        h1("Vulnerable Youth", class = "display-1"),
-        width = 8,
-        offset = 2
-      )),
-      fluidRow(column(
-        h6("The e61 Institute and The Paul Ramsay Foundation", class = "h6"),
+        h6("The e61 Institute and The Paul Ramsay Foundation", id = "author-title"),
         width = 8,
         offset = 2
       )),
@@ -38,14 +36,14 @@ ui <- shinyUI(
       fluidRow(
         column(
           div(
-            plotOutput(outputId = "mpg"),
+            img(src = "unemployment and E-to-P aggregates.png"),
             div(h5("Graph Here"),
                 p("Graph blurb wow"),
                 class = "card-body"),
             class = "card",
             style = ""
           ),
-          width = 5,
+          width = 6,
           class = "m-2"
         ),
         
@@ -58,7 +56,7 @@ ui <- shinyUI(
             class = "card",
             style = ""
           ),
-          width = 5,
+          width = 6,
           class = "m-2"
         )
         
@@ -72,10 +70,22 @@ ui <- shinyUI(
         h6("Job mismatch is exacerbated by recessions", class = "display-6"),
         fluidRow(column(
           div(
-            img(src = "artworks-XJdVplPCbvDvJlH7-jF9c4A-t500x500.jpg"),
+            img(src = "job mobility rate aggregates.png"),
             div(h5("Graph Here"),
                 p("Graph blurb wow"),
-                class = "card-body -2"),
+                class = "card-body-2"),
+            class = "card",
+            style = ""
+          ),
+          width = 6,
+          class = "m-2"
+        ),
+        column(
+          div(
+            img(src = "job mobility rate aggregates.png"),
+            div(h5("Graph Here"),
+                p("Graph blurb wow"),
+                class = "card-body-2"),
             class = "card",
             style = ""
           ),
@@ -83,7 +93,7 @@ ui <- shinyUI(
           class = "m-2"
         )),
         width = 12,
-        class = " m-3 justify-content-center "
+        class = "m-3 justify-content-center"
       )
     ),
     
@@ -92,10 +102,22 @@ ui <- shinyUI(
         h6("Outcomes have worsened for the long - term unemployed", class = "display-6"),
         fluidRow(column(
           div(
-            img(src = "artworks-XJdVplPCbvDvJlH7-jF9c4A-t500x500.jpg"),
+            img(src = "duration unemployed shares.png"),
             div(h5("Graph Here"),
                 p("Graph blurb wow"),
-                class = "card-body "),
+                class = "card-body"),
+            class = "card",
+            style = ""
+          ),
+          width = 6,
+          class = "m-2"
+        ),
+        column(
+          div(
+            img(src = "youth unemployment sa4 map.png"),
+            div(h5("Graph Here"),
+                p("Graph blurb wow"),
+                class = "card-body"),
             class = "card",
             style = ""
           ),
@@ -103,7 +125,7 @@ ui <- shinyUI(
           class = "m-2"
         )),
         width = 12,
-        class = "m-3 justify-content-center "
+        class = "m-3 justify-content-center"
       )
     ),
     
@@ -115,7 +137,7 @@ ui <- shinyUI(
             img(src = "artworks-XJdVplPCbvDvJlH7-jF9c4A-t500x500.jpg"),
             div(h5("Graph Here"),
                 p("Graph blurb wow"),
-                class = "card-body -2"),
+                class = "card-body-2"),
             class = "card",
             style = ""
           ),
@@ -123,7 +145,7 @@ ui <- shinyUI(
           class = "m-2"
         )),
         width = 12,
-        class = " m-3 justify-content-center  "
+        class = "m-3 justify-content-center"
       )
     ),
     
@@ -135,7 +157,7 @@ ui <- shinyUI(
             img(src = "artworks-XJdVplPCbvDvJlH7-jF9c4A-t500x500.jpg"),
             div(h5("Graph Here"),
                 p("Graph blurb wow"),
-                class = "card-body "),
+                class = "card-body"),
             class = "card",
             style = ""
           ),
@@ -163,7 +185,7 @@ ui <- shinyUI(
           class = "m-2"
         )),
         width = 12,
-        class = "m-3 justify-content-center  "
+        class = "m-3 justify-content-center"
       )
     ),
   )
