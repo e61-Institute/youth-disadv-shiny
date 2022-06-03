@@ -4,11 +4,10 @@ library(sf)
 library(leaflet)
 library(data.table)
 library(magrittr)
-library(tmap)
 library(tidyverse)
 
 theme_set(theme_bw())
-df <- st_read("data/jobcreation.shp")
+df <- st_read("./data/jobcreation.shp")
 
 ui <- shinyUI(
   fluidPage(
@@ -246,14 +245,20 @@ ui <- shinyUI(
 )
 
 server <- function(input, output, session) {
-  output$map <- renderTmap({
+  # output$map <- renderTmap({
+  #   data_map <- subset(df, indstry == input$name)
+  #   tmap_mode("view")
+  #   tm_shape(data_map) +
+  #     tm_polygons("net",
+  #                 style = "cont",
+  #                 palette = "RdYlBu")
+  #   
+  # })
+  
+  output$map <- renderLeaflet({
     data_map <- subset(df, indstry == input$name)
-    tmap_mode("view")
-    tm_shape(data_map) +
-      tm_polygons("net",
-                  style = "cont",
-                  palette = "RdYlBu")
-    
+    leaflet(data_map) %>% 
+      addPolygons(fillColor = ~colorBin("RdYlBu", net))
   })
   
   
