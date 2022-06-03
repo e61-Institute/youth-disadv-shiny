@@ -54,19 +54,6 @@ ui <- shinyUI(
           class = "m-2"
         ),
         
-        column(
-          div(
-            img(src = "artworks-XJdVplPCbvDvJlH7-jF9c4A-t500x500.jpg"),
-            div(h5("Graph Here"),
-                p("Graph blurb wow"),
-                class = "card-body"),
-            class = "card",
-            style = ""
-          ),
-          width = 5,
-          class = "m-2"
-        )
-        
       ),
       width = 12,
     ),
@@ -239,7 +226,7 @@ ui <- shinyUI(
           width = 7,
           class = "m-2"
         )
-      )
+      ), width = 12
     ))
   )
 )
