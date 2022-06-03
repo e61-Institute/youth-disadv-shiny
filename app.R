@@ -191,7 +191,7 @@ ui <- shinyUI(
       fluidRow(
         column(
           div(
-            tmapOutput("map"),
+            leafletOutput("map"),
             div(
               h5("Net Jobs Created by Area"),
               p("Per 1000 Workers between 2002 - 2021"),
@@ -232,20 +232,20 @@ ui <- shinyUI(
 )
 
 server <- function(input, output, session) {
-  # output$map <- renderTmap({
-  #   data_map <- subset(df, indstry == input$name)
-  #   tmap_mode("view")
-  #   tm_shape(data_map) +
-  #     tm_polygons("net",
-  #                 style = "cont",
-  #                 palette = "RdYlBu")
-  #   
-  # })
-  
+
   output$map <- renderLeaflet({
     data_map <- subset(df, indstry == input$name)
+    
+    pal <- colorBin("RdYlBu", domain = data_map$net)
+    
     leaflet(data_map) %>% 
-      addPolygons(fillColor = ~colorBin("RdYlBu", net))
+      addProviderTiles("Stamen.TonerLite") %>% 
+      addPolygons(
+        opacity = 1, fillOpacity = 0.7,
+        weight = 2, color = "#999999",
+        fillColor = ~pal(net),
+        highlightOptions = highlightOptions(color = "#444444", weight = 3, bringToFront = TRUE)) %>% 
+      addLegend(pal = pal, values = ~net, opacity = 0.7, title = NULL, position = "bottomright")
   })
   
   
