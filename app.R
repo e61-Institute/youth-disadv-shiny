@@ -14,6 +14,7 @@ theme_set(theme_bw())
 
 
 
+
 # read in data
 df_map <- st_read("data/jobcreation.shp")
 df_unemp <- read_csv("data/unemployment and E-to-P aggregates.csv")
@@ -22,10 +23,6 @@ df_job_mobility <- read_csv("data/job mobility rate aggregates.csv")
 df_duration <- read_csv("data/duration unemployed shares.csv")
 df_map2 <- st_read("data/youth unemployment sa4 map.shp")
 df_map2 <- df_map2[!is.na(df_map2$date),]
-
-
-
-
 
 
 ui <- shinyUI(
@@ -384,6 +381,7 @@ ui <- shinyUI(
                       unique(df_map$indstry)),
           tmapOutput("map"),
             
+
           ),
         br(),
         p("Source: BLADE Data Industries with less than 10 firms excluded", 
@@ -439,6 +437,7 @@ ui <- shinyUI(
  
 
 server <- function(input, output, session) {
+
   
   chart_bg_color <-'black'
   chart_text_color <- 'white'
@@ -469,6 +468,7 @@ server <- function(input, output, session) {
       font = list(color = chart_text_color)
     )
   
+
   })
   
   # Section 2
