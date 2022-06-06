@@ -9,7 +9,6 @@ library(magrittr)
 library(tidyverse)
 library(plotly)
 library(shinyWidgets)
-library(tmap)
 theme_set(theme_bw())
 
 # read in data
@@ -240,7 +239,7 @@ ui <- shinyUI(
               #  img(src = "youth unemployment sa4 map.png",
               #     width = "60%",
               #     height = "60%"),
-              tmapOutput("map2"),
+              leafletOutput("map2"),
                
               
             ),
