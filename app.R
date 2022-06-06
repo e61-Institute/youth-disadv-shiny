@@ -375,9 +375,7 @@ ui <- shinyUI(
           selectInput("name",
                       "Select industry",
                       unique(df_map$indstry)),
-          tmapOutput("map"),
-            
-
+          leafletOutput("map"),
           ),
         br(),
         p("Source: BLADE Data Industries with less than 10 firms excluded", 
