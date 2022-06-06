@@ -25,18 +25,9 @@ ui <- shinyUI(
     theme = bs_theme(version = 5,
                      bg = "#303233",
                      fg = "#ffffff"),
-    # tags$head(
-    #   tags$link(rel = "stylesheet", type = "text/css", href = "style.css"),
-    # ),
-    
-   tags$head(
-      tags$style(HTML('.card {
-                       background-color: black;
-                       box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-                       }')
-                 )
-      ),
-    
+    tags$head(
+      tags$link(rel = "stylesheet", type = "text/css", href = "style.css"),
+    ),
     
     # Title and subtitle
     fluidRow(column(
