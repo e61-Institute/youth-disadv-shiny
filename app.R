@@ -6,23 +6,21 @@ library(sf)
 library(leaflet)
 library(data.table)
 library(magrittr)
-library(tmap)
 library(tidyverse)
 library(plotly)
 library(shinyWidgets)
-
+library(tmap)
 theme_set(theme_bw())
 
-# set local_data_folder
-local_data_folder <- "C:/Users/sport/Documents/e61 data vis/General/Data/"
+
 
 # read in data
-df_map <- st_read(paste0(local_data_folder,"shiny-data/jobcreation.shp"))
-df_unemp <- read_csv(paste0(local_data_folder,"shiny-data/unemployment and E-to-P aggregates.csv"))
+df_map <- st_read("data/jobcreation.shp")
+df_unemp <- read_csv("data/unemployment and E-to-P aggregates.csv")
 # df_neet <- read_csv(paste0(local_data_folder,"Matt/neet_entry_and_exit_rate.csv"))
-df_job_mobility <- read_csv(paste0(local_data_folder, "shiny-data/job mobility rate aggregates.csv"))
-df_duration <- read_csv(paste0(local_data_folder, "shiny-data/duration unemployed shares.csv"))
-df_map2 <- st_read(paste0(local_data_folder,"shiny-data/youth unemployment sa4 map.shp"))
+df_job_mobility <- read_csv("data/job mobility rate aggregates.csv")
+df_duration <- read_csv("data/duration unemployed shares.csv")
+df_map2 <- st_read("data/youth unemployment sa4 map.shp")
 df_map2 <- df_map2[!is.na(df_map2$date),]
 
 
@@ -632,25 +630,19 @@ server <- function(input, output, session) {
     
   })
   
-  output$map2 <- renderTmap({
+  output$map2 <- renderLeaflet({
     Unemployment <- df_map2 %>% filter(age == input$age_map, 
                                        date == input$timeline,
-                                       sex == "Total") %>% 
-      rename(`Unemployed share (%)` = value)
-    tmap_mode("view")
-    tm_shape(Unemployment) + 
-      tm_basemap(providers$Esri.WorldGrayCanvas) +
-      tm_polygons("Unemployed share (%)",
-                  style = "cont",
-                  breaks = c(0,50,100),
-                  alpha = 0.7,
-                  pallette = "-RdYlGn") + 
-      tm_layout(bg.color = chart_bg_color,
-                outer.bg.color = chart_bg_color,
-                legend.bg.alpha = 1)
+                                       sex == "Total") 
+    domain <- c(0,50)
     
-    
-   
+    pal <- colorNumeric("OrRd",domain = domain)
+    leaflet(Unemployment) %>% 
+      addPolygons(stroke = FALSE, smoothFactor = 0.2,color = ~pal(Unemployment$value),
+                  fillOpacity = 0.7) %>%
+      addProviderTiles(providers$Esri.WorldGrayCanvas) %>%
+      addLegend("bottomright",opacity = 1, pal = pal,values=~domain, title = "Unemployed share (%)")
+
       
   })
   
@@ -658,23 +650,24 @@ server <- function(input, output, session) {
   
   # Section 6
   
-  output$map <- renderTmap({
-    `Change in jobs` <- subset(df_map, indstry == input$name) %>% 
-      rename(`Net change in jobs` = net)
-    tmap_mode("view")
-    tm_shape(`Change in jobs`) +
-      tm_basemap(providers$Esri.WorldGrayCanvas) +
-      tm_polygons("Net change in jobs",
-                  style = "cont",
-                  alpha = 0.7,
-                  palette = "RdYlGn") + 
-      tm_layout(bg.color = chart_bg_color,
-                outer.bg.color = chart_bg_color,
-                legend.bg.alpha = 1)
+  
+  output$map <- renderLeaflet({
+     
+    data_map <- subset(df_map, indstry == input$name) %>%
+      rename(Net = net)
     
-   
-
+    max <- max(c(abs(min(data_map$Net)),max(data_map$Net)))
+    domain <- c(-max,max)
+    
+    pal2 <- colorNumeric("RdYlGn",domain = domain)
+    leaflet(data_map) %>% 
+      addPolygons(stroke = FALSE, smoothFactor = 0.2,color = ~pal2(data_map$Net),
+                  fillOpacity = 0.7) %>%
+      addProviderTiles(providers$Esri.WorldGrayCanvas) %>%
+      addLegend("bottomright",opacity = 1, pal = pal2,values=~domain, title = "Net Change in Jobs")
+    
   })
+  
 
 
   output$table <- renderDataTable({
