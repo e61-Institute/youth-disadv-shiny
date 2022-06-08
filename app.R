@@ -9,7 +9,9 @@ library(plotly)
 library(shinyWidgets)
 theme_set(theme_bw())
 
-# read in data
+
+# Read in data ------------------------------------------------------------
+
 df_map <- st_read("data/jobcreation.shp")
 df_unemp <- read_csv("data/unemployment and E-to-P aggregates.csv")
 # df_neet <- read_csv(paste0(local_data_folder,"Matt/neet_entry_and_exit_rate.csv"))
@@ -17,6 +19,11 @@ df_job_mobility <- read_csv("data/job mobility rate aggregates.csv")
 df_duration <- read_csv("data/duration unemployed shares.csv")
 df_map2 <- st_read("data/youth unemployment sa4 map.shp")
 df_map2 <- df_map2[!is.na(df_map2$date),]
+
+
+# UI ----------------------------------------------------------------------
+
+
 
 ui <- shinyUI(
   fluidPage(
@@ -62,10 +69,10 @@ ui <- shinyUI(
                     fluidRow(
                       class = "card-body",
                       column(6,
-                      selectInput('measure', 'Select measure:', 
+                      selectInput("measure", "Select measure:", 
                                   choices = unique(df_unemp$measure))),
                       column(6,
-                      checkboxGroupInput('ages', 'Select age groups:',
+                      checkboxGroupInput("ages", "Select age groups:",
                                          choices = unique(df_unemp$age_group),
                                          selected = c("Total", "15-24 years"))),
                     ),
@@ -142,7 +149,7 @@ ui <- shinyUI(
               #img(src = "job mobility rate aggregates.png"),
               plotlyOutput("job_mobility"),
                   div(
-                  checkboxGroupInput('ages_jm', 'Select age groups:',
+                  checkboxGroupInput("ages_jm", "Select age groups:",
                                    choices = unique(df_job_mobility$age_group),
                                    selected = c("Total", "15-24 years")),
                   class = "card-body"),
@@ -426,15 +433,13 @@ ui <- shinyUI(
  
             
            
-        
-     
-      
- 
+
+# Server  -----------------------------------------------------------------
 
 server <- function(input, output, session) {
 
-  chart_bg_color <-'black'
-  chart_text_color <- 'white'
+  chart_bg_color <- "black"
+  chart_text_color <- "white"
   
   # Section 1
  
@@ -454,8 +459,8 @@ server <- function(input, output, session) {
       margin = list(l = 70, r = 50, t = 50, b = 100),
       annotations = list(text = "Source: ABS (2022), Labour Force, Detailed",
                          showarrow = F,
-                         xref = 'paper', x = 0,
-                         yref = 'paper', y = -.35,
+                         xref = "paper", x = 0,
+                         yref = "paper", y = -.35,
                          font = list(size = 10, color = "grey")),
       paper_bgcolor = chart_bg_color,
       plot_bgcolor = chart_bg_color,
@@ -483,8 +488,8 @@ server <- function(input, output, session) {
       margin = list(l = 70, r = 50, t = 50, b = 100),
       annotations = list(text = "Source: [INSERT SOURCE]",
                          showarrow = F,
-                         xref = 'paper', x = 0,
-                         yref = 'paper', y = -.35,
+                         xref = "paper", x = 0,
+                         yref = "paper", y = -.35,
                          font = list(size = 10, color = "grey")),
       paper_bgcolor = chart_bg_color,
       plot_bgcolor= chart_bg_color,
@@ -554,8 +559,8 @@ server <- function(input, output, session) {
       margin = list(l = 70, r = 50, t = 50, b = 100),
       annotations = list(text = "Source: [INSERT SOURCE]",
                          showarrow = F,
-                         xref = 'paper', x = 0,
-                         yref = 'paper', y = -.35,
+                         xref = "paper", x = 0,
+                         yref = "paper", y = -.35,
                          font = list(size = 10, color = "grey")),
       paper_bgcolor = chart_bg_color,
       paper_bgcolor = chart_bg_color,
