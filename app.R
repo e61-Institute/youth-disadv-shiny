@@ -111,7 +111,7 @@ ui <- shinyUI(
               div(
                 h5("Graduate Mismatch in 2015 vs 2020"),
                 p("Source: QILT Survey"),
-                class = "card-body -2"
+                class = "card-body-2"
               ),
               
             ),
@@ -193,7 +193,7 @@ ui <- shinyUI(
                   selectInput("age_dur_2", "Select second age group:",
                               choices = unique(df_duration$age_group),
                               selected = "Total")),
-                  class = "card-body "),
+                  class = "card-body"),
               
             ),
             
@@ -284,7 +284,7 @@ ui <- shinyUI(
             div(
               h5("Graduate outcomes for disadvantaged students"),
               p("Source: QILT Survey"),
-              class = "card-body -2"
+              class = "card-body-2"
             ),
             
           ),
@@ -297,7 +297,7 @@ ui <- shinyUI(
             div(
               h5("Youth unemployment and household disadvantage"),
               p("Source: ABS"),
-              class = "card-body -2"
+              class = "card-body-2"
             ),
             
           ),
@@ -337,7 +337,7 @@ ui <- shinyUI(
             div(
               h5("Growing disparity across regions"),
               p("Source: HILDA"),
-              class = "card-body "
+              class = "card-body"
             ),
             
           ),
