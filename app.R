@@ -1,5 +1,3 @@
-
-rm(list = ls())
 library(shiny)
 library(bslib)
 library(sf)
@@ -9,11 +7,7 @@ library(magrittr)
 library(tidyverse)
 library(plotly)
 library(shinyWidgets)
-library(tmap)
 theme_set(theme_bw())
-
-
-
 
 # read in data
 df_map <- st_read("data/jobcreation.shp")
@@ -24,24 +18,14 @@ df_duration <- read_csv("data/duration unemployed shares.csv")
 df_map2 <- st_read("data/youth unemployment sa4 map.shp")
 df_map2 <- df_map2[!is.na(df_map2$date),]
 
-
 ui <- shinyUI(
   fluidPage(
     theme = bs_theme(version = 5,
                      bg = "#303233",
                      fg = "#ffffff"),
-    # tags$head(
-    #   tags$link(rel = "stylesheet", type = "text/css", href = "style.css"),
-    # ),
-    
-   tags$head(
-      tags$style(HTML('.card {
-                       background-color: black;
-                       box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-                       }')
-                 )
-      ),
-    
+    tags$head(
+      tags$link(rel = "stylesheet", type = "text/css", href = "style.css"),
+    ),
     
     # Title and subtitle
     fluidRow(column(
@@ -127,7 +111,7 @@ ui <- shinyUI(
               div(
                 h5("Graduate Mismatch in 2015 vs 2020"),
                 p("Source: QILT Survey"),
-                class = "card-body -2"
+                class = "card-body-2"
               ),
               
             ),
@@ -209,7 +193,7 @@ ui <- shinyUI(
                   selectInput("age_dur_2", "Select second age group:",
                               choices = unique(df_duration$age_group),
                               selected = "Total")),
-                  class = "card-body "),
+                  class = "card-body"),
               
             ),
             
@@ -244,7 +228,7 @@ ui <- shinyUI(
               #  img(src = "youth unemployment sa4 map.png",
               #     width = "60%",
               #     height = "60%"),
-              tmapOutput("map2"),
+              leafletOutput("map2"),
                
               
             ),
@@ -300,7 +284,20 @@ ui <- shinyUI(
             div(
               h5("Graduate outcomes for disadvantaged students"),
               p("Source: QILT Survey"),
-              class = "card-body -2"
+              class = "card-body-2"
+            ),
+            
+          ),
+          div(
+            img(
+              src = "youth-ihad-unemployment.png",
+              width = "75%",
+              height = "75%"
+            ),
+            div(
+              h5("Youth unemployment and household disadvantage"),
+              p("Source: ABS"),
+              class = "card-body-2"
             ),
             
           ),
@@ -340,7 +337,7 @@ ui <- shinyUI(
             div(
               h5("Growing disparity across regions"),
               p("Source: HILDA"),
-              class = "card-body "
+              class = "card-body"
             ),
             
           ),
@@ -379,9 +376,7 @@ ui <- shinyUI(
           selectInput("name",
                       "Select industry",
                       unique(df_map$indstry)),
-          tmapOutput("map"),
-            
-
+          leafletOutput("map"),
           ),
         br(),
         p("Source: BLADE Data Industries with less than 10 firms excluded", 
@@ -438,7 +433,6 @@ ui <- shinyUI(
 
 server <- function(input, output, session) {
 
-  
   chart_bg_color <-'black'
   chart_text_color <- 'white'
   
