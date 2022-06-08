@@ -288,6 +288,19 @@ ui <- shinyUI(
             ),
             
           ),
+          div(
+            img(
+              src = "youth-ihad-unemployment.png",
+              width = "75%",
+              height = "75%"
+            ),
+            div(
+              h5("Youth unemployment and household disadvantage"),
+              p("Source: ABS"),
+              class = "card-body -2"
+            ),
+            
+          ),
           
         ),
         
