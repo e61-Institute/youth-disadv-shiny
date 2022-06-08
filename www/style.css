@@ -1,7 +1,7 @@
-/* .radial { 
-  background: rgb(255,255,255);
-  background: linear-gradient(200deg, rgba(255,255,255,0.8099614845938375) 0%, rgba(0,128,128,1) 25%);
-}*/
+.card {
+  background-color: black;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
   
 #main-title {
   font-weight: 700;
