@@ -447,7 +447,7 @@ server <- function(input, output, session) {
   
     req(input$ages)
   
-    ue_graph <- df_unemp %>% filter(measure == input$measure, age_group == input$ages) %>%
+    ue_graph <- df_unemp %>% filter(measure == input$measure, age_group == input$ages, date > "2000-01-01") %>%
       plot_ly(x = ~date, y = ~value, split = ~age_group, type = "scatter", mode = "lines")
     
     ue_graph <- ue_graph %>% layout(
