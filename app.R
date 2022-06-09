@@ -19,6 +19,11 @@ df_duration <- read_csv("data/duration unemployed shares.csv")
 df_map2 <- st_read("data/youth unemployment sa4 map.shp")
 df_map2 <- df_map2[!is.na(df_map2$date),]
 df_occupation <- read_csv("data/two_digit_occupation_by_age.csv")
+df_occupation_area <- st_read("data/occupation_area.shp") %>%
+  rename(Area = SA3_nam, Percent = prcnt_t, Occupation = two_nam) %>%
+  group_by(Area,age)%>%
+  summarize(Percent  = sum(Percent),
+            Occupation = paste0(Occupation, collapse = " , <br/>"))
 
 # UI ----------------------------------------------------------------------
 
@@ -415,6 +420,21 @@ Job mobility (the share of workers changing jobs in the past year) has increased
             style = "font-size:10pt; color:grey"),
           ),
       ),
+      fluidRow(
+        column(width = 8, class = "m-2",
+               div(
+                 h5("Top 3 occupations worked by Youth (19-29) in region"),
+                 p(em("SA3 level")),
+                 selectInput("age_area",
+                             "Select Age",
+                             unique(df_occupation_area$age)),
+                 leafletOutput("area_occupation")
+               ),
+               br(),
+               p("Source: MADIP ATO extracts FY20", 
+                 style = "font-size:10pt; color:grey"),
+        ),
+      ),
         ),
       ),
    
@@ -678,6 +698,32 @@ server <- function(input, output, session) {
                   fillOpacity = 0.7) %>%
       addProviderTiles(providers$Esri.WorldGrayCanvas) %>%
       addLegend("bottomright",opacity = 1, pal = pal2,values=~domain, title = "Net Change in Jobs")
+    
+  })
+  
+  output$area_occupation <- renderLeaflet({
+    
+    data_map <- subset(df_occupation_area, age = input$age_area) 
+    
+    pal <- colorNumeric(
+      palette = "Blues",
+      domain = data_map$Percent)
+    
+    labels <- sprintf(
+      "<strong>%s</strong><br/>%s",
+      data_map$Area, data_map$Occupation
+    ) %>% lapply(htmltools::HTML)
+    
+    leaflet(data_map) %>% 
+      addPolygons(stroke = FALSE, smoothFactor = 0.2,color = ~pal(Percent),
+                  fillOpacity = 0.7,
+                  label = labels,
+                  labelOptions =labelOptions(style = list("font-weight" = "normal", padding = "3px 8px"),
+                                             textsize = "15px",
+                                             direction = "auto")) %>%
+      addProviderTiles(providers$Esri.WorldGrayCanvas) %>%
+      addLegend(pal = pal, values = ~Percent, opacity = 0.5, title = " % Total Employment", position = "bottomright")
+      
     
   })
   
