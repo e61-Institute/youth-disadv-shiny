@@ -285,7 +285,7 @@ ui <- shinyUI(
               h5("Graduate outcomes for disadvantaged students"),
               p("Source: QILT Survey"),
               class = "card-body-2"
-            ),
+              ),
             
           ),
           div(
@@ -298,19 +298,6 @@ ui <- shinyUI(
               h5("Youth unemployment and household disadvantage"),
               p("Source: ABS"),
               class = "card-body-2"
-            ),
-            
-          ),
-          div(
-            img(
-              src = "youth-ihad-unemployment.png",
-              width = "75%",
-              height = "75%"
-            ),
-            div(
-              h5("Youth unemployment and household disadvantage"),
-              p("Source: ABS"),
-              class = "card-body -2"
             ),
             
           ),
