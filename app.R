@@ -9,7 +9,6 @@ library(plotly)
 library(shinyWidgets)
 theme_set(theme_bw())
 
-
 # Read in data ------------------------------------------------------------
 
 df_map <- st_read("data/jobcreation.shp")
@@ -19,7 +18,7 @@ df_job_mobility <- read_csv("data/job mobility rate aggregates.csv")
 df_duration <- read_csv("data/duration unemployed shares.csv")
 df_map2 <- st_read("data/youth unemployment sa4 map.shp")
 df_map2 <- df_map2[!is.na(df_map2$date),]
-
+df_occupation <- read_csv("data/two_digit_occupation_by_age.csv")
 
 # UI ----------------------------------------------------------------------
 
@@ -165,10 +164,43 @@ Job mobility (the share of workers changing jobs in the past year) has increased
                     Suspendisse placerat, purus nec varius gravida, eros lorem."),
                  ),
         ),
+        fluidRow(
+          column(
+            width = 7, class = "m-2",
+            div(
+              #img(src = "job mobility rate aggregates.png"),
+              plotlyOutput("occupation_intensity"),
+              div(
+                selectInput('age_gp', 'Select Age', 
+                            choices = unique(df_occupation$age))),
+                class = "card-body"),
+              class = "m-2",
+              style = ""
+            ),
+          column(width = 4, class = "m-2",
+                 h6("First takeaway"),
+                 p("Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+                    Pellentesque pellentesque, erat ac maximus finibus, neque 
+                    magna accumsan eros, vitae faucibus felis velit ac enim. 
+                    Proin sit amet diam non nunc vulputate tempor a ut nibh. 
+                    Suspendisse placerat, purus nec varius gravida, eros lorem 
+                    fringilla dolor, sit amet porttitor elit nulla vel arcu. 
+                    Mauris enim diam, euismod non arcu et, consequat ultricies 
+                    mi. "),
+                 
+                 h6("Additional takeaway"),
+                 p("Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+                    Pellentesque pellentesque, erat ac maximus finibus, neque 
+                    magna accumsan eros, vitae faucibus felis velit ac enim. 
+                    Proin sit amet diam non nunc vulputate tempor a ut nibh. 
+                    Suspendisse placerat, purus nec varius gravida, eros lorem."),
+          ),
+          
+          ),
+        ),
         
       ),
-    ),
- 
+
 
     # Section 3
     fluidRow(class = "m-3 justify-content-center",
@@ -388,8 +420,7 @@ Job mobility (the share of workers changing jobs in the past year) has increased
    
    
    
-      )
-    )
+      )    )
  
             
            
@@ -451,6 +482,29 @@ server <- function(input, output, session) {
                          xref = "paper", x = 0,
                          yref = "paper", y = -.35,
                          font = list(size = 10, color = "grey")),
+      paper_bgcolor = chart_bg_color,
+      plot_bgcolor= chart_bg_color,
+      font = list(color = chart_text_color)
+    )
+  })
+  
+  output$occupation_intensity <- renderPlotly({
+    
+    req(input$age_gp)
+    
+    jm_graph <- df_occupation %>% filter(age == input$age_gp) %>% 
+      group_by(year)%>%
+      slice_max(order_by=percent_total, n= 8)%>%
+      ungroup()%>%
+      mutate(percent_total = percent_total*100)%>%
+      plot_ly(x = ~year, y = ~percent_total, color = ~two_name,type="scatter",mode = "lines") 
+    
+    jm_graph <- jm_graph %>% layout(
+      showlegend = TRUE,
+      title = "Top 8 occupations by Age Category",
+      xaxis = list(title = "Year", zeroline = FALSE, showgrid = F),
+      yaxis = list(title = "Percent Total", zeroline = FALSE, showgrid = F,ticksuffix = "%"),
+      legend = list(orientation = 'h'),
       paper_bgcolor = chart_bg_color,
       plot_bgcolor= chart_bg_color,
       font = list(color = chart_text_color)
