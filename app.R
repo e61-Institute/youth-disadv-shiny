@@ -9,7 +9,9 @@ library(plotly)
 library(shinyWidgets)
 theme_set(theme_bw())
 
-# read in data
+
+# Read in data ------------------------------------------------------------
+
 df_map <- st_read("data/jobcreation.shp")
 df_unemp <- read_csv("data/unemployment and E-to-P aggregates.csv")
 # df_neet <- read_csv(paste0(local_data_folder,"Matt/neet_entry_and_exit_rate.csv"))
@@ -17,6 +19,11 @@ df_job_mobility <- read_csv("data/job mobility rate aggregates.csv")
 df_duration <- read_csv("data/duration unemployed shares.csv")
 df_map2 <- st_read("data/youth unemployment sa4 map.shp")
 df_map2 <- df_map2[!is.na(df_map2$date),]
+
+
+# UI ----------------------------------------------------------------------
+
+
 
 ui <- shinyUI(
   fluidPage(
@@ -38,7 +45,7 @@ ui <- shinyUI(
         offset = 2
       )),
       fluidRow(column(
-        h6("The e61 Institute and The Paul Ramsay Foundation", id = "author-title"),
+        h6("e61 Institute and The Paul Ramsay Foundation", id = "author-title"),
         width = 8,
         offset = 2
       )),
@@ -52,7 +59,7 @@ ui <- shinyUI(
 
     fluidRow(class = "m-3 justify-content-center",
              column(width = 12, class = "card m-2",
-              h3("The pandemic recovery has left behind vulnerable groups"),
+              h3("The recovery from the pandemic has been uneven for vulnerable groups"),
               br(),
               fluidRow(width = 12,
                 column(width = 7, class = "m-2", style = "",
@@ -62,32 +69,25 @@ ui <- shinyUI(
                     fluidRow(
                       class = "card-body",
                       column(6,
-                      selectInput('measure', 'Select measure:', 
+                      selectInput("measure", "Select measure:", 
                                   choices = unique(df_unemp$measure))),
                       column(6,
-                      checkboxGroupInput('ages', 'Select age groups:',
+                      checkboxGroupInput("ages", "Select age groups:",
                                          choices = unique(df_unemp$age_group),
                                          selected = c("Total", "15-24 years"))),
                     ),
                   ),
                 ),
                 column(width = 4, class = "m-2",
-                  h6("First takeaway"),
-                  p("Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-                    Pellentesque pellentesque, erat ac maximus finibus, neque 
-                    magna accumsan eros, vitae faucibus felis velit ac enim. 
-                    Proin sit amet diam non nunc vulputate tempor a ut nibh. 
-                    Suspendisse placerat, purus nec varius gravida, eros lorem 
-                    fringilla dolor, sit amet porttitor elit nulla vel arcu. 
-                    Mauris enim diam, euismod non arcu et, consequat ultricies 
-                    mi. "),
+                  h6("Introduction"),
+                  p("In aggregate terms the recovery has been strong, unemployment is at historic lows, while the employment-to-population ratio is well above pre-pandemic levels. Although aggregate labour market indicators show that as a whole, the labour market is strong, including for young Australians, the recovery has been uneven for some groups of vulnerable young people, which this data visualisation will explore.
+"),
                   
-                  h6("Additional takeaway"),
-                  p("Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-                    Pellentesque pellentesque, erat ac maximus finibus, neque 
-                    magna accumsan eros, vitae faucibus felis velit ac enim. 
-                    Proin sit amet diam non nunc vulputate tempor a ut nibh. 
-                    Suspendisse placerat, purus nec varius gravida, eros lorem."),
+                  h6("Employment-to-population and unemployment"),
+                  p("The employment-to-population ratio for young Australians aged between 15-24 years is now higher than that of the total population after being below the total population rate throughout the 2010s.
+
+However, the unemployment rate for 15-24 year olds continues to be significantly higher than that for the total population, although the absolute rate has declined sharply from pandemic highs to be at the lowest level since 2008. This reflected the overrepresentation of young people in industries -- hospitality and arts and recreation services -- that were most affected by the pandemic.
+"),
         
                   ),
                 ),
@@ -98,7 +98,7 @@ ui <- shinyUI(
     # Section 2
     fluidRow(class = "m-3 justify-content-center",
       column(width = 12, class = "card m-2",
-        h3("Job mismatch is exacerbated by recessions"),
+        h3("Recessions make it harder to find the best match between workers and jobs"),
         br(),
         fluidRow(
           column(width = 7, class = "m-2",
@@ -118,14 +118,10 @@ ui <- shinyUI(
          ),
           column(width = 4, class = "m-2",
                  h6("First takeaway"),
-                 p("Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-                    Pellentesque pellentesque, erat ac maximus finibus, neque 
-                    magna accumsan eros, vitae faucibus felis velit ac enim. 
-                    Proin sit amet diam non nunc vulputate tempor a ut nibh. 
-                    Suspendisse placerat, purus nec varius gravida, eros lorem 
-                    fringilla dolor, sit amet porttitor elit nulla vel arcu. 
-                    Mauris enim diam, euismod non arcu et, consequat ultricies 
-                    mi. "),
+                 p("Recessions cause a decrease in the quality of job match for two reasons. The relative shortage of high-quality jobs in a downturn forces workers to shift down the job quality ladder and potentially take jobs to which they are less well matched. In addition, recessions often damage labour mobility prospects, which can lead recent entrants to be trapped in poorly matched jobs.  Thus, the incidence of mismatch is likely to be greater following a sustained period of weakness in the labour market.
+
+Job mobility (the share of workers changing jobs in the past year) has increased in 2022, following declines in 2020 and 2021 relative to pre-pandemic levels. The pandemic constrained the ability of workers to move location and switch to better matched jobs, hampering their ability to climb the job ladder. This effect appears to have eased, although part of the increase in mobility may represent a partial catch-up on previous years.
+"),
                  
                  h6("Additional takeaway"),
                  p("Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
@@ -142,7 +138,7 @@ ui <- shinyUI(
               #img(src = "job mobility rate aggregates.png"),
               plotlyOutput("job_mobility"),
                   div(
-                  checkboxGroupInput('ages_jm', 'Select age groups:',
+                  checkboxGroupInput("ages_jm", "Select age groups:",
                                    choices = unique(df_job_mobility$age_group),
                                    selected = c("Total", "15-24 years")),
                   class = "card-body"),
@@ -177,7 +173,7 @@ ui <- shinyUI(
     # Section 3
     fluidRow(class = "m-3 justify-content-center",
       column(width = 12, class = "m-2 card",
-        h3("Outcomes have worsened for the long-term unemployed"),
+        h3("Labour market outcomes are worse for the long-term unemployed..."),
         br(),
         fluidRow(
           column(width = 12, class = "m-2",
@@ -202,14 +198,10 @@ ui <- shinyUI(
         fluidRow(
           column(width = 6, class = "m-2",
                  h6("First takeaway"),
-                 p("Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-                    Pellentesque pellentesque, erat ac maximus finibus, neque 
-                    magna accumsan eros, vitae faucibus felis velit ac enim. 
-                    Proin sit amet diam non nunc vulputate tempor a ut nibh. 
-                    Suspendisse placerat, purus nec varius gravida, eros lorem 
-                    fringilla dolor, sit amet porttitor elit nulla vel arcu. 
-                    Mauris enim diam, euismod non arcu et, consequat ultricies 
-                    mi. ")),
+                 p("Long periods of time out of employment make it more difficult to transition back into employment. An elevated share of 15-24 year olds have been unemployed for 1 year or more relative to the total population. Although the COVID-19 recession exacerbated this problem, this was an ongoing concern well before the pandemic.
+
+[Maybe move the map to the next section]
+")),
           column(width = 5, class = "m-2",
                  h6("Additional takeaway"),
                  p("Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
@@ -271,7 +263,7 @@ ui <- shinyUI(
     # Section 4
     fluidRow(class = "m-3 justify-content-center",
       column(width = 12, class = "card m-2",
-        h3("... and those in disadvantaged areas"),
+        h3("... and for those in disadvantaged areas"),
         br(),
         fluidRow(
           column(width = 7, class = "m-2",
@@ -285,7 +277,7 @@ ui <- shinyUI(
               h5("Graduate outcomes for disadvantaged students"),
               p("Source: QILT Survey"),
               class = "card-body-2"
-            ),
+              ),
             
           ),
           div(
@@ -307,27 +299,16 @@ ui <- shinyUI(
       
       column(width = 4, class = "m-2",
              h6("First takeaway"),
-             p("Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-                    Pellentesque pellentesque, erat ac maximus finibus, neque 
-                    magna accumsan eros, vitae faucibus felis velit ac enim. 
-                    Proin sit amet diam non nunc vulputate tempor a ut nibh. 
-                    Suspendisse placerat, purus nec varius gravida, eros lorem 
-                    fringilla dolor, sit amet porttitor elit nulla vel arcu. 
-                    Mauris enim diam, euismod non arcu et, consequat ultricies 
-                    mi."),
+             p("[Something about labour market outcomes for graduates from disadvantaged backgrounds being worse than those from privileged backgrounds]"),
              
              h6("Additional takeaway"),
-             p("Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-                    Pellentesque pellentesque, erat ac maximus finibus, neque 
-                    magna accumsan eros, vitae faucibus felis velit ac enim. 
-                    Proin sit amet diam non nunc vulputate tempor a ut nibh. 
-                    Suspendisse placerat, purus nec varius gravida, eros lorem."))
+             p("Young Australians living in areas with greater household disadvantage (as measured by the ABS Index of Household Advantage and Disadvantage) tend to have more difficulty finding employment, with unemployment rates in these areas higher than more advantaged areas. These disadvantaged areas tend to be clustered in regional Australia or the outer rings of the capital cities."))
     ))),
 
     # Section 5
     fluidRow(class = "m-3 justify-content-center", 
       column(width = 12, class = "card m-2",
-        h3("Youth NEET in disadvantaged areas is of concern"),
+        h3("Youth not in employment, education or training living in disadvantaged areas are a concern"),
         br(),
         fluidRow(
           column(width = 7, class = "m-2",
@@ -346,14 +327,7 @@ ui <- shinyUI(
         
         column(width = 4, class = "m-2",
                h6("First takeaway"),
-               p("Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-                    Pellentesque pellentesque, erat ac maximus finibus, neque 
-                    magna accumsan eros, vitae faucibus felis velit ac enim. 
-                    Proin sit amet diam non nunc vulputate tempor a ut nibh. 
-                    Suspendisse placerat, purus nec varius gravida, eros lorem 
-                    fringilla dolor, sit amet porttitor elit nulla vel arcu. 
-                    Mauris enim diam, euismod non arcu et, consequat ultricies 
-                    mi. "),
+               p("The likelihood of young Australians not being in employment, education or training increases with distance from Australia's capital cities. This suggests that economic opportunities are concentrated in the capital cities, and disadvantaged areas are being further left behind."),
                
                h6("Additional takeaway"),
                p("Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
@@ -367,7 +341,7 @@ ui <- shinyUI(
     # Section 6
     fluidRow(class = "m-3 justify-content-center",
       column(width = 12, class = "card m-2",
-      h3("Exiting disadvantage and vulnerability"),
+      h3("Where are the opportunities to exit disadvantage and vulnerability?"),
       fluidRow(
         column(width = 7, class = "m-2",
         div(
@@ -385,14 +359,7 @@ ui <- shinyUI(
         column(width = 4, class = "m-2",
                br(),
                h6("First takeaway"),
-               p("Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-                    Pellentesque pellentesque, erat ac maximus finibus, neque 
-                    magna accumsan eros, vitae faucibus felis velit ac enim. 
-                    Proin sit amet diam non nunc vulputate tempor a ut nibh. 
-                    Suspendisse placerat, purus nec varius gravida, eros lorem 
-                    fringilla dolor, sit amet porttitor elit nulla vel arcu. 
-                    Mauris enim diam, euismod non arcu et, consequat ultricies 
-                    mi. "),
+               p("Employment opportunities vary by industry and across Australia. Young people living in more disadvantaged regions may have to relocate to find opportunities that best match their interests and skills."),
                
                h6("Additional takeaway"),
                p("Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
@@ -426,15 +393,13 @@ ui <- shinyUI(
  
             
            
-        
-     
-      
- 
+
+# Server  -----------------------------------------------------------------
 
 server <- function(input, output, session) {
 
-  chart_bg_color <-'black'
-  chart_text_color <- 'white'
+  chart_bg_color <- "black"
+  chart_text_color <- "white"
   
   # Section 1
  
@@ -442,7 +407,7 @@ server <- function(input, output, session) {
   
     req(input$ages)
   
-    ue_graph <- df_unemp %>% filter(measure == input$measure, age_group == input$ages) %>%
+    ue_graph <- df_unemp %>% filter(measure == input$measure, age_group == input$ages, date > "2000-01-01") %>%
       plot_ly(x = ~date, y = ~value, split = ~age_group, type = "scatter", mode = "lines")
     
     ue_graph <- ue_graph %>% layout(
@@ -454,8 +419,8 @@ server <- function(input, output, session) {
       margin = list(l = 70, r = 50, t = 50, b = 100),
       annotations = list(text = "Source: ABS (2022), Labour Force, Detailed",
                          showarrow = F,
-                         xref = 'paper', x = 0,
-                         yref = 'paper', y = -.35,
+                         xref = "paper", x = 0,
+                         yref = "paper", y = -.35,
                          font = list(size = 10, color = "grey")),
       paper_bgcolor = chart_bg_color,
       plot_bgcolor = chart_bg_color,
@@ -483,8 +448,8 @@ server <- function(input, output, session) {
       margin = list(l = 70, r = 50, t = 50, b = 100),
       annotations = list(text = "Source: [INSERT SOURCE]",
                          showarrow = F,
-                         xref = 'paper', x = 0,
-                         yref = 'paper', y = -.35,
+                         xref = "paper", x = 0,
+                         yref = "paper", y = -.35,
                          font = list(size = 10, color = "grey")),
       paper_bgcolor = chart_bg_color,
       plot_bgcolor= chart_bg_color,
@@ -554,8 +519,8 @@ server <- function(input, output, session) {
       margin = list(l = 70, r = 50, t = 50, b = 100),
       annotations = list(text = "Source: [INSERT SOURCE]",
                          showarrow = F,
-                         xref = 'paper', x = 0,
-                         yref = 'paper', y = -.35,
+                         xref = "paper", x = 0,
+                         yref = "paper", y = -.35,
                          font = list(size = 10, color = "grey")),
       paper_bgcolor = chart_bg_color,
       paper_bgcolor = chart_bg_color,
