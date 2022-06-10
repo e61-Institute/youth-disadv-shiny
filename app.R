@@ -38,7 +38,7 @@ ui <- shinyUI(
       tags$link(rel = "stylesheet", type = "text/css", href = "style.css"),
     ),
     
-    # Title and subtitle
+    ## Title and subtitle ####
     fluidRow(column(
       fluidRow(column(
         h1(
@@ -59,7 +59,7 @@ ui <- shinyUI(
     
    
    
-    # Section 1
+    ## Section 1 ####
 
     fluidRow(class = "m-3 justify-content-center",
              column(width = 12, class = "card m-2",
@@ -99,7 +99,7 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
             ),
           
     
-    # Section 2
+    ## Section 2 ####
     fluidRow(class = "m-3 justify-content-center",
       column(width = 12, class = "card m-2",
         h3("Recessions make it harder to find the best match between workers and jobs"),
@@ -207,7 +207,7 @@ Job mobility (the share of workers changing jobs in the past year) has increased
       ),
 
 
-    # Section 3
+    ## Section 3 ####
     fluidRow(class = "m-3 justify-content-center",
       column(width = 12, class = "m-2 card",
         h3("Labour market outcomes are worse for the long-term unemployed..."),
@@ -297,7 +297,7 @@ Job mobility (the share of workers changing jobs in the past year) has increased
       ),
     
 
-    # Section 4
+    ## Section 4 ####
     fluidRow(class = "m-3 justify-content-center",
       column(width = 12, class = "card m-2",
         h3("... and for those in disadvantaged areas"),
@@ -342,7 +342,7 @@ Job mobility (the share of workers changing jobs in the past year) has increased
              p("Young Australians living in areas with greater household disadvantage (as measured by the ABS Index of Household Advantage and Disadvantage) tend to have more difficulty finding employment, with unemployment rates in these areas higher than more advantaged areas. These disadvantaged areas tend to be clustered in regional Australia or the outer rings of the capital cities."))
     ))),
 
-    # Section 5
+    ## Section 5 ####
     fluidRow(class = "m-3 justify-content-center", 
       column(width = 12, class = "card m-2",
         h3("Youth not in employment, education or training living in disadvantaged areas are a concern"),
@@ -350,8 +350,19 @@ Job mobility (the share of workers changing jobs in the past year) has increased
         fluidRow(
           column(width = 7, class = "m-2",
           div(
+            # Graph title: Youth NEET rate as percentage of young population, by age and demographic group
+            img(src = "aggregate_neet_example_graph.png", height = "auto", 
+                width = "50%"),
+            div(
+              h5("Youth NEET rate"),
+              p("Source: ABS Labour Force Survey"),
+              class = "card-body"
+            ),
+            
+          ),
+          div(
             img(src = "animated_gradient_males_shadow.gif", height = "auto", 
-                width = "20%"),
+                width = "50%"),
             div(
               h5("Growing disparity across regions"),
               p("Source: HILDA"),
@@ -375,7 +386,7 @@ Job mobility (the share of workers changing jobs in the past year) has increased
       )
     ),
 
-    # Section 6
+    ## Section 6 ####
     fluidRow(class = "m-3 justify-content-center",
       column(width = 12, class = "card m-2",
       h3("Where are the opportunities to exit disadvantage and vulnerability?"),
@@ -452,7 +463,7 @@ server <- function(input, output, session) {
   chart_bg_color <- "black"
   chart_text_color <- "white"
   
-  # Section 1
+  ## Section 1 ####
  
   output$unemployment <- renderPlotly({
   
@@ -481,7 +492,7 @@ server <- function(input, output, session) {
 
   })
   
-  # Section 2
+  ## Section 2 ####
   
   output$job_mobility <- renderPlotly({
     
@@ -531,7 +542,7 @@ server <- function(input, output, session) {
     )
   })
   
-  # Section 3
+  ## Section 3 ####
   
   output$duration_unemployed <- renderPlotly({
     
@@ -681,7 +692,7 @@ server <- function(input, output, session) {
   
   
   
-  # Section 6
+  ## Section 6 ####
   
   
   output$map <- renderLeaflet({
