@@ -1,9 +1,53 @@
 .card {
   background-color: black;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  
 }
   
 #main-title {
   font-weight: 700;
+}
+
+section {
+    margin: 0;
+    padding: 40px 0 0;
+}
+
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding-bottom: 500px;
+  padding: 0;
+  overflow: hidden;
+  background-color: #6f7980;
+  position: -webkit-sticky; /* Safari */
+  position: sticky;
+  left: 0;
+  top: 0;
+  width: 100%;
+  z-index: +10000;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+li {
+  float: left;
+}
+
+li a {
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+/* Change the link color on hover */
+li a:hover {
+  background-color: #414142;
+  color: white;
+}
+
+.active {
+  background-color: #04AA6D;
 }
                     

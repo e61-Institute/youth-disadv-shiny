@@ -16,7 +16,6 @@ theme_set(theme_bw())
 
 df_map <- st_read("data/jobcreation.shp")
 df_unemp <- read_csv("data/unemployment and E-to-P aggregates.csv")
-# df_neet <- read_csv(paste0(local_data_folder,"Matt/neet_entry_and_exit_rate.csv"))
 df_job_mobility <- read_csv("data/job mobility rate aggregates.csv")
 df_duration <- read_csv("data/duration unemployed shares.csv")
 df_map2 <- st_read("data/youth unemployment sa4 map.shp")
@@ -27,6 +26,9 @@ df_occupation_area <- st_read("data/occupation_area.shp") %>%
   group_by(Area,age)%>%
   summarize(Percent  = sum(Percent),
             Occupation = paste0(Occupation, collapse = " , <br/>"))
+
+df_youth_unem <- read_csv("data/df_youth_unem_with_fv.csv")
+df_neet <- read_csv("data/aggregate_neet_rate.csv")
 
 # UI ----------------------------------------------------------------------
 
@@ -40,6 +42,9 @@ ui <- shinyUI(
     tags$head(
       tags$link(rel = "stylesheet", type = "text/css", href = "style.css"),
     ),
+   
+    
+    
     
     ## Title and subtitle ####
     fluidRow(column(
@@ -60,10 +65,27 @@ ui <- shinyUI(
     ),
     class = "mb-5 radial"),
     
+    
+    
+    ## Navigation bar ####
+    
+    
+    tags$ul(tags$li(a(href = "#section-1", "Recovery progress")),
+            tags$li(a(href = "#section-2", "Job mobility")),
+            tags$li(a(href = "#section-3", "Long-term unemployed")),
+            tags$li(a(href = "#section-4", "Disadvantaged areas")),
+            tags$li(a(href = "#section-5", "Youth NEET")),
+            tags$li(a(href = "#section-6", "Where are the opportunities?")),
+    ),
+    
+    
+    
    
    
     ## Section 1 ####
 
+    a(id = "section-1"),
+    tags$section(
     fluidRow(class = "m-3 justify-content-center",
              column(width = 12, class = "card m-2",
               h3("The recovery from the pandemic has been uneven for vulnerable groups"),
@@ -99,10 +121,12 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
                   ),
                 ),
               ), 
-            ),
+            )),
           
     
     ## Section 2 ####
+    a(id = "section-2"),
+    tags$section(
     fluidRow(class = "m-3 justify-content-center",
       column(width = 12, class = "card m-2",
         h3("Recessions make it harder to find the best match between workers and jobs"),
@@ -172,14 +196,14 @@ Job mobility (the share of workers changing jobs in the past year) has increased
                     Suspendisse placerat, purus nec varius gravida, eros lorem."),
                  ),
         ),
-        fluidRow(
+        fluidRow(height = 700,
           column(
             width = 7, class = "m-2",
             div(
               #img(src = "job mobility rate aggregates.png"),
               plotlyOutput("occupation_intensity"),
               div(
-                selectInput('age_gp', 'Select Age', 
+                selectInput('age_gp', 'Select age groups:', 
                             choices = unique(df_occupation$age))),
                 class = "card-body"),
               class = "m-2",
@@ -207,10 +231,12 @@ Job mobility (the share of workers changing jobs in the past year) has increased
           ),
         ),
         
-      ),
+      )),
 
 
     ## Section 3 ####
+    a(id = "section-3"),
+    tags$section(
     fluidRow(class = "m-3 justify-content-center",
       column(width = 12, class = "m-2 card",
         h3("Labour market outcomes are worse for the long-term unemployed..."),
@@ -270,8 +296,8 @@ Job mobility (the share of workers changing jobs in the past year) has increased
                       selected = "15-24 years"),
           sliderTextInput("timeline", "Select date: ",
                           choices = seq(min(df_map2$date), max(df_map2$date), by = "months"),
-                          selected = min(df_map2$date)
-                          # animate = animationOptions(interval = 50, loop = TRUE)
+                          selected = min(df_map2$date),
+                          animate = animationOptions(interval = 1000, loop = F)
                           # Note that animation needs to be fixed - it currently causes the map to reload, which takes too much time
         ))),
         div(class = "m-2",
@@ -297,10 +323,12 @@ Job mobility (the share of workers changing jobs in the past year) has increased
                     Suspendisse placerat, purus nec varius gravida, eros lorem."))),
         ),
         
-      ),
+      )),
     
 
     ## Section 4 ####
+    a(id = "section-4"),
+    tags$section(
     fluidRow(class = "m-3 justify-content-center",
       column(width = 12, class = "card m-2",
         h3("... and for those in disadvantaged areas"),
@@ -310,8 +338,8 @@ Job mobility (the share of workers changing jobs in the past year) has increased
           div(
             img(
               src = "dot plot.png",
-              width = "75%",
-              height = "75%"
+              width = "30%",
+              height = "30%"
             ),
             div(
               h5("Graduate outcomes for disadvantaged students"),
@@ -320,49 +348,101 @@ Job mobility (the share of workers changing jobs in the past year) has increased
               ),
             
           ),
-          div(
-            img(
-              src = "youth-ihad-unemployment.png",
-              width = "75%",
-              height = "75%"
-            ),
-            div(
-              h5("Youth unemployment and household disadvantage"),
-              p("Source: ABS"),
-              class = "card-body-2"
-            ),
-            
           ),
-          
+         
+          column(width = 4, class = "m-2",
+                 h6("First takeaway"),
+                 p("Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+                    Pellentesque pellentesque, erat ac maximus finibus, neque 
+                    magna accumsan eros, vitae faucibus felis velit ac enim. 
+                    Proin sit amet diam non nunc vulputate tempor a ut nibh. 
+                    Suspendisse placerat, purus nec varius gravida, eros lorem 
+                    fringilla dolor, sit amet porttitor elit nulla vel arcu. 
+                    Mauris enim diam, euismod non arcu et, consequat ultricies 
+                    mi. "),
+                 
+                 h6("Additional takeaway"),
+                 p("Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+                    Pellentesque pellentesque, erat ac maximus finibus, neque 
+                    magna accumsan eros, vitae faucibus felis velit ac enim. 
+                    Proin sit amet diam non nunc vulputate tempor a ut nibh. 
+                    Suspendisse placerat, purus nec varius gravida, eros lorem.")
+                 )
         ),
+        fluidRow(
+            column(width = 7, class = "m-2",
+            div(
+              plotlyOutput("youth_unem"),
+            ),
+            fluidRow(column(width = 5,
+                      radioButtons("sex_youth_unem", "Select sex:", 
+                           choices = unique(df_youth_unem$sex),
+                           selected = "Total")),
+                    column(width = 5,
+                      checkboxGroupInput("age_youth_unem", "Select age groups:",
+                                         choices = unique(df_youth_unem$age),
+                                         selected = c("15-24 years", "Total")))
+            ),
+            ),
+            column(width = 4, class = "m-2",
+                   h6("First takeaway"),
+                   p("[Something about labour market outcomes for graduates from disadvantaged backgrounds being worse than those from privileged backgrounds]"),
+                   
+                   h6("Additional takeaway"),
+                   p("Young Australians living in areas with greater household disadvantage (as measured by the ABS Index of Household Advantage and Disadvantage) tend to have more difficulty finding employment, with unemployment rates in these areas higher than more advantaged areas. These disadvantaged areas tend to be clustered in regional Australia or the outer rings of the capital cities."))
+            
+            )
+            
+          ))),
+          
+       
         
       
-      column(width = 4, class = "m-2",
-             h6("First takeaway"),
-             p("[Something about labour market outcomes for graduates from disadvantaged backgrounds being worse than those from privileged backgrounds]"),
-             
-             h6("Additional takeaway"),
-             p("Young Australians living in areas with greater household disadvantage (as measured by the ABS Index of Household Advantage and Disadvantage) tend to have more difficulty finding employment, with unemployment rates in these areas higher than more advantaged areas. These disadvantaged areas tend to be clustered in regional Australia or the outer rings of the capital cities."))
-    ))),
+      
 
     ## Section 5 ####
+    a(id = "section-5"),
+    tags$section(
     fluidRow(class = "m-3 justify-content-center", 
       column(width = 12, class = "card m-2",
         h3("Youth not in employment, education or training living in disadvantaged areas are a concern"),
         br(),
+        p("Note that there is no data for the Education > 15-19 years or 15-24 years combinations - we could try to do something 
+          fancy where the age menu only pops up if you select the other options, or reconsider how to present this (unless data will be added 
+          later)", style = "color:red"),
         fluidRow(
           column(width = 7, class = "m-2",
-          div(
-            # Graph title: Youth NEET rate as percentage of young population, by age and demographic group
-            img(src = "aggregate_neet_example_graph.png", height = "auto", 
-                width = "50%"),
-            div(
-              h5("Youth NEET rate"),
-              p("Source: ABS Labour Force Survey"),
-              class = "card-body"
-            ),
+          # div(
+          #   # Graph title: Youth NEET rate as percentage of young population, by age and demographic group
+          #   img(src = "aggregate_neet_example_graph.png", height = "auto", 
+          #       width = "50%"),
+          #   div(
+          #     h5("Youth NEET rate"),
+          #     p("Source: ABS Labour Force Survey"),
+          #     class = "card-body"
+          #   ),
             
+          # ),
+          
+          div(
+            plotlyOutput("neet")  
           ),
+          fluidRow(
+            column(width = 6,
+                   selectInput("neet_dem", "Select demographic: ",
+                                choices = c("Total",
+                                            "Gender",
+                                            "Education"
+                                            ),
+                                selected = "Total")),
+            column(width = 6,
+                   radioButtons("neet_age", "Select age group: ",
+                                choices = c("15-24 years",
+                                            "15-19 years",
+                                            "20-24 years"),
+                                selected = "15-24 years"))
+          ),
+          
           div(
             img(src = "animated_gradient_males_shadow.gif", height = "auto", 
                 width = "50%"),
@@ -387,9 +467,11 @@ Job mobility (the share of workers changing jobs in the past year) has increased
                     Proin sit amet diam non nunc vulputate tempor a ut nibh. 
                     Suspendisse placerat, purus nec varius gravida, eros lorem."))),
       )
-    ),
+    )),
 
     ## Section 6 ####
+    a(id = "section-6"),
+    tags$section(
     fluidRow(class = "m-3 justify-content-center",
       column(width = 12, class = "card m-2",
       h3("Where are the opportunities to exit disadvantage and vulnerability?"),
@@ -439,10 +521,11 @@ Job mobility (the share of workers changing jobs in the past year) has increased
                div(
                  h5("Top 3 occupations worked by Youth (19-29) in region"),
                  p(em("SA3 level")),
+                 leafletOutput("area_occupation"),
                  selectInput("age_area",
-                             "Select Age",
-                             unique(df_occupation_area$age)),
-                 leafletOutput("area_occupation")
+                             "Select age group:",
+                             unique(df_occupation_area$age))
+                 
                ),
                br(),
                p("Source: MADIP ATO extracts FY20", 
@@ -454,7 +537,7 @@ Job mobility (the share of workers changing jobs in the past year) has increased
    
    
    
-      )    )
+      )    ))
  
             
            
@@ -526,22 +609,30 @@ server <- function(input, output, session) {
     
     req(input$age_gp)
     
+    # Would this graph make more sense as "Top 5 occupations in 2022 by age"? At the moment it
+    # takes the top 5 occupations in each year, so there are some occupations that only show 
+    # up for 1-2 years on the graph while they are in the top 5. 
+    
+    
     jm_graph <- df_occupation %>% filter(age == input$age_gp) %>% 
       group_by(year)%>%
-      slice_max(order_by=percent_total, n= 8)%>%
+      slice_max(order_by = percent_total, n = 5)%>%
       ungroup()%>%
       mutate(percent_total = percent_total*100)%>%
-      plot_ly(x = ~year, y = ~percent_total, color = ~two_name,type="scatter",mode = "lines") 
+      plot_ly(x = ~year, y = ~percent_total, color = ~two_name, type="scatter", 
+              mode = "lines") 
     
     jm_graph <- jm_graph %>% layout(
       showlegend = TRUE,
-      title = "Top 8 occupations by Age Category",
+      title = "Top 5 occupations by age group",
       xaxis = list(title = "Year", zeroline = FALSE, showgrid = F),
       yaxis = list(title = "Percent Total", zeroline = FALSE, showgrid = F,ticksuffix = "%"),
-      legend = list(orientation = 'h'),
+      legend = list(orientation = 'h',
+                    yref = "paper", y = -.45),
       paper_bgcolor = chart_bg_color,
       plot_bgcolor= chart_bg_color,
       font = list(color = chart_text_color)
+      
     )
   })
   
@@ -552,8 +643,6 @@ server <- function(input, output, session) {
     req(input$age_dur_1)
     req(input$age_dur_2)
     
-    # note each trace needs to be added individually to make the legend and 
-    # colours work
     dur_graph_1 <- df_duration %>% filter(age_group == input$age_dur_1) %>% 
       plot_ly(x = ~date) %>% 
       add_trace(data = filter(df_duration, age_group == input$age_dur_1,
@@ -689,10 +778,137 @@ server <- function(input, output, session) {
                   fillOpacity = 0.7) %>%
       addProviderTiles(providers$Esri.WorldGrayCanvas) %>%
       addLegend("bottomright",opacity = 1, pal = pal,values=~domain, title = "Unemployed share (%)")
+     
 
       
   })
   
+  ## Section 4 ####
+  
+  output$youth_unem <- renderPlotly({
+    
+    df_youth_unem$total <- as.numeric(df_youth_unem$total)
+    df_youth_unem$date <- as.character(df_youth_unem$date)
+   
+    
+    youth_unem_graph <- df_youth_unem %>% 
+      filter(age == input$age_youth_unem, sex == input$sex_youth_unem) %>%
+      rename(Date = date) %>% 
+      plot_ly(x = ~share_decile_1) %>% 
+      add_trace(x = ~share_decile_1, y = ~ue_rate, 
+                split = ~age,
+                type = "scatter",
+                size = ~total,
+                mode = "markers", 
+                frame = ~Date) %>% 
+      add_lines(x = ~share_decile_1, y = ~fv, split = ~age, frame = ~Date, name = "Trendline")
+    
+    youth_unem_graph <- youth_unem_graph %>% layout(
+      showlegend = TRUE,
+      title = "Unemployment rate against share of households who are disadvantaged",
+      xaxis = list(title = "Share of households in bottom decile of disadvantage", 
+                   zeroline = FALSE, showgrid = F, ticksuffix = "%", margin = list(b = 100)),
+      yaxis = list(title = "Unemployment rate", zeroline = FALSE, showgrid = F,
+                   ticksuffix = "%"),
+      margin = list(l = 70, r = 50, t = 50, b = 100, autoexpand = T),
+      annotations = list(text = "Source: ABS",
+                         showarrow = F,
+                         xref = 'paper', x = 0,
+                         yref = 'paper', y = -.5,
+                         font = list(size = 10, color = "grey")),
+      paper_bgcolor = chart_bg_color,
+      plot_bgcolor= chart_bg_color,
+      font = list(color = chart_text_color))
+    
+    youth_unem_graph <- youth_unem_graph %>% 
+      animation_opts(
+        frame = 200, transition = 200,  easing = "linear", redraw = F
+      ) %>%
+      animation_slider(
+        currentvalue = list(font = list(size = 12, color = "grey")),
+        yref = "paper", y = -.3
+      ) %>% 
+      animation_button(
+        yref = "paper", y = -.3
+      ) 
+   
+    
+  })
+  
+  ## Section 5 ####
+  
+  output$neet <- renderPlotly({
+    
+    if(input$neet_dem == "Total"){
+      if(input$neet_age == "15-19 years"){
+        neet_ts <- df_neet %>% plot_ly(x = ~Month, y = ~`Total 15-19 years`,
+                                       type = "scatter", mode = "lines")
+      }
+      else if (input$neet_age == "20-24 years"){
+        neet_ts <- df_neet %>% plot_ly(x = ~Month, y = ~`Total 20-24 years`, 
+                                       type = "scatter", mode = "lines")
+      }
+      else if (input$neet_age == "15-24 years"){
+        neet_ts <- df_neet %>% plot_ly(x = ~Month, y = ~`Total 15-24 years`, 
+                                       type = "scatter", mode = "lines")
+      }
+    }
+    else if (input$neet_dem == "Gender"){
+      if(input$neet_age == "15-19 years"){
+        neet_ts <- df_neet %>% plot_ly(x = ~Month) %>% 
+          add_trace(y = ~`Males 15-19 years`, type = "scatter", mode = "lines", name = "Males") %>% 
+          add_trace(y = ~`Females 15-19 years`, type = "scatter", mode = "lines", name = "Females")
+      }
+      else if (input$neet_age == "20-24 years"){
+        neet_ts <- df_neet %>% plot_ly(x = ~Month) %>% 
+          add_trace(y = ~`Males 20-24 years`, type = "scatter", mode = "lines", name = "Males") %>% 
+          add_trace(y = ~`Females 20-24 years`, type = "scatter", mode = "lines", name = "Females")
+      }
+      else if (input$neet_age == "15-24 years"){
+        neet_ts <- df_neet %>% plot_ly(x = ~Month) %>% 
+          add_trace(y = ~`Males 15-24 years`, type = "scatter", mode = "lines", name = "Males") %>% 
+          add_trace(y = ~`Females 15-24 years`, type = "scatter", mode = "lines", name = "Females")
+      }
+    }
+    else if (input$neet_dem == "Education"){
+      if(input$neet_age == "15-19 years"){
+        neet_ts <- df_neet %>% plot_ly(x = ~Month) # note there is no data for this combo
+      }
+      else if (input$neet_age == "20-24 years"){
+        neet_ts <- df_neet %>% plot_ly(x = ~Month) %>% 
+          add_trace(y = ~`Year 9 or below/Never attended school 20-24 years`, type = "scatter", mode = "lines", name = "Year 9 or below") %>% 
+          add_trace(y = ~`Year 10 or equivalent 20-24 years`, type = "scatter", mode = "lines", name = "Year 10 or equivalent") %>% 
+          add_trace(y = ~`Year 11 or equivalent 20-24 years`, type = "scatter", mode = "lines", name = "Year 11 or equivalent") %>% 
+          add_trace(y = ~`Year 12 or equivalent 20-24 years`, type = "scatter", mode = "lines", name = "Year 12 or equivalent")
+      }
+      else if (input$neet_age == "15-24 years"){
+        neet_ts <- df_neet %>% plot_ly(x = ~Month) # note there is no data for this combo
+      }
+    }
+    
+    
+    neet_ts <- neet_ts %>% layout(
+      
+      title = "Youth NEET rate by age and demographic group",
+      xaxis = list(title = "Date", 
+                   zeroline = FALSE, showgrid = F, margin = list(b = 100)),
+      yaxis = list(title = "NEET rate", zeroline = FALSE, showgrid = F,
+                   tickformat = "1%"),
+      margin = list(l = 70, r = 50, t = 50, b = 100, autoexpand = T),
+      annotations = list(text = "Source: ABS Labour Force Survey",
+                         showarrow = F,
+                         xref = 'paper', x = 0,
+                         yref = 'paper', y = -.35,
+                         font = list(size = 10, color = "grey")),
+      paper_bgcolor = chart_bg_color,
+      plot_bgcolor= chart_bg_color,
+      font = list(color = chart_text_color))
+    
+ 
+    
+
+    
+  })
   
   
   ## Section 6 ####
@@ -717,7 +933,7 @@ server <- function(input, output, session) {
   
   output$area_occupation <- renderLeaflet({
     
-    data_map <- subset(df_occupation_area, age = input$age_area) 
+    data_map <- df_occupation_area %>% filter(age == input$age_area) 
     
     pal <- colorNumeric(
       palette = "Blues",
