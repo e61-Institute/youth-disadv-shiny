@@ -1,0 +1,11 @@
+name: vulnerableyouth
+title: shinyapplication
+username:
+account: e61-institute
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 6485217
+bundleId: 6005368
+url: https://e61-institute.shinyapps.io/vulnerableyouth/
+when: 1655181299.81203
+lastSyncTime: 1655181299.81203
