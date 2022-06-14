@@ -68,12 +68,13 @@ ui <- shinyUI(
     ## Navigation bar ####
     
     
-    tags$ul(tags$li(a(href = "#section-1", "Recovery progress")),
-            tags$li(a(href = "#section-2", "Job mobility")),
-            tags$li(a(href = "#section-3", "Long-term unemployed")),
-            tags$li(a(href = "#section-4", "Disadvantaged areas")),
-            tags$li(a(href = "#section-5", "Youth NEET")),
-            tags$li(a(href = "#section-6", "Where are the opportunities?")),
+    tags$ul(tags$li(a(href = "#section-1", "Recovery progress"), class = "nav-bar-element"),
+            tags$li(a(href = "#section-2", "Job mobility"), class = "nav-bar-element"),
+            tags$li(a(href = "#section-3", "Long-term unemployed"), class = "nav-bar-element"),
+            tags$li(a(href = "#section-4", "Disadvantaged areas"), class = "nav-bar-element"),
+            tags$li(a(href = "#section-5", "Youth NEET"), class = "nav-bar-element"),
+            tags$li(a(href = "#section-6", "Where are the opportunities?"), class = "nav-bar-element"),
+            class = "nav-bar-container"
     ),
     
     
