@@ -27,7 +27,7 @@ df_occupation_area <- st_read("data/occupation_area.shp") %>%
   summarize(Percent  = sum(Percent),
             Occupation = paste0(Occupation, collapse = " , <br/>"))
 
-df_youth_unem <- read_csv("data/df_youth_unem_with_fv.csv")
+df_youth_unem <- read_csv("data/youth-ihad-unemployment.csv")
 df_neet <- read_csv("data/aggregate_neet_rate.csv")
 
 # UI ----------------------------------------------------------------------
