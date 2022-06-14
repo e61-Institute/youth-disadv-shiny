@@ -13,7 +13,7 @@ section {
     padding: 40px 0 0;
 }
 
-ul {
+ul.nav-bar-container {
   list-style-type: none;
   margin: 0;
   padding-bottom: 500px;
@@ -29,11 +29,11 @@ ul {
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
-li {
+li.nav-bar-element {
   float: left;
 }
 
-li a {
+li.nav-bar-element a {
   display: block;
   color: white;
   text-align: center;
@@ -42,12 +42,12 @@ li a {
 }
 
 /* Change the link color on hover */
-li a:hover {
+li.nav-bar-element a:hover {
   background-color: #414142;
   color: white;
 }
 
-.active {
+/* Changes the box colour on click */
+li.nav-bar-element a:active {
   background-color: #04AA6D;
 }
-                    
