@@ -1,12 +1,15 @@
-library(shiny)
-library(bslib)
-library(sf)
-library(leaflet)
-library(data.table)
-library(magrittr)
-library(tidyverse)
-library(plotly)
-library(shinyWidgets)
+pacman::p_load(c(
+    "shiny",
+    "bslib",
+    "sf",
+    "leaflet",
+    "data.table",
+    "magrittr",
+    "tidyverse",
+    "plotly",
+    "shinyWidgets"
+))
+
 theme_set(theme_bw())
 
 # Read in data ------------------------------------------------------------
