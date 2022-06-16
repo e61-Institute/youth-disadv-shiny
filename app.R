@@ -1,4 +1,4 @@
-pacman::p_load(c(
+pacman::p_load(
     "shiny",
     "bslib",
     "sf",
@@ -8,7 +8,7 @@ pacman::p_load(c(
     "tidyverse",
     "plotly",
     "shinyWidgets"
-))
+)
 
 theme_set(theme_bw())
 
