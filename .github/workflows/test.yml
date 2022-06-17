@@ -1,5 +1,5 @@
 
-name: PR
+name: Run on push dev
 
 # Controls when the action will run.
 on:
