@@ -35,6 +35,7 @@ df_duration_v_ue <- read_csv("data/duration_v_rates_unemployment.csv")
 df_pc_mismatched <- read_csv("data/percent_mismatched.csv")
 df_helpful <- read_csv("data/percent_helpful_transitions.csv")
 df_ue_gained <- read_csv("data/percent_unemployed_gained_emp.csv")
+df_neet_distance <- read_csv("data/neet_distance_fitted_values.csv")
 
 
 
@@ -605,20 +606,8 @@ Job mobility (the share of workers changing jobs in the past year) has increased
                                         choices = unique(df_neet_2$demo_split),    
                                         selected = "Total"))
                    ),
-          )),
-          div(
-            img(src = "animated_gradient_males_shadow.gif", height = "auto", 
-                width = "50%"),
-            div(
-              h5("Growing disparity across regions"),
-              p("Source: HILDA"),
-              class = "card-body"
-            ),
-            
           ),
-         
-        ),
-        
+   
         column(width = 4, class = "m-2",
                h6("First takeaway"),
                p("The likelihood of young Australians not being in employment, education or training increases with distance from Australia's capital cities. This suggests that economic opportunities are concentrated in the capital cities, and disadvantaged areas are being further left behind."),
@@ -629,7 +618,25 @@ Job mobility (the share of workers changing jobs in the past year) has increased
                     magna accumsan eros, vitae faucibus felis velit ac enim. 
                     Proin sit amet diam non nunc vulputate tempor a ut nibh. 
                     Suspendisse placerat, purus nec varius gravida, eros lorem."))),
+      
+    
+    fluidRow(
+      column(width = 7, class = "m-2",
+             
+             plotlyOutput("neet_distance"),  
+             
       ),
+      column(width = 4, class = "m-2",
+             h6("First takeaway"),
+             p("Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+                    Pellentesque pellentesque, erat ac maximus finibus, neque 
+                    magna accumsan eros, vitae faucibus felis velit ac enim. 
+                    Proin sit amet diam non nunc vulputate tempor a ut nibh. 
+                    Suspendisse placerat, purus nec varius gravida, eros lorem."),
+             
+    )),
+    
+    ))),
     
 
     ## Section 6 ####
@@ -1017,7 +1024,7 @@ server <- function(input, output, session) {
     pc_ue_gained <- df_ue_gained %>% filter(Duration == input$ue_dur) %>% 
       plot_ly(x = ~Date, y = ~Percent, type = "scatter", mode = "lines")
     
-    duration_v_ue <- duration_v_ue %>% layout(
+    pc_ue_gained <- pc_ue_gained %>% layout(
       title = "% unemployed who gained employment",
       xaxis = list(title = "Date", zeroline = FALSE, showgrid = F),
       yaxis = list(title = "% unemployed", zeroline = FALSE, showgrid = F, ticksuffix = "%"),
@@ -1200,6 +1207,35 @@ server <- function(input, output, session) {
       plot_bgcolor= chart_bg_color,
       font = list(color = chart_text_color))
      
+  })
+  
+  output$neet_distance <- renderPlotly({
+    
+    neet_distance <- df_neet_distance %>% 
+      arrange(mindistance) %>% 
+      plot_ly(x = ~mindistance, y = ~pred, frame = ~wave, type = "scatter", mode = "lines")
+    
+    neet_distance <- neet_distance %>% layout(
+      
+      title = "Probability of NEET over distance (Males, 18-24)",
+      
+      xaxis = list(title = "Log distance from nearest capital city", 
+                   zeroline = FALSE, showgrid = F),
+      yaxis = list(title = "Predicted probability of NEET status", zeroline = FALSE, showgrid = F,
+                   tickformat = "1%"),
+      margin = list(l = 70, r = 50, t = 50, b = 100, autoexpand = T),
+      annotations = list(text = "Source: HILDA Release 2.0",
+                         showarrow = F,
+                         xref = 'paper', x = 0,
+                         yref = 'paper', y = -.25,
+                         font = list(size = 10, color = "grey")),
+      paper_bgcolor = chart_bg_color,
+      plot_bgcolor= chart_bg_color,
+      font = list(color = chart_text_color)) %>% 
+      animation_opts(
+        frame = 200, transition = 200,  easing = "linear", redraw = F
+      )
+    
   })
   
   
