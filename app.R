@@ -624,6 +624,8 @@ Job mobility (the share of workers changing jobs in the past year) has increased
       column(width = 7, class = "m-2",
              
              plotlyOutput("neet_distance"),  
+             p("Note there appears to be an issue with the predicted values supplied - 
+               they remain constant for each wave.", style = "color: red")
              
       ),
       column(width = 4, class = "m-2",
@@ -1222,19 +1224,27 @@ server <- function(input, output, session) {
       xaxis = list(title = "Log distance from nearest capital city", 
                    zeroline = FALSE, showgrid = F),
       yaxis = list(title = "Predicted probability of NEET status", zeroline = FALSE, showgrid = F,
-                   tickformat = "1%"),
+                   tickformat = "1%", dtick = 0.02),
       margin = list(l = 70, r = 50, t = 50, b = 100, autoexpand = T),
       annotations = list(text = "Source: HILDA Release 2.0",
                          showarrow = F,
                          xref = 'paper', x = 0,
-                         yref = 'paper', y = -.25,
+                         yref = 'paper', y = -.5,
                          font = list(size = 10, color = "grey")),
       paper_bgcolor = chart_bg_color,
       plot_bgcolor= chart_bg_color,
       font = list(color = chart_text_color)) %>% 
       animation_opts(
         frame = 200, transition = 200,  easing = "linear", redraw = F
-      )
+      ) %>%
+      animation_slider(
+        currentvalue = list(font = list(size = 12, color = "grey")),
+        yref = "paper", y = -.3
+      ) %>% 
+      animation_button(
+        yref = "paper", y = -.3
+      ) 
+    
     
   })
   
