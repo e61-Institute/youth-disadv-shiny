@@ -31,6 +31,8 @@ df_js <- st_read("data/js-recipient-share-map.shp")
 df_js <- df_js[!is.na(df_js$date),]
 df_js$date <- as.Date(df_js$date, "%Y-%m-%d")
 df_neet_2 <- read_csv("data/neet-entry-exit-rates.csv")
+df_duration_v_ue <- read_csv("data/duration_v_rates_unemployment.csv")
+df_pc_mismatched <- read_csv("data/percent_mismatched.csv")
 
 # UI ----------------------------------------------------------------------
 
@@ -169,7 +171,7 @@ Job mobility (the share of workers changing jobs in the past year) has increased
           column(
             width = 7, class = "m-2",
             div(
-              #img(src = "job mobility rate aggregates.png"),
+              
               plotlyOutput("job_mobility"),
                   div(
                   checkboxGroupInput("ages_jm", "Select age groups:",
@@ -199,6 +201,35 @@ Job mobility (the share of workers changing jobs in the past year) has increased
                     Suspendisse placerat, purus nec varius gravida, eros lorem."),
                  ),
         ),
+        
+        fluidRow(
+          column(
+            width = 7, class = "m-2",
+            
+              
+              plotlyOutput("pc_mismatched"),
+              
+          ),
+          column(width = 4, class = "m-2",
+                 h6("First takeaway"),
+                 p("Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+                    Pellentesque pellentesque, erat ac maximus finibus, neque 
+                    magna accumsan eros, vitae faucibus felis velit ac enim. 
+                    Proin sit amet diam non nunc vulputate tempor a ut nibh. 
+                    Suspendisse placerat, purus nec varius gravida, eros lorem 
+                    fringilla dolor, sit amet porttitor elit nulla vel arcu. 
+                    Mauris enim diam, euismod non arcu et, consequat ultricies 
+                    mi. "),
+                 
+                 h6("Additional takeaway"),
+                 p("Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+                    Pellentesque pellentesque, erat ac maximus finibus, neque 
+                    magna accumsan eros, vitae faucibus felis velit ac enim. 
+                    Proin sit amet diam non nunc vulputate tempor a ut nibh. 
+                    Suspendisse placerat, purus nec varius gravida, eros lorem."),
+          ),
+        ),
+        
         fluidRow(height = 700,
           column(
             width = 7, class = "m-2",
@@ -326,11 +357,34 @@ Job mobility (the share of workers changing jobs in the past year) has increased
                     Suspendisse placerat, purus nec varius gravida, eros lorem."))),
         
         
+        fluidRow(
+          column(width = 7, class = "m-2",
+                 
+                 plotlyOutput("duration_v_ue"),
+                 selectInput("dur_v_ue_date", "Select date: ", 
+                             choices = unique(df_duration_v_ue$Date),
+                             selected = "2022-06-01"),
+                 p("Note: have included a date dropdown as requested, but would this be better as 
+                   a timeline?", style = "color: red")
+                 
+          ),
+          column(width = 4, class = "m-2",
+                 
+                 # sliderTextInput("timeline_js", "Select date: ",
+                 #                 choices = seq(min(df_js$date), max(df_js$date), by = "months"),
+                 #                 selected = min(df_js$date),
+                 #                 animate = animationOptions(interval = 1000, loop = F)
+          )),
+        
         div(class = "m-2",
             br(),
             h5("Relative intensity of JS recipients share for 18-24 year olds"),
             p("Note: double check 'rel_prp' is the correct value to display", style =  "color:red" )
         ),
+        
+        
+          
+        
         fluidRow(
           column(width = 7, class = "m-2",
                 
@@ -650,8 +704,32 @@ server <- function(input, output, session) {
                          font = list(size = 10, color = "grey")),
       paper_bgcolor = chart_bg_color,
       plot_bgcolor= chart_bg_color,
-      font = list(color = chart_text_color)
-    )
+      font = list(color = chart_text_color))
+  })
+  
+  output$pc_mismatched <- renderPlotly({
+    
+    df_pc_mismatched$Percent_mismatch <- df_pc_mismatched$Percent_mismatch * 100
+    format(df_pc_mismatched$Year, "%Y")
+    
+    pc_mismatched <- df_pc_mismatched %>%
+      plot_ly(x = ~Year, y = ~Percent_mismatch, type = 'bar')
+    
+    pc_mismatched <- pc_mismatched %>% layout(
+      title = "Percent of young workers mismatched",
+      xaxis = list(title = "Year", zeroline = FALSE, showgrid = F),
+      yaxis = list(title = "% mismatched", zeroline = FALSE, showgrid = F,
+                   ticksuffix = "%"),
+      margin = list(l = 70, r = 50, t = 50, b = 100),
+      annotations = list(text = "Source: [INSERT SOURCE]",
+                         showarrow = F,
+                         xref = "paper", x = 0,
+                         yref = "paper", y = -.35,
+                         font = list(size = 10, color = "grey")),
+      paper_bgcolor = chart_bg_color,
+      plot_bgcolor= chart_bg_color,
+      font = list(color = chart_text_color))
+    
   })
   
   output$occupation_intensity <- renderPlotly({
@@ -832,6 +910,24 @@ server <- function(input, output, session) {
       
   })
   
+  output$duration_v_ue <- renderPlotly({
+    
+    df_duration_v_ue$UE <- df_duration_v_ue$UE * 100
+    
+    duration_v_ue <- df_duration_v_ue %>% filter(Date == input$dur_v_ue_date) %>% 
+      plot_ly(x = ~UE, y = ~MD, type = "scatter", mode = "markers")
+    
+    duration_v_ue <- duration_v_ue %>% layout(
+      title = "Median unemployment duration v unemployment rate",
+      xaxis = list(title = "Unemployment rate", zeroline = FALSE, showgrid = F, ticksuffix = "%"),
+      yaxis = list(title = "Median duration unemployed (months)", zeroline = FALSE, showgrid = F),
+      margin = list(l = 70, r = 50, t = 50, b = 100),
+      paper_bgcolor = chart_bg_color,
+      plot_bgcolor = chart_bg_color,
+      font = list(color = chart_text_color))
+    
+  })
+  
   output$js_map <- renderLeaflet({
     js <- df_js %>% filter(ag_bckt == input$age_js, 
                                        date == input$timeline_js) 
@@ -1002,8 +1098,8 @@ server <- function(input, output, session) {
                          font = list(size = 10, color = "grey")),
       paper_bgcolor = chart_bg_color,
       plot_bgcolor= chart_bg_color,
-      font = list(color = chart_text_color),
-      rangeslider = list(type = "date"))
+      font = list(color = chart_text_color))
+     
   })
   
   
