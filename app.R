@@ -7,8 +7,35 @@ library(magrittr)
 library(tidyverse)
 library(plotly)
 library(shinyWidgets)
+library(leaftime)
+library(htmltools)
+library(geojsonio)
 
 theme_set(theme_bw())
+
+# Leaflet code (not working currently) --------------------------------------
+
+# df_map2 <- st_read("data/youth unemployment sa4 map.shp")
+# df_map2 <- df_map2[!is.na(df_map2$date),]
+
+# Unemployment <- df_map2 %>% filter(age == "15-24 years",
+#                                    sex == "Total") 
+# 
+# Unemployment$start <- as.Date(Unemployment$date, "%Y-%m-%d")
+# Unemployment$end <- as.Date(Unemployment$date, "%Y-%m-%d")
+# 
+# unemployment_geo <- geojsonio::geojson_json(Unemployment, lat = "cent_lt", lon = "cent_lng")
+# 
+# domain <- c(0,50)
+# 
+# pal <- colorNumeric("OrRd",domain = domain)
+# 
+# leaflet(Unemployment) %>% 
+#   addPolygons(stroke = FALSE, smoothFactor = 0.2,color = ~pal(Unemployment$value),
+#               fillOpacity = 0.7) %>%
+#   addProviderTiles(providers$Esri.WorldGrayCanvas) %>%
+#   addLegend("bottomright",opacity = 1, pal = pal,values=~domain, title = "Unemployed share (%)") %>% 
+#   addTimeline(data = unemployment_geo)
 
 # Read in data ------------------------------------------------------------
 
