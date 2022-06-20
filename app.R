@@ -7,8 +7,35 @@ library(magrittr)
 library(tidyverse)
 library(plotly)
 library(shinyWidgets)
+library(leaftime)
+library(htmltools)
+library(geojsonio)
 
 theme_set(theme_bw())
+
+# Leaflet code (not working currently) --------------------------------------
+
+# df_map2 <- st_read("data/youth unemployment sa4 map.shp")
+# df_map2 <- df_map2[!is.na(df_map2$date),]
+
+# Unemployment <- df_map2 %>% filter(age == "15-24 years",
+#                                    sex == "Total") 
+# 
+# Unemployment$start <- as.Date(Unemployment$date, "%Y-%m-%d")
+# Unemployment$end <- as.Date(Unemployment$date, "%Y-%m-%d")
+# 
+# unemployment_geo <- geojsonio::geojson_json(Unemployment, lat = "cent_lt", lon = "cent_lng")
+# 
+# domain <- c(0,50)
+# 
+# pal <- colorNumeric("OrRd",domain = domain)
+# 
+# leaflet(Unemployment) %>% 
+#   addPolygons(stroke = FALSE, smoothFactor = 0.2,color = ~pal(Unemployment$value),
+#               fillOpacity = 0.7) %>%
+#   addProviderTiles(providers$Esri.WorldGrayCanvas) %>%
+#   addLegend("bottomright",opacity = 1, pal = pal,values=~domain, title = "Unemployed share (%)") %>% 
+#   addTimeline(data = unemployment_geo)
 
 # Read in data ------------------------------------------------------------
 
@@ -27,10 +54,19 @@ df_occupation_area <- st_read("data/occupation_area.shp") %>%
 
 df_youth_unem <- read_csv("data/youth-ihad-unemployment.csv")
 df_neet <- read_csv("data/aggregate_neet_rate.csv")
+df_js <- st_read("data/js-recipient-share-map.shp")
+df_js <- df_js[!is.na(df_js$date),]
+df_js$date <- as.Date(df_js$date, "%Y-%m-%d")
+df_neet_2 <- read_csv("data/neet-entry-exit-rates.csv")
+df_duration_v_ue <- read_csv("data/duration_v_rates_unemployment.csv")
+df_pc_mismatched <- read_csv("data/percent_mismatched.csv")
+df_helpful <- read_csv("data/percent_helpful_transitions.csv")
+df_ue_gained <- read_csv("data/percent_unemployed_gained_emp.csv")
+df_neet_distance <- read_csv("data/neet_distance_fitted_values.csv")
+
+
 
 # UI ----------------------------------------------------------------------
-
-
 
 ui <- shinyUI(
   fluidPage(
@@ -165,7 +201,7 @@ Job mobility (the share of workers changing jobs in the past year) has increased
           column(
             width = 7, class = "m-2",
             div(
-              #img(src = "job mobility rate aggregates.png"),
+              
               plotlyOutput("job_mobility"),
                   div(
                   checkboxGroupInput("ages_jm", "Select age groups:",
@@ -195,6 +231,66 @@ Job mobility (the share of workers changing jobs in the past year) has increased
                     Suspendisse placerat, purus nec varius gravida, eros lorem."),
                  ),
         ),
+        
+        fluidRow(
+          column(
+            width = 7, class = "m-2",
+            
+              
+              plotlyOutput("pc_mismatched"),
+              
+          ),
+          column(width = 4, class = "m-2",
+                 h6("First takeaway"),
+                 p("Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+                    Pellentesque pellentesque, erat ac maximus finibus, neque 
+                    magna accumsan eros, vitae faucibus felis velit ac enim. 
+                    Proin sit amet diam non nunc vulputate tempor a ut nibh. 
+                    Suspendisse placerat, purus nec varius gravida, eros lorem 
+                    fringilla dolor, sit amet porttitor elit nulla vel arcu. 
+                    Mauris enim diam, euismod non arcu et, consequat ultricies 
+                    mi. "),
+                 
+                 h6("Additional takeaway"),
+                 p("Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+                    Pellentesque pellentesque, erat ac maximus finibus, neque 
+                    magna accumsan eros, vitae faucibus felis velit ac enim. 
+                    Proin sit amet diam non nunc vulputate tempor a ut nibh. 
+                    Suspendisse placerat, purus nec varius gravida, eros lorem."),
+          ),
+        ),
+        
+        fluidRow(
+          column(
+            width = 7, class = "m-2",
+            
+            
+            plotlyOutput("helpful_jt"),
+            selectInput("helpful_age", "Select age group: ",
+                        choices = unique(df_helpful$Age),
+                        selected = "15-24")
+            
+          ),
+          column(width = 4, class = "m-2",
+                 h6("First takeaway"),
+                 p("Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+                    Pellentesque pellentesque, erat ac maximus finibus, neque 
+                    magna accumsan eros, vitae faucibus felis velit ac enim. 
+                    Proin sit amet diam non nunc vulputate tempor a ut nibh. 
+                    Suspendisse placerat, purus nec varius gravida, eros lorem 
+                    fringilla dolor, sit amet porttitor elit nulla vel arcu. 
+                    Mauris enim diam, euismod non arcu et, consequat ultricies 
+                    mi. "),
+                 
+                 h6("Additional takeaway"),
+                 p("Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+                    Pellentesque pellentesque, erat ac maximus finibus, neque 
+                    magna accumsan eros, vitae faucibus felis velit ac enim. 
+                    Proin sit amet diam non nunc vulputate tempor a ut nibh. 
+                    Suspendisse placerat, purus nec varius gravida, eros lorem."),
+          ),
+        ),
+        
         fluidRow(height = 700,
           column(
             width = 7, class = "m-2",
@@ -320,6 +416,101 @@ Job mobility (the share of workers changing jobs in the past year) has increased
                     magna accumsan eros, vitae faucibus felis velit ac enim. 
                     Proin sit amet diam non nunc vulputate tempor a ut nibh. 
                     Suspendisse placerat, purus nec varius gravida, eros lorem."))),
+        
+        
+        fluidRow(
+          column(width = 7, class = "m-2",
+                 
+                 plotlyOutput("duration_v_ue"),
+                 selectInput("dur_v_ue_date", "Select date: ", 
+                             choices = unique(df_duration_v_ue$Date),
+                             selected = "2022-06-01"),
+                 p("Note: have included a date dropdown as requested, but would this be better as 
+                   a timeline?", style = "color: red")
+                 
+          ),
+          column(width = 4, class = "m-2",
+                 h6("First takeaway"),
+                 p("Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+                    Pellentesque pellentesque, erat ac maximus finibus, neque 
+                    magna accumsan eros, vitae faucibus felis velit ac enim. 
+                    Proin sit amet diam non nunc vulputate tempor a ut nibh. 
+                    Suspendisse placerat, purus nec varius gravida, eros lorem 
+                    fringilla dolor, sit amet porttitor elit nulla vel arcu. 
+                    Mauris enim diam, euismod non arcu et, consequat ultricies 
+                    mi."))
+                 
+          ),
+        
+        fluidRow(
+          column(width = 7, class = "m-2",
+                 
+                 plotlyOutput("pc_ue_gained"),
+                 selectInput("ue_dur", "Select unemployed duration: ", 
+                             choices = unique(df_ue_gained$Duration),
+                             selected = "1 year +")
+                 
+          ),
+          column(width = 4, class = "m-2",
+                 h6("First takeaway"),
+                 p("Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+                    Pellentesque pellentesque, erat ac maximus finibus, neque 
+                    magna accumsan eros, vitae faucibus felis velit ac enim. 
+                    Proin sit amet diam non nunc vulputate tempor a ut nibh. 
+                    Suspendisse placerat, purus nec varius gravida, eros lorem 
+                    fringilla dolor, sit amet porttitor elit nulla vel arcu. 
+                    Mauris enim diam, euismod non arcu et, consequat ultricies 
+                    mi."))
+          
+        ),
+        
+        div(class = "m-2",
+            br(),
+            h5("Relative intensity of JS recipients share for 18-24 year olds"),
+            p("Note: double check 'rel_prp' is the correct value to display", style =  "color:red" )
+        ),
+        
+        
+          
+        
+        fluidRow(
+          column(width = 7, class = "m-2",
+                
+                 leafletOutput("js_map"),
+                 
+                 
+          ),
+          column(width = 4, class = "m-2",
+                 selectInput("age_js", "Select age group: ", 
+                             choices = unique(df_js$ag_bckt),
+                             selected = "18-24"),
+                 sliderTextInput("timeline_js", "Select date: ",
+                                 choices = seq(min(df_js$date), max(df_js$date), by = "months"),
+                                 selected = min(df_js$date),
+                                 animate = animationOptions(interval = 1000, loop = F)
+                                 # Note that animation needs to be fixed - it currently causes the map to reload, which takes too much time
+                 ))),
+        div(class = "m-2",
+            p("Source: [INSERT SOURCE]", style = "font-size:10pt; color:grey" ),
+        ),
+        fluidRow(
+          column(width = 6, class = "m-2",
+                 h6("First takeaway"),
+                 p("Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+                    Pellentesque pellentesque, erat ac maximus finibus, neque 
+                    magna accumsan eros, vitae faucibus felis velit ac enim. 
+                    Proin sit amet diam non nunc vulputate tempor a ut nibh. 
+                    Suspendisse placerat, purus nec varius gravida, eros lorem 
+                    fringilla dolor, sit amet porttitor elit nulla vel arcu. 
+                    Mauris enim diam, euismod non arcu et, consequat ultricies 
+                    mi.")),
+          column(width = 5, class = "m-2",
+                 h6("Additional takeaway"),
+                 p("Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+                    Pellentesque pellentesque, erat ac maximus finibus, neque 
+                    magna accumsan eros, vitae faucibus felis velit ac enim. 
+                    Proin sit amet diam non nunc vulputate tempor a ut nibh. 
+                    Suspendisse placerat, purus nec varius gravida, eros lorem."))),
         ),
         
       )),
@@ -406,22 +597,9 @@ Job mobility (the share of workers changing jobs in the past year) has increased
       column(width = 12, class = "card m-2",
         h3("Youth not in employment, education or training living in disadvantaged areas are a concern"),
         br(),
-        p("Note that there is no data for the Education > 15-19 years or 15-24 years combinations - we could try to do something 
-          fancy where the age menu only pops up if you select the other options, or reconsider how to present this (unless data will be added 
-          later)", style = "color:red"),
         fluidRow(
           column(width = 7, class = "m-2",
-          # div(
-          #   # Graph title: Youth NEET rate as percentage of young population, by age and demographic group
-          #   img(src = "aggregate_neet_example_graph.png", height = "auto", 
-          #       width = "50%"),
-          #   div(
-          #     h5("Youth NEET rate"),
-          #     p("Source: ABS Labour Force Survey"),
-          #     class = "card-body"
-          #   ),
-            
-          # ),
+        
           
           div(
             plotlyOutput("neet")  
@@ -430,8 +608,8 @@ Job mobility (the share of workers changing jobs in the past year) has increased
             column(width = 6,
                    selectInput("neet_dem", "Select demographic: ",
                                 choices = c("Total",
-                                            "Gender",
-                                            "Education"
+                                            "Gender"
+                                            # "Education"
                                             ),
                                 selected = "Total")),
             column(width = 6,
@@ -440,21 +618,23 @@ Job mobility (the share of workers changing jobs in the past year) has increased
                                             "15-19 years",
                                             "20-24 years"),
                                 selected = "15-24 years"))
-          ),
+          ))),
           
-          div(
-            img(src = "animated_gradient_males_shadow.gif", height = "auto", 
-                width = "50%"),
-            div(
-              h5("Growing disparity across regions"),
-              p("Source: HILDA"),
-              class = "card-body"
-            ),
-            
+          fluidRow(
+            column(width = 7, class = "m-2",
+                   
+                   
+                   div(
+                     plotlyOutput("neet_entry_exit")  
+                   ),
+                   fluidRow(
+                     column(width = 6,
+                            selectInput("neet_entry_exit_dem", "Select demographic: ",
+                                        choices = unique(df_neet_2$demo_split),    
+                                        selected = "Total"))
+                   ),
           ),
-         
-        ),
-        
+   
         column(width = 4, class = "m-2",
                h6("First takeaway"),
                p("The likelihood of young Australians not being in employment, education or training increases with distance from Australia's capital cities. This suggests that economic opportunities are concentrated in the capital cities, and disadvantaged areas are being further left behind."),
@@ -465,8 +645,28 @@ Job mobility (the share of workers changing jobs in the past year) has increased
                     magna accumsan eros, vitae faucibus felis velit ac enim. 
                     Proin sit amet diam non nunc vulputate tempor a ut nibh. 
                     Suspendisse placerat, purus nec varius gravida, eros lorem."))),
-      )
+      
+    
+    fluidRow(
+      column(width = 7, class = "m-2",
+             
+             plotlyOutput("neet_distance"),  
+             p("Note there appears to be an issue with the predicted values supplied - 
+               they remain constant for each wave.", style = "color: red")
+             
+      ),
+      column(width = 4, class = "m-2",
+             h6("First takeaway"),
+             p("Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+                    Pellentesque pellentesque, erat ac maximus finibus, neque 
+                    magna accumsan eros, vitae faucibus felis velit ac enim. 
+                    Proin sit amet diam non nunc vulputate tempor a ut nibh. 
+                    Suspendisse placerat, purus nec varius gravida, eros lorem."),
+             
     )),
+    
+    ))),
+    
 
     ## Section 6 ####
     a(id = "section-6"),
@@ -600,17 +800,63 @@ server <- function(input, output, session) {
                          font = list(size = 10, color = "grey")),
       paper_bgcolor = chart_bg_color,
       plot_bgcolor= chart_bg_color,
-      font = list(color = chart_text_color)
-    )
+      font = list(color = chart_text_color))
   })
+  
+  output$pc_mismatched <- renderPlotly({
+    
+    df_pc_mismatched$Percent_mismatch <- df_pc_mismatched$Percent_mismatch * 100
+    format(df_pc_mismatched$Year, "%Y")
+    
+    pc_mismatched <- df_pc_mismatched %>%
+      plot_ly(x = ~Year, y = ~Percent_mismatch, type = 'bar')
+    
+    pc_mismatched <- pc_mismatched %>% layout(
+      title = "Percent of young workers mismatched",
+      xaxis = list(title = "Year", zeroline = FALSE, showgrid = F),
+      yaxis = list(title = "% mismatched", zeroline = FALSE, showgrid = F,
+                   ticksuffix = "%"),
+      margin = list(l = 70, r = 50, t = 50, b = 100),
+      annotations = list(text = "Source: [INSERT SOURCE]",
+                         showarrow = F,
+                         xref = "paper", x = 0,
+                         yref = "paper", y = -.35,
+                         font = list(size = 10, color = "grey")),
+      paper_bgcolor = chart_bg_color,
+      plot_bgcolor= chart_bg_color,
+      font = list(color = chart_text_color))
+    
+  })
+  
+  
+  output$helpful_jt <- renderPlotly({
+    
+    
+    df_helpful$Percent <- df_helpful$Percent * 100
+    
+    helpful_jt <- df_helpful %>% filter(Age == input$helpful_age) %>% 
+      plot_ly(x = ~Date, y = ~Percent, type = "scatter", mode = "lines")
+    
+    helpful_jt <- helpful_jt %>% layout(
+      title = "Percent of workers with helpful job transitions",
+      xaxis = list(title = "Date", zeroline = FALSE, showgrid = F),
+      yaxis = list(title = "% workers", zeroline = FALSE, showgrid = F, ticksuffix = "%"),
+      margin = list(l = 70, r = 50, t = 50, b = 100),
+      annotations = list(text = "Source: [INSERT SOURCE]",
+                         showarrow = F,
+                         xref = "paper", x = 0,
+                         yref = "paper", y = -.35,
+                         font = list(size = 10, color = "grey")),
+      paper_bgcolor = chart_bg_color,
+      plot_bgcolor = chart_bg_color,
+      font = list(color = chart_text_color))
+    
+  })
+  
   
   output$occupation_intensity <- renderPlotly({
     
     req(input$age_gp)
-    
-    # Would this graph make more sense as "Top 5 occupations in 2022 by age"? At the moment it
-    # takes the top 5 occupations in each year, so there are some occupations that only show 
-    # up for 1-2 years on the graph while they are in the top 5. 
     
     
     jm_graph <- df_occupation %>% filter(age == input$age_gp) %>% 
@@ -782,6 +1028,58 @@ server <- function(input, output, session) {
       
   })
   
+  output$duration_v_ue <- renderPlotly({
+    
+    df_duration_v_ue$UE <- df_duration_v_ue$UE * 100
+    
+    duration_v_ue <- df_duration_v_ue %>% filter(Date == input$dur_v_ue_date) %>% 
+      plot_ly(x = ~UE, y = ~MD, type = "scatter", mode = "markers")
+    
+    duration_v_ue <- duration_v_ue %>% layout(
+      title = "Median unemployment duration v unemployment rate",
+      xaxis = list(title = "Unemployment rate", zeroline = FALSE, showgrid = F, ticksuffix = "%"),
+      yaxis = list(title = "Median duration unemployed (months)", zeroline = FALSE, showgrid = F),
+      margin = list(l = 70, r = 50, t = 50, b = 100),
+      paper_bgcolor = chart_bg_color,
+      plot_bgcolor = chart_bg_color,
+      font = list(color = chart_text_color))
+    
+  })
+  
+  output$pc_ue_gained <- renderPlotly({
+    
+    df_ue_gained$Percent <- df_ue_gained$Percent * 100
+    
+    pc_ue_gained <- df_ue_gained %>% filter(Duration == input$ue_dur) %>% 
+      plot_ly(x = ~Date, y = ~Percent, type = "scatter", mode = "lines")
+    
+    pc_ue_gained <- pc_ue_gained %>% layout(
+      title = "% unemployed who gained employment",
+      xaxis = list(title = "Date", zeroline = FALSE, showgrid = F),
+      yaxis = list(title = "% unemployed", zeroline = FALSE, showgrid = F, ticksuffix = "%"),
+      margin = list(l = 70, r = 50, t = 50, b = 100),
+      paper_bgcolor = chart_bg_color,
+      plot_bgcolor = chart_bg_color,
+      font = list(color = chart_text_color))
+    
+  })
+ 
+  output$js_map <- renderLeaflet({
+    js <- df_js %>% filter(ag_bckt == input$age_js, 
+                                       date == input$timeline_js) 
+    domain <- c(0,100)
+    
+    pal <- colorNumeric("OrRd",domain = domain)
+    leaflet(js) %>% 
+      addPolygons(stroke = FALSE, smoothFactor = 0.2,color = ~pal(js$rel_prp),
+                  fillOpacity = 0.7) %>%
+      addProviderTiles(providers$Esri.WorldGrayCanvas) %>%
+      addLegend("bottomright",opacity = 1, pal = pal,values=~domain, title = "Index (lower is better)")
+    
+    
+    
+  })
+  
   ## Section 4 ####
   
   output$youth_unem <- renderPlotly({
@@ -906,6 +1204,74 @@ server <- function(input, output, session) {
  
     
 
+    
+  })
+  
+  output$neet_entry_exit <- renderPlotly({
+    
+    df_neet_2$exit <- -df_neet_2$exit
+    
+    neet_entry_exit <- df_neet_2 %>% filter(demo_split == input$neet_entry_exit_dem) %>% 
+      plot_ly(x = ~date, y = ~neet_flow, type = "scatter", mode = "lines", name = "NEET flow") %>% 
+      rangeslider(start = min(df_neet_2$date), end = max(df_neet_2$date))
+    
+    neet_entry_exit <- neet_entry_exit %>% 
+      add_trace(x = ~date, y = ~entry, type = 'scatter', fill = 'tozeroy', name = "Entries") %>% 
+      add_trace(x = ~date, y = ~exit, type = 'scatter', fill = 'tozeroy', name = "Exits") 
+    
+    neet_entry_exit <- neet_entry_exit %>% layout(
+      
+      title = "NEET entry and exit rates",
+      xaxis = list(title = "Date", 
+                   zeroline = FALSE, showgrid = F, margin = list(b = 100)),
+      yaxis = list(title = "NEET rate", zeroline = FALSE, showgrid = F,
+                   tickformat = "1%"),
+      margin = list(l = 70, r = 50, t = 50, b = 100, autoexpand = T),
+      annotations = list(text = "Source: ABS Labour Force Survey",
+                         showarrow = F,
+                         xref = 'paper', x = 0,
+                         yref = 'paper', y = -.7,
+                         font = list(size = 10, color = "grey")),
+      paper_bgcolor = chart_bg_color,
+      plot_bgcolor= chart_bg_color,
+      font = list(color = chart_text_color))
+     
+  })
+  
+  output$neet_distance <- renderPlotly({
+    
+    neet_distance <- df_neet_distance %>% 
+      arrange(mindistance) %>% 
+      plot_ly(x = ~mindistance, y = ~pred, frame = ~wave, type = "scatter", mode = "lines")
+    
+    neet_distance <- neet_distance %>% layout(
+      
+      title = "Probability of NEET over distance (Males, 18-24)",
+      
+      xaxis = list(title = "Log distance from nearest capital city", 
+                   zeroline = FALSE, showgrid = F),
+      yaxis = list(title = "Predicted probability of NEET status", zeroline = FALSE, showgrid = F,
+                   tickformat = "1%", dtick = 0.02),
+      margin = list(l = 70, r = 50, t = 50, b = 100, autoexpand = T),
+      annotations = list(text = "Source: HILDA Release 2.0",
+                         showarrow = F,
+                         xref = 'paper', x = 0,
+                         yref = 'paper', y = -.5,
+                         font = list(size = 10, color = "grey")),
+      paper_bgcolor = chart_bg_color,
+      plot_bgcolor= chart_bg_color,
+      font = list(color = chart_text_color)) %>% 
+      animation_opts(
+        frame = 200, transition = 200,  easing = "linear", redraw = F
+      ) %>%
+      animation_slider(
+        currentvalue = list(font = list(size = 12, color = "grey")),
+        yref = "paper", y = -.3
+      ) %>% 
+      animation_button(
+        yref = "paper", y = -.3
+      ) 
+    
     
   })
   
