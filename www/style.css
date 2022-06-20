@@ -1,6 +1,6 @@
 .card {
   background-color: black;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  box-shadow: 0 4px 8px 0 #00000033, 0 6px 20px 0 #00000032;
   
 }
   
@@ -13,20 +13,21 @@ section {
     padding: 40px 0 0;
 }
 
+/* Nav bar background */
 ul.nav-bar-container {
   list-style-type: none;
   margin: 0;
   padding-bottom: 500px;
   padding: 0;
   overflow: hidden;
-  background-color: #6f7980;
+  background-color: #008080;
   position: -webkit-sticky; /* Safari */
   position: sticky;
   left: 0;
   top: 0;
   width: 100%;
   z-index: +10000;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  box-shadow: 0 4px 8px 0 #00000033, 0 6px 20px 0 #00000032;
 }
 
 li.nav-bar-element {
@@ -43,11 +44,11 @@ li.nav-bar-element a {
 
 /* Change the link color on hover */
 li.nav-bar-element a:hover {
-  background-color: #414142;
+  background-color: #60b0b0;
   color: white;
 }
 
 /* Changes the box colour on click */
 li.nav-bar-element a:active {
-  background-color: #04AA6D;
+  background-color: #003039;
 }
