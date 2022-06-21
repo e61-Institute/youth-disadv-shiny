@@ -49,8 +49,8 @@ df_occupation <- read_csv("data/two_digit_occupation_by_age.csv")
 df_occupation_area <- st_read("data/occupation_area.shp") %>%
   rename(Area = SA3_nam, Percent = prcnt_t, Occupation = two_nam) %>%
   group_by(Area,age)%>%
-  summarize(Percent  = sum(Percent),
-            Occupation = paste0(Occupation, collapse = " , <br/>"))
+  summarise(Percent  = sum(Percent),
+            Occupation = paste0(Occupation, collapse = ", <br/>"))
 
 df_youth_unem <- read_csv("data/youth-ihad-unemployment.csv")
 df_neet <- read_csv("data/aggregate_neet_rate.csv")
