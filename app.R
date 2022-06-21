@@ -122,14 +122,14 @@ ui <- shinyUI(
     a(id = "section-1"),
     tags$section(
     fluidRow(class = "m-3 justify-content-center",
+             ### E-P + U/E time series ####
              column(width = 12, class = "card m-2",
               h3("The recovery from the pandemic has been uneven for vulnerable groups"),
               br(),
               fluidRow(width = 12,
                 column(width = 7, class = "m-2", style = "",
                   div(
-                    # img(src = "unemployment and E-to-P aggregates.png"),
-                    plotlyOutput("unemployment"),
+                    plotlyOutput("emp_pop_ue_ts"),
                     fluidRow(
                       class = "card-body",
                       column(6,
@@ -167,41 +167,10 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
         h3("Recessions make it harder to find the best match between workers and jobs"),
         br(),
         fluidRow(
-          column(width = 7, class = "m-2",
-            div(
-              img(
-                src = "scatter-plot.jpg",
-                width = "20%",
-                height = "20%"
-              ),
-              div(
-                h5("Graduate Mismatch in 2015 vs 2020"),
-                p("Source: QILT Survey"),
-                class = "card-body-2"
-              ),
-              
-            ),
-         ),
-          column(width = 4, class = "m-2",
-                 h6("First takeaway"),
-                 p("Recessions cause a decrease in the quality of job match for two reasons. The relative shortage of high-quality jobs in a downturn forces workers to shift down the job quality ladder and potentially take jobs to which they are less well matched. In addition, recessions often damage labour mobility prospects, which can lead recent entrants to be trapped in poorly matched jobs.  Thus, the incidence of mismatch is likely to be greater following a sustained period of weakness in the labour market.
-
-Job mobility (the share of workers changing jobs in the past year) has increased in 2022, following declines in 2020 and 2021 relative to pre-pandemic levels. The pandemic constrained the ability of workers to move location and switch to better matched jobs, hampering their ability to climb the job ladder. This effect appears to have eased, although part of the increase in mobility may represent a partial catch-up on previous years.
-"),
-                 
-                 h6("Additional takeaway"),
-                 p("Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-                    Pellentesque pellentesque, erat ac maximus finibus, neque 
-                    magna accumsan eros, vitae faucibus felis velit ac enim. 
-                    Proin sit amet diam non nunc vulputate tempor a ut nibh. 
-                    Suspendisse placerat, purus nec varius gravida, eros lorem."),
-        ),
-        ),
-        fluidRow(
+          ### Job mobility by age group ####
           column(
             width = 7, class = "m-2",
             div(
-              
               plotlyOutput("job_mobility"),
                   div(
                   checkboxGroupInput("ages_jm", "Select age groups:",
@@ -214,29 +183,16 @@ Job mobility (the share of workers changing jobs in the past year) has increased
           ),
           column(width = 4, class = "m-2",
                  h6("First takeaway"),
-                 p("Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-                    Pellentesque pellentesque, erat ac maximus finibus, neque 
-                    magna accumsan eros, vitae faucibus felis velit ac enim. 
-                    Proin sit amet diam non nunc vulputate tempor a ut nibh. 
-                    Suspendisse placerat, purus nec varius gravida, eros lorem 
-                    fringilla dolor, sit amet porttitor elit nulla vel arcu. 
-                    Mauris enim diam, euismod non arcu et, consequat ultricies 
-                    mi. "),
-                 
-                 h6("Additional takeaway"),
-                 p("Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-                    Pellentesque pellentesque, erat ac maximus finibus, neque 
-                    magna accumsan eros, vitae faucibus felis velit ac enim. 
-                    Proin sit amet diam non nunc vulputate tempor a ut nibh. 
-                    Suspendisse placerat, purus nec varius gravida, eros lorem."),
+                 p("Recessions cause a decrease in the quality of job match for two reasons. The relative shortage of high-quality jobs in a downturn forces workers to shift down the job quality ladder and potentially take jobs to which they are less well matched. In addition, recessions often damage labour mobility prospects, which can lead recent entrants to be trapped in poorly matched jobs.  Thus, the incidence of mismatch is likely to be greater following a sustained period of weakness in the labour market."),
+                 p("Job mobility (the share of workers changing jobs in the past year) has increased in 2022, following declines in 2020 and 2021 relative to pre-pandemic levels. The pandemic constrained the ability of workers to move location and switch to better matched jobs, hampering their ability to climb the job ladder. This effect appears to have eased, although part of the increase in mobility may represent a partial catch-up on previous years.
+"),
                  ),
         ),
         
         fluidRow(
+          ### Mismatched young workers ####
           column(
             width = 7, class = "m-2",
-            
-              
               plotlyOutput("pc_mismatched"),
               
           ),
@@ -261,10 +217,9 @@ Job mobility (the share of workers changing jobs in the past year) has increased
         ),
         
         fluidRow(
+          ### Helpful job transitions ####
           column(
             width = 7, class = "m-2",
-            
-            
             plotlyOutput("helpful_jt"),
             selectInput("helpful_age", "Select age group: ",
                         choices = unique(df_helpful$Age),
@@ -292,10 +247,10 @@ Job mobility (the share of workers changing jobs in the past year) has increased
         ),
         
         fluidRow(height = 700,
+          ### Main occupation by age time series ####
           column(
             width = 7, class = "m-2",
             div(
-              #img(src = "job mobility rate aggregates.png"),
               plotlyOutput("occupation_intensity"),
               div(
                 selectInput('age_gp', 'Select age groups:', 
@@ -337,9 +292,9 @@ Job mobility (the share of workers changing jobs in the past year) has increased
         h3("Labour market outcomes are worse for the long-term unemployed..."),
         br(),
         fluidRow(
+          ### Duration of unemployment by age ####
           column(width = 12, class = "m-2",
             div(
-              #img(src = "duration unemployed shares.png"),
               plotlyOutput("duration_unemployed"),
               fluidRow(
                   column(width = 6,
@@ -371,54 +326,8 @@ Job mobility (the share of workers changing jobs in the past year) has increased
                     Proin sit amet diam non nunc vulputate tempor a ut nibh. 
                     Suspendisse placerat, purus nec varius gravida, eros lorem.")),
         ),
-        div(class = "m-2",
-        br(),
-        h5("Unemployed share by age group over time"),
-        ),
         fluidRow(
-          column(width = 7, class = "m-2",
-            
-              #  img(src = "youth unemployment sa4 map.png",
-              #     width = "60%",
-              #     height = "60%"),
-              leafletOutput("map2"),
-               
-              
-            ),
-          column(width = 4, class = "m-2",
-          selectInput("age_map", "Select age group: ", 
-                      choices = unique(df_map2$age),
-                      selected = "15-24 years"),
-          sliderTextInput("timeline", "Select date: ",
-                          choices = seq(min(df_map2$date), max(df_map2$date), by = "months"),
-                          selected = min(df_map2$date),
-                          animate = animationOptions(interval = 1000, loop = F)
-                          # Note that animation needs to be fixed - it currently causes the map to reload, which takes too much time
-        ))),
-        div(class = "m-2",
-        p("Source: [INSERT SOURCE]", style = "font-size:10pt; color:grey" ),
-        ),
-        fluidRow(
-          column(width = 6, class = "m-2",
-                 h6("First takeaway"),
-                 p("Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-                    Pellentesque pellentesque, erat ac maximus finibus, neque 
-                    magna accumsan eros, vitae faucibus felis velit ac enim. 
-                    Proin sit amet diam non nunc vulputate tempor a ut nibh. 
-                    Suspendisse placerat, purus nec varius gravida, eros lorem 
-                    fringilla dolor, sit amet porttitor elit nulla vel arcu. 
-                    Mauris enim diam, euismod non arcu et, consequat ultricies 
-                    mi.")),
-          column(width = 5, class = "m-2",
-                 h6("Additional takeaway"),
-                 p("Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-                    Pellentesque pellentesque, erat ac maximus finibus, neque 
-                    magna accumsan eros, vitae faucibus felis velit ac enim. 
-                    Proin sit amet diam non nunc vulputate tempor a ut nibh. 
-                    Suspendisse placerat, purus nec varius gravida, eros lorem."))),
-        
-        
-        fluidRow(
+          ### U/E duration vs rate ####
           column(width = 7, class = "m-2",
                  
                  plotlyOutput("duration_v_ue"),
@@ -443,6 +352,7 @@ Job mobility (the share of workers changing jobs in the past year) has increased
           ),
         
         fluidRow(
+          ### U/E regaining employment ####
           column(width = 7, class = "m-2",
                  
                  plotlyOutput("pc_ue_gained"),
@@ -466,14 +376,10 @@ Job mobility (the share of workers changing jobs in the past year) has increased
         
         div(class = "m-2",
             br(),
-            h5("Relative intensity of JS recipients share for 18-24 year olds"),
-            p("Note: double check 'rel_prp' is the correct value to display", style =  "color:red" )
+            h5("Relative intensity of JS recipients share for 18-24 year olds")
         ),
-        
-        
-          
-        
         fluidRow(
+          ### JS relative intensity from illion ####
           column(width = 7, class = "m-2",
                 
                  leafletOutput("js_map"),
@@ -524,22 +430,85 @@ Job mobility (the share of workers changing jobs in the past year) has increased
         h3("... and for those in disadvantaged areas"),
         br(),
         fluidRow(
+          ### U/E rate vs IHAD disadvantage #### 
           column(width = 7, class = "m-2",
           div(
-            img(
-              src = "dot plot.png",
-              width = "30%",
-              height = "30%"
-            ),
-            div(
-              h5("Graduate outcomes for disadvantaged students"),
-              p("Source: QILT Survey"),
-              class = "card-body-2"
-              ),
-            
+            plotlyOutput("youth_unem"),
+          ),
+          fluidRow(column(width = 5,
+                    radioButtons("sex_youth_unem", "Select sex:", 
+                         choices = unique(df_youth_unem$sex),
+                         selected = "Total")),
+                  column(width = 5,
+                    checkboxGroupInput("age_youth_unem", "Select age groups:",
+                                       choices = unique(df_youth_unem$age),
+                                       selected = c("15-24 years", "Total")))
           ),
           ),
-         
+          column(width = 4, class = "m-2",
+                 h6("First takeaway"),
+                 p("[Something about labour market outcomes for graduates from disadvantaged backgrounds being worse than those from privileged backgrounds]"),
+                 
+                 h6("Additional takeaway"),
+                 p("Young Australians living in areas with greater household disadvantage (as measured by the ABS Index of Household Advantage and Disadvantage) tend to have more difficulty finding employment, with unemployment rates in these areas higher than more advantaged areas. These disadvantaged areas tend to be clustered in regional Australia or the outer rings of the capital cities."))
+          ),
+        div(class = "m-2",
+            br(),
+            h5("Unemployed share by age group over time"),
+        ),
+        fluidRow(
+          ### Unemployed share by age group over time ####
+          column(width = 7, class = "m-2",
+                 leafletOutput("map2"),
+          ),
+          column(width = 4, class = "m-2",
+                 selectInput("age_map", "Select age group: ", 
+                             choices = unique(df_map2$age),
+                             selected = "15-24 years"),
+                 sliderTextInput("timeline", "Select date: ",
+                                 choices = seq(min(df_map2$date), max(df_map2$date), by = "months"),
+                                 selected = min(df_map2$date),
+                                 animate = animationOptions(interval = 1000, loop = F)
+                                 # Note that animation needs to be fixed - it currently causes the map to reload, which takes too much time
+                 ))),
+        div(class = "m-2",
+            p("Source: [INSERT SOURCE]", style = "font-size:10pt; color:grey" ),
+        ),
+        fluidRow(
+          column(width = 6, class = "m-2",
+                 h6("First takeaway"),
+                 p("Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+                    Pellentesque pellentesque, erat ac maximus finibus, neque 
+                    magna accumsan eros, vitae faucibus felis velit ac enim. 
+                    Proin sit amet diam non nunc vulputate tempor a ut nibh. 
+                    Suspendisse placerat, purus nec varius gravida, eros lorem 
+                    fringilla dolor, sit amet porttitor elit nulla vel arcu. 
+                    Mauris enim diam, euismod non arcu et, consequat ultricies 
+                    mi.")),
+          column(width = 5, class = "m-2",
+                 h6("Additional takeaway"),
+                 p("Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+                    Pellentesque pellentesque, erat ac maximus finibus, neque 
+                    magna accumsan eros, vitae faucibus felis velit ac enim. 
+                    Proin sit amet diam non nunc vulputate tempor a ut nibh. 
+                    Suspendisse placerat, purus nec varius gravida, eros lorem."))),
+        fluidRow(
+          ### Employment rate by degree level and industry ####
+          column(width = 7, class = "m-2",
+                 div(
+                   div(
+                     h5("Employment rate by degree level and industry"),
+                     p("Source: QILT Survey"),
+                     class = "card-body-2"
+                   ),
+                   img(
+                     src = "dot plot.png",
+                     width = "30%",
+                     height = "30%"
+                   )
+                 ),
+          ),
+          
           column(width = 4, class = "m-2",
                  h6("First takeaway"),
                  p("Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
@@ -557,31 +526,8 @@ Job mobility (the share of workers changing jobs in the past year) has increased
                     magna accumsan eros, vitae faucibus felis velit ac enim. 
                     Proin sit amet diam non nunc vulputate tempor a ut nibh. 
                     Suspendisse placerat, purus nec varius gravida, eros lorem.")
-                 )
-        ),
-        fluidRow(
-            column(width = 7, class = "m-2",
-            div(
-              plotlyOutput("youth_unem"),
-            ),
-            fluidRow(column(width = 5,
-                      radioButtons("sex_youth_unem", "Select sex:", 
-                           choices = unique(df_youth_unem$sex),
-                           selected = "Total")),
-                    column(width = 5,
-                      checkboxGroupInput("age_youth_unem", "Select age groups:",
-                                         choices = unique(df_youth_unem$age),
-                                         selected = c("15-24 years", "Total")))
-            ),
-            ),
-            column(width = 4, class = "m-2",
-                   h6("First takeaway"),
-                   p("[Something about labour market outcomes for graduates from disadvantaged backgrounds being worse than those from privileged backgrounds]"),
-                   
-                   h6("Additional takeaway"),
-                   p("Young Australians living in areas with greater household disadvantage (as measured by the ABS Index of Household Advantage and Disadvantage) tend to have more difficulty finding employment, with unemployment rates in these areas higher than more advantaged areas. These disadvantaged areas tend to be clustered in regional Australia or the outer rings of the capital cities."))
-            
-            )
+          )
+        )
             
           ))),
           
@@ -598,11 +544,10 @@ Job mobility (the share of workers changing jobs in the past year) has increased
         h3("Youth not in employment, education or training living in disadvantaged areas are a concern"),
         br(),
         fluidRow(
+          ### Youth NEET by age/demo time series ####
           column(width = 7, class = "m-2",
-        
-          
           div(
-            plotlyOutput("neet")  
+            plotlyOutput("neet_ts")  
           ),
           fluidRow(
             column(width = 6,
@@ -621,9 +566,8 @@ Job mobility (the share of workers changing jobs in the past year) has increased
           ))),
           
           fluidRow(
+            ### NEET entry and exit rates ####
             column(width = 7, class = "m-2",
-                   
-                   
                    div(
                      plotlyOutput("neet_entry_exit")  
                    ),
@@ -648,6 +592,7 @@ Job mobility (the share of workers changing jobs in the past year) has increased
       
     
     fluidRow(
+      ### Pr(NEET) by distance from CC ####
       column(width = 7, class = "m-2",
              
              plotlyOutput("neet_distance"),  
@@ -675,14 +620,15 @@ Job mobility (the share of workers changing jobs in the past year) has increased
       column(width = 12, class = "card m-2",
       h3("Where are the opportunities to exit disadvantage and vulnerability?"),
       fluidRow(
+        ### Map: Change in jobs by industry/location ####
         column(width = 7, class = "m-2",
         div(
-          h5("Map: net change in jobs by industry and location"),
+          h5("Net change in jobs by industry and location"),
           p(em("Change in jobs per 1000 workers between 2002 - 2021")),
           selectInput("name",
                       "Select industry",
                       unique(df_map$indstry)),
-          leafletOutput("map"),
+          leafletOutput("map_change_jobs_industry"),
           ),
         br(),
         p("Source: BLADE Data Industries with less than 10 firms excluded", 
@@ -701,6 +647,7 @@ Job mobility (the share of workers changing jobs in the past year) has increased
                     Suspendisse placerat, purus nec varius gravida, eros lorem.")),
           ),
       fluidRow(
+        ### Table: Change in jobs by industry/location ####
         column(width = 8, class = "m-2",
           div(
             h5("Table: change in jobs by industry and location"),
@@ -708,7 +655,7 @@ Job mobility (the share of workers changing jobs in the past year) has increased
             selectInput("name_area",
                         "Select location",
                         unique(df_map$s3_n_16)),
-            dataTableOutput("table")
+            dataTableOutput("change_jobs_industry_table")
           ),
           br(),
           p("Source: BLADE Data Industries with less than 10 firms excluded", 
@@ -716,6 +663,7 @@ Job mobility (the share of workers changing jobs in the past year) has increased
           ),
       ),
       fluidRow(
+        ### Top 3 youth occupations ####
         column(width = 8, class = "m-2",
                div(
                  h5("Top 3 occupations worked by Youth (19-29) in region"),
@@ -750,7 +698,8 @@ server <- function(input, output, session) {
   
   ## Section 1 ####
  
-  output$unemployment <- renderPlotly({
+  ### E-P + U/E time series ####
+  output$emp_pop_ue_ts <- renderPlotly({
   
     req(input$ages)
   
@@ -779,6 +728,7 @@ server <- function(input, output, session) {
   
   ## Section 2 ####
   
+  ### Job mobility by age group ####
   output$job_mobility <- renderPlotly({
     
     req(input$ages_jm)
@@ -803,6 +753,7 @@ server <- function(input, output, session) {
       font = list(color = chart_text_color))
   })
   
+  ### Mismatched young workers ####
   output$pc_mismatched <- renderPlotly({
     
     df_pc_mismatched$Percent_mismatch <- df_pc_mismatched$Percent_mismatch * 100
@@ -828,7 +779,7 @@ server <- function(input, output, session) {
     
   })
   
-  
+  ### Helpful job transitions ####
   output$helpful_jt <- renderPlotly({
     
     
@@ -853,7 +804,7 @@ server <- function(input, output, session) {
     
   })
   
-  
+  ### Main occupation by age time series ####
   output$occupation_intensity <- renderPlotly({
     
     req(input$age_gp)
@@ -883,6 +834,7 @@ server <- function(input, output, session) {
   
   ## Section 3 ####
   
+  ### Duration of unemployment by age ####
   output$duration_unemployed <- renderPlotly({
     
     req(input$age_dur_1)
@@ -1011,23 +963,7 @@ server <- function(input, output, session) {
     
   })
   
-  output$map2 <- renderLeaflet({
-    Unemployment <- df_map2 %>% filter(age == input$age_map, 
-                                       date == input$timeline,
-                                       sex == "Total") 
-    domain <- c(0,50)
-    
-    pal <- colorNumeric("OrRd",domain = domain)
-    leaflet(Unemployment) %>% 
-      addPolygons(stroke = FALSE, smoothFactor = 0.2,color = ~pal(Unemployment$value),
-                  fillOpacity = 0.7) %>%
-      addProviderTiles(providers$Esri.WorldGrayCanvas) %>%
-      addLegend("bottomright",opacity = 1, pal = pal,values=~domain, title = "Unemployed share (%)")
-     
-
-      
-  })
-  
+  ### U/E duration vs rate ####
   output$duration_v_ue <- renderPlotly({
     
     df_duration_v_ue$UE <- df_duration_v_ue$UE * 100
@@ -1046,6 +982,7 @@ server <- function(input, output, session) {
     
   })
   
+  ### U/E regaining employment ####
   output$pc_ue_gained <- renderPlotly({
     
     df_ue_gained$Percent <- df_ue_gained$Percent * 100
@@ -1064,6 +1001,7 @@ server <- function(input, output, session) {
     
   })
  
+  ### JS intensity from illion ####
   output$js_map <- renderLeaflet({
     js <- df_js %>% filter(ag_bckt == input$age_js, 
                                        date == input$timeline_js) 
@@ -1082,6 +1020,8 @@ server <- function(input, output, session) {
   
   ## Section 4 ####
   
+
+  ### U/E rate vs IHAD disadvantage ####
   output$youth_unem <- renderPlotly({
     
     df_youth_unem$total <- as.numeric(df_youth_unem$total)
@@ -1132,9 +1072,32 @@ server <- function(input, output, session) {
     
   })
   
+  ### Unemployed share by age group over time ####
+  output$map2 <- renderLeaflet({
+    Unemployment <- df_map2 %>% filter(age == input$age_map, 
+                                       date == input$timeline,
+                                       sex == "Total") 
+    domain <- c(0,50)
+    
+    pal <- colorNumeric("OrRd",domain = domain)
+    leaflet(Unemployment) %>% 
+      addPolygons(stroke = FALSE, smoothFactor = 0.2,color = ~pal(Unemployment$value),
+                  fillOpacity = 0.7) %>%
+      addProviderTiles(providers$Esri.WorldGrayCanvas) %>%
+      addLegend("bottomright",opacity = 1, pal = pal,values=~domain, title = "Unemployed share (%)")
+    
+    
+    
+  })
+  
+  ### Employment rate by degree level and industry ####
+  
+  # Need to do
+  
   ## Section 5 ####
   
-  output$neet <- renderPlotly({
+  ### Youth NEET by age/demo time series ####
+  output$neet_ts <- renderPlotly({
     
     if(input$neet_dem == "Total"){
       if(input$neet_age == "15-19 years"){
@@ -1207,6 +1170,7 @@ server <- function(input, output, session) {
     
   })
   
+  ### NEET entry and exit rates ####
   output$neet_entry_exit <- renderPlotly({
     
     df_neet_2$exit <- -df_neet_2$exit
@@ -1238,6 +1202,7 @@ server <- function(input, output, session) {
      
   })
   
+  ### Pr(NEET) by distance from CC ####
   output$neet_distance <- renderPlotly({
     
     neet_distance <- df_neet_distance %>% 
@@ -1278,8 +1243,8 @@ server <- function(input, output, session) {
   
   ## Section 6 ####
   
-  
-  output$map <- renderLeaflet({
+  ### Map: Change in jobs by industry/location ####
+  output$map_change_jobs_industry <- renderLeaflet({
      
     data_map <- subset(df_map, indstry == input$name) %>%
       rename(Net = net)
@@ -1296,6 +1261,7 @@ server <- function(input, output, session) {
     
   })
   
+  ### Top 3 youth occupations ####
   output$area_occupation <- renderLeaflet({
     
     data_map <- df_occupation_area %>% filter(age == input$age_area) 
@@ -1323,8 +1289,8 @@ server <- function(input, output, session) {
   })
   
 
-
-  output$table <- renderDataTable({
+  ### Table: Change in jobs by industry/location ####
+  output$change_jobs_industry_table <- renderDataTable({
     df_map%>%
       as.data.frame() %>%
       filter(s3_n_16 == input$name_area) %>%
@@ -1340,9 +1306,6 @@ server <- function(input, output, session) {
     scrollY = 200,
     scrollCollapse = T,
     fixedHeader = T
-    
-    
-    
     
   ))
  }
