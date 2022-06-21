@@ -51,3 +51,9 @@ li.nav-bar-element a:hover {
 li.nav-bar-element a:active {
   background-color: #04AA6D;
 }
+
+/* Source text formatting */
+p.source-text {
+  font-size: 10pt; 
+  color: grey;
+}

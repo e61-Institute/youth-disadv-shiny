@@ -397,7 +397,7 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
                                  # Note that animation needs to be fixed - it currently causes the map to reload, which takes too much time
                  ))),
         div(class = "m-2",
-            p("Source: [INSERT SOURCE]", style = "font-size:10pt; color:grey" ),
+            p("Source: [INSERT SOURCE]", class = "source-text"),
         ),
         fluidRow(
           column(width = 6, class = "m-2",
@@ -472,7 +472,7 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
                                  # Note that animation needs to be fixed - it currently causes the map to reload, which takes too much time
                  ))),
         div(class = "m-2",
-            p("Source: [INSERT SOURCE]", style = "font-size:10pt; color:grey" ),
+            p("Source: [INSERT SOURCE]", class = "source-text"),
         ),
         fluidRow(
           column(width = 6, class = "m-2",
@@ -494,11 +494,13 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
                     Suspendisse placerat, purus nec varius gravida, eros lorem."))),
         fluidRow(
           ### Employment rate by degree level and industry ####
+          # Still need to make this graph
           column(width = 7, class = "m-2",
                  div(
                    div(
                      h5("Employment rate by degree level and industry"),
-                     p("Source: QILT Survey"),
+                     p("Source: QILT Survey", class = "source-text"),
+                     p("This graph still needs to be made"),
                      class = "card-body-2"
                    ),
                    img(
@@ -632,7 +634,7 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
           ),
         br(),
         p("Source: BLADE Data Industries with less than 10 firms excluded", 
-          style = "font-size:10pt; color:grey")),
+          class = "source-text")),
         
         column(width = 4, class = "m-2",
                br(),
@@ -659,7 +661,7 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
           ),
           br(),
           p("Source: BLADE Data Industries with less than 10 firms excluded", 
-            style = "font-size:10pt; color:grey"),
+            class = "source-text"),
           ),
       ),
       fluidRow(
@@ -676,7 +678,7 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
                ),
                br(),
                p("Source: MADIP ATO extracts FY20", 
-                 style = "font-size:10pt; color:grey"),
+                 class = "source-text"),
         ),
       ),
         ),
