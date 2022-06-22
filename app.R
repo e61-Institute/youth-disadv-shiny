@@ -153,13 +153,20 @@ ui <- shinyUI(
                     ),
                   ),
                 ),
-                column(width = 4, class = "m-2",
-                  h6("Introduction"),
-                  p("In aggregate terms the recovery has been strong, unemployment is at historic lows, while the employment-to-population ratio is well above pre-pandemic levels. Although aggregate labour market indicators show that as a whole, the labour market is strong, including for young Australians, the recovery has been uneven for some groups of vulnerable young people, which this data visualisation will explore.
-"),
-                  
-                  h6("Employment-to-population and unemployment"),
-                  p("The employment-to-population ratio for young Australians aged between 15-24 years is now higher than that of the total population after being below the total population rate throughout the 2010s.
+              ),
+            ),
+          ),
+          column(
+            width = 4,
+            class = "m-2",
+            h6("Introduction"),
+            p(
+              "In aggregate terms the recovery has been strong, unemployment is at historic lows, while the employment-to-population ratio is well above pre-pandemic levels. Although aggregate labour market indicators show that as a whole, the labour market is strong, including for young Australians, the recovery has been uneven for some groups of vulnerable young people, which this data visualisation will explore.
+"
+            ),
+h6("Employment-to-population and unemployment"),
+p(
+  "The employment-to-population ratio for young Australians aged between 15-24 years is now higher than that of the total population after being below the total population rate throughout the 2010s.
 
 However, the unemployment rate for 15-24 year olds continues to be significantly higher than that for the total population, although the absolute rate has declined sharply from pandemic highs to be at the lowest level since 2008. This reflected the overrepresentation of young people in industries -- hospitality and arts and recreation services -- that were most affected by the pandemic.
 "),
@@ -192,512 +199,530 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
               style = ""
             ),
           ),
-          column(width = 4, class = "m-2",
-                 h6("First takeaway"),
-                 p("Recessions cause a decrease in the quality of job match for two reasons. The relative shortage of high-quality jobs in a downturn forces workers to shift down the job quality ladder and potentially take jobs to which they are less well matched. In addition, recessions often damage labour mobility prospects, which can lead recent entrants to be trapped in poorly matched jobs.  Thus, the incidence of mismatch is likely to be greater following a sustained period of weakness in the labour market."),
-                 p("Job mobility (the share of workers changing jobs in the past year) has increased in 2022, following declines in 2020 and 2021 relative to pre-pandemic levels. The pandemic constrained the ability of workers to move location and switch to better matched jobs, hampering their ability to climb the job ladder. This effect appears to have eased, although part of the increase in mobility may represent a partial catch-up on previous years.
-"),
-                 ),
-        ),
-        
-        fluidRow(
-          ### Mismatched young workers ####
           column(
-            width = 7, class = "m-2",
-              plotlyOutput("pc_mismatched"),
-              
-          ),
-          column(width = 4, class = "m-2",
-                 h6("First takeaway"),
-                 p("Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-                    Pellentesque pellentesque, erat ac maximus finibus, neque 
-                    magna accumsan eros, vitae faucibus felis velit ac enim. 
-                    Proin sit amet diam non nunc vulputate tempor a ut nibh. 
-                    Suspendisse placerat, purus nec varius gravida, eros lorem 
-                    fringilla dolor, sit amet porttitor elit nulla vel arcu. 
-                    Mauris enim diam, euismod non arcu et, consequat ultricies 
-                    mi. "),
-                 
-                 h6("Additional takeaway"),
-                 p("Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-                    Pellentesque pellentesque, erat ac maximus finibus, neque 
-                    magna accumsan eros, vitae faucibus felis velit ac enim. 
-                    Proin sit amet diam non nunc vulputate tempor a ut nibh. 
-                    Suspendisse placerat, purus nec varius gravida, eros lorem."),
+            width = 4,
+            class = "m-2",
+            h6("Job mobility"),
+            p("Recessions cause a decrease in the quality of job matches for two reasons. The relative shortage of high-quality jobs in a downturn forces workers to shift down the job quality ladder and potentially take jobs to which they are less well matched. In addition, recessions often damage labour mobility prospects, which can lead recent entrants to be trapped in poorly matched jobs.  Thus, the incidence of mismatch is likely to be greater following a sustained period of weakness in the labour market."),
+            p("Job mobility (the share of workers changing jobs in the past year) has increased in 2022, following declines in 2020 and 2021 relative to pre-pandemic levels. The pandemic constrained the ability of workers to move location and switch to better matched jobs, hampering their ability to climb the job ladder. This effect appears to have eased, although part of the increase in mobility may represent a partial catch-up on previous years.")
           ),
         ),
-        
-        fluidRow(
-          ### Helpful job transitions ####
-          column(
-            width = 7, class = "m-2",
-            plotlyOutput("helpful_jt"),
-            selectInput("helpful_age", "Select age group: ",
-                        choices = unique(df_helpful$Age),
-                        selected = "15-24")
-            
-          ),
-          column(width = 4, class = "m-2",
-                 h6("First takeaway"),
-                 p("Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-                    Pellentesque pellentesque, erat ac maximus finibus, neque 
-                    magna accumsan eros, vitae faucibus felis velit ac enim. 
-                    Proin sit amet diam non nunc vulputate tempor a ut nibh. 
-                    Suspendisse placerat, purus nec varius gravida, eros lorem 
-                    fringilla dolor, sit amet porttitor elit nulla vel arcu. 
-                    Mauris enim diam, euismod non arcu et, consequat ultricies 
-                    mi. "),
-                 
-                 h6("Additional takeaway"),
-                 p("Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-                    Pellentesque pellentesque, erat ac maximus finibus, neque 
-                    magna accumsan eros, vitae faucibus felis velit ac enim. 
-                    Proin sit amet diam non nunc vulputate tempor a ut nibh. 
-                    Suspendisse placerat, purus nec varius gravida, eros lorem."),
-          ),
-        ),
-        
-        fluidRow(height = 700,
-          ### Main occupation by age time series ####
-          column(
-            width = 7, class = "m-2",
-            div(
-              plotlyOutput("occupation_intensity"),
-              div(
-                selectInput('age_gp', 'Select age groups:', 
-                            choices = unique(df_occupation$age))),
-                class = "card-body"),
-              class = "m-2",
-              style = ""
+
+  fluidRow(
+    ### Mismatched young workers ####
+    column(
+      width = 7,
+      class = "m-2",
+      plotlyOutput("pc_mismatched")
+
+    ),
+    column(
+      width = 4,
+      class = "m-2",
+      h6("Job mismatches"),
+      p(
+        "Young workers have a greater need to sort into well-matched jobs in the formative years of their careers (Topel and Ward 1992). Young job switchers experience faster wage growth than older job switchers (of around 6.5 percentage points per annum on average). This is consistent with evidence suggesting that 80 per cent of career earnings growth occurs in the first decade of work (Murphy and Welch 1990). Second, disadvantage young workers tend to experience larger wage gains from switching jobs than those that are not disadvantaged."
+      )
+    ),
+  ),
+
+  fluidRow(
+    ### Helpful job transitions ####
+    column(
+      width = 7,
+      class = "m-2",
+      plotlyOutput("helpful_jt"),
+      selectInput(
+        "helpful_age",
+        "Select age group: ",
+        choices = unique(df_helpful$Age),
+        selected = "15-24"
+      )
+    ),
+    column(
+      width = 4,
+      class = "m-2",
+      h6("Beneficial job transitions"),
+      p("The pandemic was associated with a decline in the quality of – or what may be considered “helpful” – job transitions.  That is, the share of young workers transitioning into better matched jobs – from previously mismatched or matched jobs – declined sharply. This marked decline was not observed for older workers, nor was it observed during the GFC.")
+    ),
+  ),
+
+  fluidRow(
+    height = 700,
+    ### Main occupation by age time series ####
+    column(
+      width = 7,
+      class = "m-2",
+      div(
+        plotlyOutput("occupation_intensity"),
+        div(selectInput(
+          'age_gp', 'Select age groups:',
+          choices = unique(df_occupation$age)
+        )),
+        class = "card-body"
+      ),
+      class = "m-2",
+      style = ""
+    ),
+    column(
+      width = 4,
+      class = "m-2",
+      h6("Main youth occupations"),
+      p("Employment opportunities for young people are primarily in services, specifically in hospitality, food preparation and sales assistant roles. The share of young people in these roles is highest in younger age groups, reflecting young people taking up these jobs part-time alongside further education or as their first jobs after completing secondary education."),
+      p("For 23-25 year olds, the share of employment in these roles is smaller, reflecting a larger share of this cohort having completed tertiary education and working in roles requiring post-secondary qualifications. However, in the lead-up to the pandemic, the share of 23-25 year olds still working in hospitality or sales has been increasing[, potentially driven by a larger share remaining in tertiary education or worse employment prospects in other industries.]")
+    )
+  )
+  )
+  ),
+  ),
+
+
+  ## Section 3 - LT unemployed ####
+  a(id = "section-3"),
+  tags$section(fluidRow(
+    class = "m-3 justify-content-center",
+    column(
+      width = 12,
+      class = "m-2 card",
+      h3("Labour market outcomes are worse for the long-term unemployed..."),
+      br(),
+      ### Duration of unemployment by age ####
+      fluidRow(column(
+        width = 12,
+        class = "m-2",
+        div(
+          plotlyOutput("duration_unemployed"),
+          fluidRow(
+            column(
+              width = 6,
+              selectInput(
+                "age_dur_1",
+                "Select first age group:",
+                choices = unique(df_duration$age_group),
+                selected = "15-24 years"
+              )
             ),
-          column(width = 4, class = "m-2",
-                 h6("First takeaway"),
-                 p("Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-                    Pellentesque pellentesque, erat ac maximus finibus, neque 
-                    magna accumsan eros, vitae faucibus felis velit ac enim. 
-                    Proin sit amet diam non nunc vulputate tempor a ut nibh. 
-                    Suspendisse placerat, purus nec varius gravida, eros lorem 
-                    fringilla dolor, sit amet porttitor elit nulla vel arcu. 
-                    Mauris enim diam, euismod non arcu et, consequat ultricies 
-                    mi. "),
-                 
-                 h6("Additional takeaway"),
-                 p("Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-                    Pellentesque pellentesque, erat ac maximus finibus, neque 
-                    magna accumsan eros, vitae faucibus felis velit ac enim. 
-                    Proin sit amet diam non nunc vulputate tempor a ut nibh. 
-                    Suspendisse placerat, purus nec varius gravida, eros lorem."),
-          ),
-          
-          ),
-        ),
-        
-      )),
-
-
-    ## Section 3 ####
-    a(id = "section-3"),
-    tags$section(
-    fluidRow(class = "m-3 justify-content-center",
-      column(width = 12, class = "m-2 card",
-        h3("Labour market outcomes are worse for the long-term unemployed..."),
-        br(),
-        fluidRow(
-          ### Duration of unemployment by age ####
-          column(width = 12, class = "m-2",
-            div(
-              plotlyOutput("duration_unemployed"),
-              fluidRow(
-                  column(width = 6,
-                  selectInput("age_dur_1", "Select first age group:",
-                              choices = unique(df_duration$age_group),
-                              selected = "15-24 years")),
-                  column(width = 6,
-                  selectInput("age_dur_2", "Select second age group:",
-                              choices = unique(df_duration$age_group),
-                              selected = "Total")),
-                  class = "card-body"),
-              
+            column(
+              width = 6,
+              selectInput(
+                "age_dur_2",
+                "Select second age group:",
+                choices = unique(df_duration$age_group),
+                selected = "Total"
+              )
             ),
-            
-          ),
+            class = "card-body"
+          )
         ),
-        fluidRow(
-          column(width = 6, class = "m-2",
-                 h6("First takeaway"),
-                 p("Long periods of time out of employment make it more difficult to transition back into employment. An elevated share of 15-24 year olds have been unemployed for 1 year or more relative to the total population. Although the COVID-19 recession exacerbated this problem, this was an ongoing concern well before the pandemic.
-
-[Maybe move the map to the next section]
-")),
-          column(width = 5, class = "m-2",
-                 h6("Additional takeaway"),
-                 p("Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-                    Pellentesque pellentesque, erat ac maximus finibus, neque 
-                    magna accumsan eros, vitae faucibus felis velit ac enim. 
-                    Proin sit amet diam non nunc vulputate tempor a ut nibh. 
-                    Suspendisse placerat, purus nec varius gravida, eros lorem.")),
-        ),
-        fluidRow(
-          ### U/E duration vs rate ####
-          column(width = 7, class = "m-2",
-                 
-                 plotlyOutput("duration_v_ue"),
-                 selectInput("dur_v_ue_date", "Select date: ", 
-                             choices = unique(df_duration_v_ue$Date),
-                             selected = "2022-06-01"),
-                 p("Note: have included a date dropdown as requested, but would this be better as 
-                   a timeline?", style = "color: red")
-                 
-          ),
-          column(width = 4, class = "m-2",
-                 h6("First takeaway"),
-                 p("Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-                    Pellentesque pellentesque, erat ac maximus finibus, neque 
-                    magna accumsan eros, vitae faucibus felis velit ac enim. 
-                    Proin sit amet diam non nunc vulputate tempor a ut nibh. 
-                    Suspendisse placerat, purus nec varius gravida, eros lorem 
-                    fringilla dolor, sit amet porttitor elit nulla vel arcu. 
-                    Mauris enim diam, euismod non arcu et, consequat ultricies 
-                    mi."))
-                 
-          ),
-        
-        fluidRow(
-          ### U/E regaining employment ####
-          column(width = 7, class = "m-2",
-                 
-                 plotlyOutput("pc_ue_gained"),
-                 selectInput("ue_dur", "Select unemployed duration: ", 
-                             choices = unique(df_ue_gained$Duration),
-                             selected = "1 year +")
-                 
-          ),
-          column(width = 4, class = "m-2",
-                 h6("First takeaway"),
-                 p("Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-                    Pellentesque pellentesque, erat ac maximus finibus, neque 
-                    magna accumsan eros, vitae faucibus felis velit ac enim. 
-                    Proin sit amet diam non nunc vulputate tempor a ut nibh. 
-                    Suspendisse placerat, purus nec varius gravida, eros lorem 
-                    fringilla dolor, sit amet porttitor elit nulla vel arcu. 
-                    Mauris enim diam, euismod non arcu et, consequat ultricies 
-                    mi."))
-          
-        ),
-        
-        div(class = "m-2",
-            br(),
-            h5("Relative intensity of JS recipients share for 18-24 year olds")
-        ),
-        fluidRow(
-          ### JS relative intensity from illion ####
-          column(width = 7, class = "m-2",
-                
-                 leafletOutput("js_map"),
-                 
-                 
-          ),
-          column(width = 4, class = "m-2",
-                 selectInput("age_js", "Select age group: ", 
-                             choices = unique(df_js$ag_bckt),
-                             selected = "18-24"),
-                 sliderTextInput("timeline_js", "Select date: ",
-                                 choices = seq(min(df_js$date), max(df_js$date), by = "months"),
-                                 selected = min(df_js$date),
-                                 animate = animationOptions(interval = 1000, loop = F)
-                                 # Note that animation needs to be fixed - it currently causes the map to reload, which takes too much time
-                 ))),
-        div(class = "m-2",
-            p("Source: [INSERT SOURCE]", class = "source-text"),
-        ),
-        fluidRow(
-          column(width = 6, class = "m-2",
-                 h6("First takeaway"),
-                 p("Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-                    Pellentesque pellentesque, erat ac maximus finibus, neque 
-                    magna accumsan eros, vitae faucibus felis velit ac enim. 
-                    Proin sit amet diam non nunc vulputate tempor a ut nibh. 
-                    Suspendisse placerat, purus nec varius gravida, eros lorem 
-                    fringilla dolor, sit amet porttitor elit nulla vel arcu. 
-                    Mauris enim diam, euismod non arcu et, consequat ultricies 
-                    mi.")),
-          column(width = 5, class = "m-2",
-                 h6("Additional takeaway"),
-                 p("Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-                    Pellentesque pellentesque, erat ac maximus finibus, neque 
-                    magna accumsan eros, vitae faucibus felis velit ac enim. 
-                    Proin sit amet diam non nunc vulputate tempor a ut nibh. 
-                    Suspendisse placerat, purus nec varius gravida, eros lorem."))),
-        ),
-        
+      ), ),
+      fluidRow(column(
+        width = 6,
+        class = "m-2",
+        h6("Duration of unemployment by age group"),
+        p(
+          "Long periods of time out of employment make it more difficult to transition back into employment. An elevated share of 15-24 year olds have been unemployed for 1 year or more relative to the total population. Although the COVID-19 recession exacerbated this problem, this was an ongoing concern well before the pandemic."
+        )
       )),
-    
-
-    ## Section 4 ####
-    a(id = "section-4"),
-    tags$section(
-    fluidRow(class = "m-3 justify-content-center",
-      column(width = 12, class = "card m-2",
-        h3("... and for those in disadvantaged areas"),
-        br(),
-        fluidRow(
-          ### U/E rate vs IHAD disadvantage #### 
-          column(width = 7, class = "m-2",
-          div(
-            plotlyOutput("youth_unem"),
-          ),
-          fluidRow(column(width = 5,
-                    radioButtons("sex_youth_unem", "Select sex:", 
-                         choices = unique(df_youth_unem$sex),
-                         selected = "Total")),
-                  column(width = 5,
-                    checkboxGroupInput("age_youth_unem", "Select age groups:",
-                                       choices = unique(df_youth_unem$age),
-                                       selected = c("15-24 years", "Total")))
-          ),
-          ),
-          column(width = 4, class = "m-2",
-                 h6("First takeaway"),
-                 p("[Something about labour market outcomes for graduates from disadvantaged backgrounds being worse than those from privileged backgrounds]"),
-                 
-                 h6("Additional takeaway"),
-                 p("Young Australians living in areas with greater household disadvantage (as measured by the ABS Index of Household Advantage and Disadvantage) tend to have more difficulty finding employment, with unemployment rates in these areas higher than more advantaged areas. These disadvantaged areas tend to be clustered in regional Australia or the outer rings of the capital cities."))
-          ),
-        div(class = "m-2",
-            br(),
-            h5("Unemployed share by age group over time"),
-        ),
-        fluidRow(
-          ### Unemployed share by age group over time ####
-          column(width = 7, class = "m-2",
-                 leafletOutput("map2"),
-          ),
-          column(width = 4, class = "m-2",
-                 selectInput("age_map", "Select age group: ", 
-                             choices = unique(df_map2$age),
-                             selected = "15-24 years"),
-                 sliderTextInput("timeline", "Select date: ",
-                                 choices = seq(min(df_map2$date), max(df_map2$date), by = "months"),
-                                 selected = min(df_map2$date),
-                                 animate = animationOptions(interval = 1000, loop = F)
-                                 # Note that animation needs to be fixed - it currently causes the map to reload, which takes too much time
-                 ))),
-        div(class = "m-2",
-            p("Source: [INSERT SOURCE]", class = "source-text"),
-        ),
-        fluidRow(
-          column(width = 6, class = "m-2",
-                 h6("First takeaway"),
-                 p("Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-                    Pellentesque pellentesque, erat ac maximus finibus, neque 
-                    magna accumsan eros, vitae faucibus felis velit ac enim. 
-                    Proin sit amet diam non nunc vulputate tempor a ut nibh. 
-                    Suspendisse placerat, purus nec varius gravida, eros lorem 
-                    fringilla dolor, sit amet porttitor elit nulla vel arcu. 
-                    Mauris enim diam, euismod non arcu et, consequat ultricies 
-                    mi.")),
-          column(width = 5, class = "m-2",
-                 h6("Additional takeaway"),
-                 p("Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-                    Pellentesque pellentesque, erat ac maximus finibus, neque 
-                    magna accumsan eros, vitae faucibus felis velit ac enim. 
-                    Proin sit amet diam non nunc vulputate tempor a ut nibh. 
-                    Suspendisse placerat, purus nec varius gravida, eros lorem."))),
-        fluidRow(
-          ### Employment rate by degree level and industry ####
-          # Still need to make this graph
-          column(width = 7, class = "m-2",
-                 div(
-                   div(
-                     h5("Employment rate by degree level and industry"),
-                     p("Source: QILT Survey", class = "source-text"),
-                     p("This graph still needs to be made"),
-                     class = "card-body-2"
-                   ),
-                   img(
-                     src = "dot plot.png",
-                     width = "30%",
-                     height = "30%"
-                   )
-                 ),
-          ),
+      fluidRow(
+        ### U/E duration vs rate ####
+        column(
+          width = 7,
+          class = "m-2",
           
-          column(width = 4, class = "m-2",
-                 h6("First takeaway"),
-                 p("Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-                    Pellentesque pellentesque, erat ac maximus finibus, neque 
-                    magna accumsan eros, vitae faucibus felis velit ac enim. 
-                    Proin sit amet diam non nunc vulputate tempor a ut nibh. 
-                    Suspendisse placerat, purus nec varius gravida, eros lorem 
-                    fringilla dolor, sit amet porttitor elit nulla vel arcu. 
-                    Mauris enim diam, euismod non arcu et, consequat ultricies 
-                    mi. "),
-                 
-                 h6("Additional takeaway"),
-                 p("Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-                    Pellentesque pellentesque, erat ac maximus finibus, neque 
-                    magna accumsan eros, vitae faucibus felis velit ac enim. 
-                    Proin sit amet diam non nunc vulputate tempor a ut nibh. 
-                    Suspendisse placerat, purus nec varius gravida, eros lorem.")
+          plotlyOutput("duration_v_ue"),
+          selectInput(
+            "dur_v_ue_date",
+            "Select date: ",
+            choices = unique(df_duration_v_ue$Date),
+            selected = "2022-06-01"
+          ),
+          p(
+            "Note: have included a date dropdown as requested, but would this be better as a timeline?",
+            style = "color: red"
+          )
+        ),
+        column(
+          width = 4,
+          class = "m-2",
+          h6("Unemployment duration and unemployment rate"),
+          p(
+            "[Pending real data: Areas with a higher unemployment rate tend to have longer median unemployment durations, reflecting the difficulty that the long-term unemployed have when searching for employment.]"
           )
         )
-            
-          ))),
-          
-       
-        
-      
-      
-
-    ## Section 5 ####
-    a(id = "section-5"),
-    tags$section(
-    fluidRow(class = "m-3 justify-content-center", 
-      column(width = 12, class = "card m-2",
-        h3("Youth not in employment, education or training living in disadvantaged areas are a concern"),
-        br(),
-        fluidRow(
-          ### Youth NEET by age/demo time series ####
-          column(width = 7, class = "m-2",
-          div(
-            plotlyOutput("neet_ts")  
-          ),
-          fluidRow(
-            column(width = 6,
-                   selectInput("neet_dem", "Select demographic: ",
-                                choices = c("Total",
-                                            "Gender"
-                                            # "Education"
-                                            ),
-                                selected = "Total")),
-            column(width = 6,
-                   radioButtons("neet_age", "Select age group: ",
-                                choices = c("15-24 years",
-                                            "15-19 years",
-                                            "20-24 years"),
-                                selected = "15-24 years"))
-          ))),
-          
-          fluidRow(
-            ### NEET entry and exit rates ####
-            column(width = 7, class = "m-2",
-                   div(
-                     plotlyOutput("neet_entry_exit")  
-                   ),
-                   fluidRow(
-                     column(width = 6,
-                            selectInput("neet_entry_exit_dem", "Select demographic: ",
-                                        choices = unique(df_neet_2$demo_split),    
-                                        selected = "Total"))
-                   ),
-          ),
-   
-        column(width = 4, class = "m-2",
-               h6("First takeaway"),
-               p("The likelihood of young Australians not being in employment, education or training increases with distance from Australia's capital cities. This suggests that economic opportunities are concentrated in the capital cities, and disadvantaged areas are being further left behind."),
-               
-               h6("Additional takeaway"),
-               p("Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-                    Pellentesque pellentesque, erat ac maximus finibus, neque 
-                    magna accumsan eros, vitae faucibus felis velit ac enim. 
-                    Proin sit amet diam non nunc vulputate tempor a ut nibh. 
-                    Suspendisse placerat, purus nec varius gravida, eros lorem."))),
-      
-    
-    fluidRow(
-      ### Pr(NEET) by distance from CC ####
-      column(width = 7, class = "m-2",
-             
-             plotlyOutput("neet_distance"),  
-             p("Note there appears to be an issue with the predicted values supplied - 
-               they remain constant for each wave.", style = "color: red")
-             
       ),
-      column(width = 4, class = "m-2",
-             h6("First takeaway"),
-             p("Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-                    Pellentesque pellentesque, erat ac maximus finibus, neque 
-                    magna accumsan eros, vitae faucibus felis velit ac enim. 
-                    Proin sit amet diam non nunc vulputate tempor a ut nibh. 
-                    Suspendisse placerat, purus nec varius gravida, eros lorem."),
-             
-    )),
-    
+      
+      fluidRow(
+        ### U/E regaining employment ####
+        column(
+          width = 7,
+          class = "m-2",
+          
+          plotlyOutput("pc_ue_gained"),
+          selectInput(
+            "ue_dur",
+            "Select unemployed duration: ",
+            choices = unique(df_ue_gained$Duration),
+            selected = "1 year +"
+          )
+        ),
+        column(
+          width = 4,
+          class = "m-2",
+          h6("Transitions into employment"),
+          p(
+            "[Pending real data: Comments on whether this trend has been increasing or decreasing and at times this has changed]"
+          )
+        )
+      ),
+      
+      div(
+        class = "m-2",
+        br(),
+        h5(
+          "Relative intensity of Jobseeker recipients share for 18-24 year olds"
+        )
+      ),
+      fluidRow(
+        ### JS relative intensity from illion ####
+        column(width = 7, class = "m-2",
+               leafletOutput("js_map")),
+        column(
+          width = 4,
+          class = "m-2",
+          selectInput(
+            "age_js",
+            "Select age group: ",
+            choices = unique(df_js$age_bucket),
+            selected = "18-24"
+          ),
+          sliderTextInput(
+            "timeline_js",
+            "Select date: ",
+            choices = seq(min(df_js$date), max(df_js$date), by = "months"),
+            selected = min(df_js$date),
+            animate = animationOptions(interval = 1000, loop = F)
+            # Note that animation needs to be fixed - it currently causes the map to reload, which takes too much time
+          )
+        )
+      ),
+      div(class = "m-2",
+          p("Source: illion", class = "source-text")),
+      fluidRow(column(
+        width = 6,
+        class = "m-2",
+        h6("Jobseeker recipient share for 18-24 year olds"),
+        p(
+          "This map uses illion data to estimate the relative shares of Jobseeker and Youth Allowance (for job seekers) payments in regions across Australia. The data are presented as an index, with higher numbers indicating a greater relative share of the population in that region are on support payments compared to the rest of Australia."
+        ),
+        p(
+          "Whilst the share of individuals on support payments change over time, the general trend is for areas that are associated with greater disadvantage such as outer suburban and regional Australia to have larger relative shares of individuals on support payments."
+        )
+      ), ),
+    )
+    )
+  ), 
+  
+  
+  ## Section 4 - Disadv areas ####
+  a(id = "section-4"),
+  tags$section(fluidRow(
+    class = "m-3 justify-content-center",
+    column(
+      width = 12,
+      class = "card m-2",
+      h3("... and for those in disadvantaged areas"),
+      br(),
+      fluidRow(
+        ### U/E rate vs IHAD disadvantage ####
+        column(
+          width = 7,
+          class = "m-2",
+          div(plotlyOutput("youth_unem"),),
+          fluidRow(
+            column(
+              width = 5,
+              radioButtons(
+                "sex_youth_unem",
+                "Select sex:",
+                choices = unique(df_youth_unem$sex),
+                selected = "Total"
+              )
+            ),
+            column(
+              width = 5,
+              checkboxGroupInput(
+                "age_youth_unem",
+                "Select age groups:",
+                choices = unique(df_youth_unem$age),
+                selected = c("15-24 years", "Total")
+              )
+            )
+          ),
+        ),
+        column(
+          width = 4,
+          class = "m-2",
+          h6("Unemployment is higher in disadvantaged areas"),
+          p(
+            "Young Australians living in areas with greater household disadvantage (as measured by the ABS Index of Household Advantage and Disadvantage) tend to have more difficulty finding employment, with unemployment rates in these areas higher than in more advantaged areas. These disadvantaged areas tend to be clustered in regional Australia or the outer rings of the capital cities."
+          )
+        )
+      ),
+      div(class = "m-2",
+          br(),
+          h5("Unemployed share by age group over time")),
+      fluidRow(
+        ### Unemployed share by age group over time ####
+        column(width = 7, class = "m-2",
+               leafletOutput("map2"),),
+        column(
+          width = 4,
+          class = "m-2",
+          selectInput(
+            "age_map",
+            "Select age group: ",
+            choices = unique(df_map2$age),
+            selected = "15-24 years"
+          ),
+          sliderTextInput(
+            "timeline",
+            "Select date: ",
+            choices = seq(min(df_map2$date), max(df_map2$date), by = "months"),
+            selected = min(df_map2$date),
+            animate = animationOptions(interval = 1000, loop = F)
+            # Note that animation needs to be fixed - it currently causes the map to reload, which takes too much time
+          )
+        )
+      ),
+      div(class = "m-2",
+          p("Source: [INSERT SOURCE]", class = "source-text")),
+      fluidRow(column(
+        width = 6,
+        class = "m-2",
+        h6("Unemployment by age group and region"),
+        p(
+          "Youth unemployment rates tend to be higher than that of the total population and this is true at the regional level as well."
+        )
+      )),
+      fluidRow(
+        ### Employment rate by degree level and industry ####
+        # Still need to make this graph
+        column(width = 7, class = "m-2",
+               div(
+                 div(h5(
+                   "Employment rate by degree level and industry"
+                 ),
+                 class = "card-body-2"),
+                 img(
+                   src = "dot plot.png",
+                   width = "30%",
+                   height = "30%"
+                 ),
+                 div(class = "m-2",
+                     p("Source: [INSERT SOURCE]", class = "source-text"),),
+               ),),
+
+        column(
+          width = 4,
+          class = "m-2",
+          h6("First takeaway"),
+          p("This graph still needs to be made")
+        )
+      )
+
+    )
+  )
+  ),
+  
+  ## Section 5 - Youth NEET ####
+  a(id = "section-5"),
+  tags$section(fluidRow(
+    class = "m-3 justify-content-center",
+    column(
+      width = 12,
+      class = "card m-2",
+      h3(
+        "Youth not in employment, education or training living in disadvantaged areas are a concern"
+      ),
+      br(),
+      fluidRow(
+        ### Youth NEET by age/demo time series ####
+        column(
+          width = 7,
+          class = "m-2",
+          div(plotlyOutput("neet_timeseries")),
+          fluidRow(column(
+            width = 6,
+            selectInput(
+              "neet_dem",
+              "Select demographic: ",
+              choices = c("Total",
+                          "Gender"
+                          ),
+              selected = "Total"
+            ),
+            column(
+              width = 6,
+              radioButtons(
+                "neet_age",
+                "Select age group: ",
+                choices = c("15-24 years",
+                            "15-19 years",
+                            "20-24 years"),
+                selected = "15-24 years"
+              )
+            ))
+          ),
+          column(
+            width = 9,
+            class = "m-2",
+            h6("Youth NEET tends to increase during economic downturns"),
+            p(
+              "The share of youth who are not in employment, education or training (NEET) has been broadly steady in Australia since 2000. The share tends to increase during economic downturns, such as the Global Financial Crisis in 2008 and the COVID-19 recession in 2020. In the past two years the aggregate NEET rate has declined back towards historic levels."
+            )
+          )
+        ),
+        fluidRow(
+          ### NEET entry and exit rates ####
+          column(
+            width = 7,
+            class = "m-2",
+            div(plotlyOutput("neet_entry_exit")),
+            fluidRow(column(
+              width = 6,
+              selectInput(
+                "neet_entry_exit_dem",
+                "Select demographic: ",
+                choices = unique(df_neet_2$demo_split),
+                selected = "Total"
+              )
+            )),
+          ),
+
+          column(
+            width = 4,
+            class = "m-2",
+            h6("The COVID-19 recession drove a large increase in NEET"),
+            p(
+              "The flow of people into NEET increased sharply in 2020, driven by the COVID-19 recession. The subsequent rapid recovery in the labour market saw a large flow out of NEET status. This flow was common across capital cities and regions, and across both males and females"
+            )
+          )
+        ),
+
+
+        fluidRow(
+          ### Pr(NEET) by distance from CC ####
+          column(
+            width = 7,
+            class = "m-2",
+
+            plotlyOutput("neet_distance"),
+            p(
+              "Note there appears to be an issue with the predicted values supplied -
+               they remain constant for each wave.",
+              style = "color: red"
+            )
+
+          ),
+          column(
+            width = 4,
+            class = "m-2",
+            h6("Youth in regional areas experience higher probabilities of being NEET"),
+            p(
+              "The likelihood of young Australians not being in employment, education or training increases with distance from Australia's capital cities. This suggests that economic opportunities are concentrated in the capital cities, and disadvantaged areas are being further left behind."
+            )
+          )
+        ),
+
+      )
     ))),
     
-
-    ## Section 6 ####
+    
+    ## Section 6 - Opportunities ####
     a(id = "section-6"),
-    tags$section(
-    fluidRow(class = "m-3 justify-content-center",
-      column(width = 12, class = "card m-2",
-      h3("Where are the opportunities to exit disadvantage and vulnerability?"),
-      fluidRow(
-        ### Map: Change in jobs by industry/location ####
-        column(width = 7, class = "m-2",
-        div(
-          h5("Net change in jobs by industry and location"),
-          p(em("Change in jobs per 1000 workers between 2002 - 2021")),
-          selectInput("name",
-                      "Select industry",
-                      unique(df_map$indstry)),
-          leafletOutput("map_change_jobs_industry"),
-          ),
-        br(),
-        p("Source: BLADE Data Industries with less than 10 firms excluded", 
-          class = "source-text")),
-        
-        column(width = 4, class = "m-2",
-               br(),
-               h6("First takeaway"),
-               p("Employment opportunities vary by industry and across Australia. Young people living in more disadvantaged regions may have to relocate to find opportunities that best match their interests and skills."),
-               
-               h6("Additional takeaway"),
-               p("Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-                    Pellentesque pellentesque, erat ac maximus finibus, neque 
-                    magna accumsan eros, vitae faucibus felis velit ac enim. 
-                    Proin sit amet diam non nunc vulputate tempor a ut nibh. 
-                    Suspendisse placerat, purus nec varius gravida, eros lorem.")),
-          ),
-      fluidRow(
-        ### Table: Change in jobs by industry/location ####
-        column(width = 8, class = "m-2",
-          div(
-            h5("Table: change in jobs by industry and location"),
-            p(em("Change in jobs per 1000 workers between 2002 - 2021")),
-            selectInput("name_area",
-                        "Select location",
-                        unique(df_map$s3_n_16)),
-            dataTableOutput("change_jobs_industry_table")
-          ),
-          br(),
-          p("Source: BLADE Data Industries with less than 10 firms excluded", 
-            class = "source-text"),
-          ),
-      ),
-      fluidRow(
-        ### Top 3 youth occupations ####
-        column(width = 8, class = "m-2",
-               div(
-                 h5("Top 3 occupations worked by Youth (19-29) in region"),
-                 p(em("SA3 level")),
-                 leafletOutput("area_occupation"),
-                 selectInput("age_area",
-                             "Select age group:",
-                             unique(df_occupation_area$age))
-                 
-               ),
-               br(),
-               p("Source: MADIP ATO extracts FY20", 
-                 class = "source-text"),
+    tags$section(fluidRow(
+      class = "m-3 justify-content-center",
+      column(
+        width = 12,
+        class = "card m-2",
+        h3(
+          "Where are the opportunities to exit disadvantage and vulnerability?"
         ),
-      ),
+        fluidRow(
+          ### Map: Change in jobs by industry/location ####
+          column(
+            width = 7,
+            class = "m-2",
+            div(
+              h5("Net change in jobs by industry and location"),
+              p(em(
+                "Change in jobs per 1000 workers between 2002 - 2021"
+              )),
+              selectInput("name",
+                          "Select industry",
+                          unique(df_map$indstry)),
+              leafletOutput("map_change_jobs_industry"),
+            ),
+            br(),
+            p(
+              "Source: BLADE Data Industries with less than 10 firms excluded",
+              class = "source-text"
+            )
+          ),
+
+          column(
+            width = 4,
+            class = "m-2",
+            br(),
+            h6("Employment opportunities vary by region and industry"),
+            p("Employment opportunities vary by industry and across Australia. Young people living in more disadvantaged regions may have to relocate to find opportunities that best match their interests and skills."),
+            p("The graph shows net changes in jobs by industry. A net increase in jobs indicates that the industry is growing in a region, while a decrease indicates a decline. The table supplements this with a gross measure that shows how many new jobs were created in an industry, without taking into account job destruction."),
+            p("The most common occupation and industries for young people (under 25 years) tend to be in hospitality, sales and carers positions. This is true across most regions, and these industries make up a larger share of employment. In contrast, the most common occupations and industry for older workers vary much more across regions and are less concentrated.")
+          ),
         ),
-      ),
-   
-   
-   
-      )    ))
+        fluidRow(### Table: Change in jobs by industry/location ####
+                 column(
+                   width = 8,
+                   class = "m-2",
+                   div(
+                     h5("Table: change in jobs by industry and location"),
+                     p(em(
+                       "Change in jobs per 1000 workers between 2002 - 2021"
+                     )),
+                     selectInput("name_area",
+                                 "Select location",
+                                 unique(df_map$s3_n_16)),
+                     dataTableOutput("change_jobs_industry_table")
+                   ),
+                   br(),
+                   p(
+                     "Source: BLADE Data Industries with less than 10 firms excluded",
+                     class = "source-text"
+                   )
+                 ),),
+        fluidRow(### Top 3 youth occupations ####
+                 column(
+                   width = 8,
+                   class = "m-2",
+                   div(
+                     h5("Top 3 occupations worked by Youth (19-29) in region"),
+                     p(em("SA3 level")),
+                     leafletOutput("area_occupation"),
+                     selectInput(
+                       "age_area",
+                       "Select age group:",
+                       unique(df_occupation_area$age)
+                     )
+
+                   ),
+                   br(),
+                   p("Source: MADIP ATO extracts FY20",
+                     class = "source-text")
+                 ))
+      )
+    ))
+  )
+)
  
             
            
