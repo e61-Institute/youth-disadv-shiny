@@ -1041,7 +1041,7 @@ server <- function(input, output, session) {
  
   ### JS intensity from illion ####
   output$js_map <- renderLeaflet({
-    js <- df_js %>% filter(ag_bckt == input$age_js, 
+    js <- df_js %>% filter(age_bucket == input$age_js, 
                                        date == input$timeline_js) 
     domain <- c(0,100)
     
@@ -1135,58 +1135,56 @@ server <- function(input, output, session) {
   ## Section 5 ####
   
   ### Youth NEET by age/demo time series ####
-  output$neet_ts <- renderPlotly({
+  output$neet_timeseries <- renderPlotly({
     
     if(input$neet_dem == "Total"){
       if(input$neet_age == "15-19 years"){
-        neet_ts <- df_neet %>% plot_ly(x = ~Month, y = ~`Total 15-19 years`,
+        neet_timeseries <- df_neet %>% plot_ly(x = ~date, y = ~`Total 15-19 years`,
                                        type = "scatter", mode = "lines")
       }
       else if (input$neet_age == "20-24 years"){
-        neet_ts <- df_neet %>% plot_ly(x = ~Month, y = ~`Total 20-24 years`, 
+        neet_timeseries <- df_neet %>% plot_ly(x = ~date, y = ~`Total 20-24 years`, 
                                        type = "scatter", mode = "lines")
       }
       else if (input$neet_age == "15-24 years"){
-        neet_ts <- df_neet %>% plot_ly(x = ~Month, y = ~`Total 15-24 years`, 
+        neet_timeseries <- df_neet %>% plot_ly(x = ~date, y = ~`Total 15-24 years`, 
                                        type = "scatter", mode = "lines")
       }
     }
     else if (input$neet_dem == "Gender"){
       if(input$neet_age == "15-19 years"){
-        neet_ts <- df_neet %>% plot_ly(x = ~Month) %>% 
+        neet_timeseries <- df_neet %>% plot_ly(x = ~date) %>% 
           add_trace(y = ~`Males 15-19 years`, type = "scatter", mode = "lines", name = "Males") %>% 
           add_trace(y = ~`Females 15-19 years`, type = "scatter", mode = "lines", name = "Females")
       }
       else if (input$neet_age == "20-24 years"){
-        neet_ts <- df_neet %>% plot_ly(x = ~Month) %>% 
+        neet_timeseries <- df_neet %>% plot_ly(x = ~date) %>% 
           add_trace(y = ~`Males 20-24 years`, type = "scatter", mode = "lines", name = "Males") %>% 
           add_trace(y = ~`Females 20-24 years`, type = "scatter", mode = "lines", name = "Females")
       }
       else if (input$neet_age == "15-24 years"){
-        neet_ts <- df_neet %>% plot_ly(x = ~Month) %>% 
+        neet_timeseries <- df_neet %>% plot_ly(x = ~date) %>% 
           add_trace(y = ~`Males 15-24 years`, type = "scatter", mode = "lines", name = "Males") %>% 
           add_trace(y = ~`Females 15-24 years`, type = "scatter", mode = "lines", name = "Females")
       }
     }
     else if (input$neet_dem == "Education"){
       if(input$neet_age == "15-19 years"){
-        neet_ts <- df_neet %>% plot_ly(x = ~Month) # note there is no data for this combo
+        neet_timeseries <- df_neet %>% plot_ly(x = ~date) # note there is no data for this combo
       }
       else if (input$neet_age == "20-24 years"){
-        neet_ts <- df_neet %>% plot_ly(x = ~Month) %>% 
+        neet_timeseries <- df_neet %>% plot_ly(x = ~date) %>% 
           add_trace(y = ~`Year 9 or below/Never attended school 20-24 years`, type = "scatter", mode = "lines", name = "Year 9 or below") %>% 
           add_trace(y = ~`Year 10 or equivalent 20-24 years`, type = "scatter", mode = "lines", name = "Year 10 or equivalent") %>% 
           add_trace(y = ~`Year 11 or equivalent 20-24 years`, type = "scatter", mode = "lines", name = "Year 11 or equivalent") %>% 
           add_trace(y = ~`Year 12 or equivalent 20-24 years`, type = "scatter", mode = "lines", name = "Year 12 or equivalent")
       }
       else if (input$neet_age == "15-24 years"){
-        neet_ts <- df_neet %>% plot_ly(x = ~Month) # note there is no data for this combo
+        neet_timeseries <- df_neet %>% plot_ly(x = ~date) # note there is no data for this combo
       }
     }
-    
-    
-    neet_ts <- neet_ts %>% layout(
-      
+
+    neet_timeseries <- neet_timeseries %>% layout(
       title = "Youth NEET rate by age and demographic group",
       xaxis = list(title = "Date", 
                    zeroline = FALSE, showgrid = F, margin = list(b = 100)),
@@ -1199,12 +1197,8 @@ server <- function(input, output, session) {
                          yref = 'paper', y = -.35,
                          font = list(size = 10, color = "grey")),
       paper_bgcolor = chart_bg_color,
-      plot_bgcolor= chart_bg_color,
+      plot_bgcolor = chart_bg_color,
       font = list(color = chart_text_color))
-    
- 
-    
-
     
   })
   
