@@ -1,10 +1,10 @@
 library(shiny)
 library(bslib)
-library(sf)
 library(leaflet)
 library(data.table)
 library(magrittr)
 library(tidyverse)
+library(sf)
 library(plotly)
 library(shinyWidgets)
 library(leaftime)
@@ -767,7 +767,7 @@ server <- function(input, output, session) {
       title = "Measures of employment by age group",
       xaxis = list(title = "Date", zeroline = FALSE, showgrid = F),
       yaxis = list(title = input$measure, zeroline = FALSE, showgrid = F,
-                   ticksuffix = "%"),
+                   ticksuffix = "%", hoverformat = ".2f"),
       margin = list(l = 70, r = 50, t = 50, b = 100),
       annotations = list(text = "Source: ABS (2022), Labour Force, Detailed",
                          showarrow = F,
@@ -797,7 +797,7 @@ server <- function(input, output, session) {
       title = "Job mobility by age group",
       xaxis = list(title = "Date", zeroline = FALSE, showgrid = F),
       yaxis = list(title = "Job mobility", zeroline = FALSE, showgrid = F,
-                   ticksuffix = "%"),
+                   ticksuffix = "%", hoverformat = ".2f"),
       margin = list(l = 70, r = 50, t = 50, b = 100),
       annotations = list(text = "Source: [INSERT SOURCE]",
                          showarrow = F,
@@ -822,7 +822,7 @@ server <- function(input, output, session) {
       title = "Percent of young workers mismatched",
       xaxis = list(title = "Year", zeroline = FALSE, showgrid = F),
       yaxis = list(title = "% mismatched", zeroline = FALSE, showgrid = F,
-                   ticksuffix = "%"),
+                   ticksuffix = "%", hoverformat = ".2f"),
       margin = list(l = 70, r = 50, t = 50, b = 100),
       annotations = list(text = "Source: [INSERT SOURCE]",
                          showarrow = F,
@@ -847,7 +847,7 @@ server <- function(input, output, session) {
     helpful_jt <- helpful_jt %>% layout(
       title = "Percent of workers with helpful job transitions",
       xaxis = list(title = "Date", zeroline = FALSE, showgrid = F),
-      yaxis = list(title = "% workers", zeroline = FALSE, showgrid = F, ticksuffix = "%"),
+      yaxis = list(title = "% workers", zeroline = FALSE, showgrid = F, ticksuffix = "%", hoverformat = ".2f"),
       margin = list(l = 70, r = 50, t = 50, b = 100),
       annotations = list(text = "Source: [INSERT SOURCE]",
                          showarrow = F,
@@ -878,7 +878,7 @@ server <- function(input, output, session) {
       showlegend = TRUE,
       title = "Top 5 occupations by age group",
       xaxis = list(title = "Year", zeroline = FALSE, showgrid = F),
-      yaxis = list(title = "Percent Total", zeroline = FALSE, showgrid = F,ticksuffix = "%"),
+      yaxis = list(title = "Percent Total", zeroline = FALSE, showgrid = F, ticksuffix = "%", , hoverformat = ".2f"),
       legend = list(orientation = 'h',
                     yref = "paper", y = -.45),
       paper_bgcolor = chart_bg_color,
@@ -945,7 +945,7 @@ server <- function(input, output, session) {
       title = "Duration of unemployment by age group",
       xaxis = list(title = input$age_dur_1, zeroline = FALSE, showgrid = F),
       yaxis = list(title = "Share of unemployed", zeroline = FALSE, showgrid = F,
-                   ticksuffix = "%"),
+                   ticksuffix = "%", hoverformat = ".2f"),
       margin = list(l = 70, r = 50, t = 50, b = 100),
       annotations = list(text = "Source: [INSERT SOURCE]",
                          showarrow = F,
@@ -1006,7 +1006,7 @@ server <- function(input, output, session) {
       title = "Duration of unemployment by age group",
       xaxis = list(title = input$age_dur_2, zeroline = FALSE, showgrid = F),
       yaxis = list(title = "Share of unemployed persons", zeroline = FALSE, showgrid = F,
-                   ticksuffix = "%"),
+                   ticksuffix = "%", hoverformat = ".2f"),
       margin = list(l = 70, r = 50, t = 50, b = 100),
       paper_bgcolor = chart_bg_color,
       plot_bgcolor = chart_bg_color,
@@ -1029,12 +1029,29 @@ server <- function(input, output, session) {
     
     duration_v_ue <- duration_v_ue %>% layout(
       title = "Median unemployment duration v unemployment rate",
-      xaxis = list(title = "Unemployment rate", zeroline = FALSE, showgrid = F, ticksuffix = "%"),
-      yaxis = list(title = "Median duration unemployed (months)", zeroline = FALSE, showgrid = F),
-      margin = list(l = 70, r = 50, t = 50, b = 100),
+      xaxis = list(
+        title = "Unemployment rate",
+        zeroline = FALSE,
+        showgrid = F,
+        ticksuffix = "%",
+        hoverformat = ".2f"
+      ),
+      yaxis = list(
+        title = "Median duration unemployed (months)",
+        zeroline = FALSE,
+        showgrid = F,
+        hoverformat = ".2f"
+      ),
+      margin = list(
+        l = 70,
+        r = 50,
+        t = 50,
+        b = 100
+      ),
       paper_bgcolor = chart_bg_color,
       plot_bgcolor = chart_bg_color,
-      font = list(color = chart_text_color))
+      font = list(color = chart_text_color)
+    )
     
   })
   
@@ -1049,7 +1066,7 @@ server <- function(input, output, session) {
     pc_ue_gained <- pc_ue_gained %>% layout(
       title = "% unemployed who gained employment",
       xaxis = list(title = "Date", zeroline = FALSE, showgrid = F),
-      yaxis = list(title = "% unemployed", zeroline = FALSE, showgrid = F, ticksuffix = "%"),
+      yaxis = list(title = "% unemployed", zeroline = FALSE, showgrid = F, ticksuffix = "%", hoverformat = ".2f"),
       margin = list(l = 70, r = 50, t = 50, b = 100),
       paper_bgcolor = chart_bg_color,
       plot_bgcolor = chart_bg_color,
@@ -1059,16 +1076,39 @@ server <- function(input, output, session) {
  
   ### JS intensity from illion ####
   output$js_map <- renderLeaflet({
-    js <- df_js %>% filter(age_bucket == input$age_js, 
-                                       date == input$timeline_js) 
+    js <- df_js %>% filter(age_bucket == input$age_js,
+                           date == input$timeline_js)
     domain <- c(0,100)
     
-    pal <- colorNumeric("OrRd",domain = domain)
-    leaflet(js) %>% 
-      addPolygons(stroke = FALSE, smoothFactor = 0.2,color = ~pal(js$rel_prp),
-                  fillOpacity = 0.7) %>%
+    pal <- colorNumeric("OrRd", domain = domain)
+    
+    labels <- sprintf(
+      "<strong>%s</strong><br/>Index: %.0f",
+      js$sa4_name_2016, js$rel_prop
+    ) %>% 
+      lapply(htmltools::HTML)
+    
+    leaflet(js) %>%
+      addPolygons(
+        stroke = FALSE,
+        smoothFactor = 0.2,
+        color = ~ pal(js$rel_prop),
+        label = labels,
+        labelOptions = labelOptions(
+          style = list("font-weight" = "normal", padding = "3px 8px"),
+          textsize = "15px",
+          direction = "auto"
+        ),
+        fillOpacity = 0.7
+      ) %>%
       addProviderTiles(providers$Esri.WorldGrayCanvas) %>%
-      addLegend("bottomright",opacity = 1, pal = pal,values=~domain, title = "Index (lower is better)")
+      addLegend(
+        "bottomright",
+        opacity = 1,
+        pal = pal,
+        values =  ~ domain,
+        title = "Index (lower is better)"
+      )
     
     
     
@@ -1102,7 +1142,7 @@ server <- function(input, output, session) {
       xaxis = list(title = "Share of households in bottom decile of disadvantage", 
                    zeroline = FALSE, showgrid = F, ticksuffix = "%", margin = list(b = 100)),
       yaxis = list(title = "Unemployment rate", zeroline = FALSE, showgrid = F,
-                   ticksuffix = "%"),
+                   ticksuffix = "%", hoverformat = ".2f"),
       margin = list(l = 70, r = 50, t = 50, b = 100, autoexpand = T),
       annotations = list(text = "Source: ABS",
                          showarrow = F,
@@ -1130,17 +1170,43 @@ server <- function(input, output, session) {
   
   ### Unemployed share by age group over time ####
   output$map2 <- renderLeaflet({
-    Unemployment <- df_map2 %>% filter(age == input$age_map, 
-                                       date == input$timeline,
-                                       sex == "Total") 
-    domain <- c(0,50)
+    Unemployment <- df_map2 %>%
+      filter(age == input$age_map,
+             date == input$timeline,
+             sex == "Total")
     
-    pal <- colorNumeric("OrRd",domain = domain)
-    leaflet(Unemployment) %>% 
-      addPolygons(stroke = FALSE, smoothFactor = 0.2,color = ~pal(Unemployment$value),
-                  fillOpacity = 0.7) %>%
+    domain <- c(0, 50)
+    
+    pal <- colorNumeric("OrRd", domain = domain)
+    
+    labels <- sprintf(
+      "<strong>%s</strong><br/>Unemployed share: %.2f",
+      Unemployment$sa4_name, Unemployment$value
+    ) %>% 
+      lapply(htmltools::HTML)
+    
+    
+    leaflet(Unemployment) %>%
+      addPolygons(
+        stroke = FALSE,
+        smoothFactor = 0.2,
+        color = ~ pal(Unemployment$value),
+        label = labels,
+        labelOptions = labelOptions(
+          style = list("font-weight" = "normal", padding = "3px 8px"),
+          textsize = "15px",
+          direction = "auto"
+        ),
+        fillOpacity = 0.7
+      ) %>%
       addProviderTiles(providers$Esri.WorldGrayCanvas) %>%
-      addLegend("bottomright",opacity = 1, pal = pal,values=~domain, title = "Unemployed share (%)")
+      addLegend(
+        "bottomright",
+        opacity = 1,
+        pal = pal,
+        values =  ~ domain,
+        title = "Unemployed share (%)"
+      )
     
     
     
@@ -1207,7 +1273,7 @@ server <- function(input, output, session) {
       xaxis = list(title = "Date", 
                    zeroline = FALSE, showgrid = F, margin = list(b = 100)),
       yaxis = list(title = "NEET rate", zeroline = FALSE, showgrid = F,
-                   tickformat = "1%"),
+                   tickformat = "1%", hoverformat = ".2f"),
       margin = list(l = 70, r = 50, t = 50, b = 100, autoexpand = T),
       annotations = list(text = "Source: ABS Labour Force Survey",
                          showarrow = F,
@@ -1239,7 +1305,7 @@ server <- function(input, output, session) {
       xaxis = list(title = "Date", 
                    zeroline = FALSE, showgrid = F, margin = list(b = 100)),
       yaxis = list(title = "NEET rate", zeroline = FALSE, showgrid = F,
-                   tickformat = "1%"),
+                   tickformat = "1%", hoverformat = ".2f"),
       margin = list(l = 70, r = 50, t = 50, b = 100, autoexpand = T),
       annotations = list(text = "Source: ABS Labour Force Survey",
                          showarrow = F,
@@ -1264,9 +1330,9 @@ server <- function(input, output, session) {
       title = "Probability of NEET over distance (Males, 18-24)",
       
       xaxis = list(title = "Log distance from nearest capital city", 
-                   zeroline = FALSE, showgrid = F),
+                   zeroline = FALSE, showgrid = F, hoverformat = ".2f"),
       yaxis = list(title = "Predicted probability of NEET status", zeroline = FALSE, showgrid = F,
-                   tickformat = "1%", dtick = 0.02),
+                   tickformat = "1%", dtick = 0.02, hoverformat = ".2f"),
       margin = list(l = 70, r = 50, t = 50, b = 100, autoexpand = T),
       annotations = list(text = "Source: HILDA Release 2.0",
                          showarrow = F,
@@ -1296,25 +1362,52 @@ server <- function(input, output, session) {
   ### Map: Change in jobs by industry/location ####
   output$map_change_jobs_industry <- renderLeaflet({
      
-    data_map <- subset(df_map, indstry == input$name) %>%
-      rename(Net = net)
+    data_map <- df_map %>% 
+      filter(industry == input$name) %>%
+      rename(Net = net) %>% 
+      st_as_sf()
     
-    max <- max(c(abs(min(data_map$Net)),max(data_map$Net)))
-    domain <- c(-max,max)
+    max <- max(c(abs(min(data_map$Net)), max(data_map$Net)))
+    domain <- c(-max, max)
     
-    pal2 <- colorNumeric("RdYlGn",domain = domain)
-    leaflet(data_map) %>% 
-      addPolygons(stroke = FALSE, smoothFactor = 0.2,color = ~pal2(data_map$Net),
-                  fillOpacity = 0.7) %>%
+    labels <- sprintf(
+      "<strong>%s</strong><br/>Net change: %.2f",
+      data_map$sa3_name_16, data_map$Net
+      ) %>% 
+      lapply(htmltools::HTML)
+    
+    pal2 <- colorNumeric("RdYlGn", domain = domain)
+    
+    leaflet(data_map) %>%
+      addPolygons(
+        stroke = FALSE,
+        smoothFactor = 0.2,
+        color = ~ pal2(data_map$Net),
+        fillOpacity = 0.7,
+        label = labels,
+        labelOptions = labelOptions(
+          style = list("font-weight" = "normal", padding = "3px 8px"),
+          textsize = "15px",
+          direction = "auto"
+        )
+      ) %>%
       addProviderTiles(providers$Esri.WorldGrayCanvas) %>%
-      addLegend("bottomright",opacity = 1, pal = pal2,values=~domain, title = "Net Change in Jobs")
+      addLegend(
+        "bottomright",
+        opacity = 1,
+        pal = pal2,
+        values = ~ domain,
+        title = "Net Change in Jobs"
+      )
     
   })
   
   ### Top 3 youth occupations ####
   output$area_occupation <- renderLeaflet({
     
-    data_map <- df_occupation_area %>% filter(age == input$age_area) 
+    data_map <- df_occupation_area %>% 
+      filter(age == input$age_area) %>%
+      st_as_sf()
     
     pal <- colorNumeric(
       palette = "Blues",
@@ -1325,29 +1418,42 @@ server <- function(input, output, session) {
       data_map$Area, data_map$Occupation
     ) %>% lapply(htmltools::HTML)
     
-    leaflet(data_map) %>% 
-      addPolygons(stroke = FALSE, smoothFactor = 0.2,color = ~pal(Percent),
-                  fillOpacity = 0.7,
-                  label = labels,
-                  labelOptions =labelOptions(style = list("font-weight" = "normal", padding = "3px 8px"),
-                                             textsize = "15px",
-                                             direction = "auto")) %>%
+    leaflet(data_map) %>%
+      addPolygons(
+        stroke = FALSE,
+        smoothFactor = 0.2,
+        color = ~ pal(Percent),
+        fillOpacity = 0.7,
+        label = labels,
+        labelOptions = labelOptions(
+          style = list("font-weight" = "normal", padding = "3px 8px"),
+          textsize = "15px",
+          direction = "auto"
+        )
+      ) %>%
       addProviderTiles(providers$Esri.WorldGrayCanvas) %>%
-      addLegend(pal = pal, values = ~Percent, opacity = 0.5, title = " % Total Employment", position = "bottomright")
-      
+      addLegend(
+        pal = pal,
+        values = ~ Percent,
+        opacity = 0.5,
+        title = " % Total Employment",
+        position = "bottomright"
+      )
+    
     
   })
   
 
   ### Table: Change in jobs by industry/location ####
   output$change_jobs_industry_table <- renderDataTable({
-    df_map%>%
+    df_map %>%
       as.data.frame() %>%
-      filter(s3_n_16 == input$name_area) %>%
-      select(indstry, net, gross) %>%
+      filter(sa3_name_16 == input$name_area) %>%
+      select(industry, net, gross) %>%
       rename(Net = net,
              Gross = gross,
-             Industry = indstry)
+             Industry = industry) %>% 
+      mutate(Net = round(Net, 2), Gross = round(Gross, 2))
   },
   options = list(
     pageLength = 5,
@@ -1356,7 +1462,6 @@ server <- function(input, output, session) {
     scrollY = 200,
     scrollCollapse = T,
     fixedHeader = T
-    
   ))
  }
 
