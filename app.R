@@ -52,19 +52,30 @@ df_occupation_area <- st_read("data/occupation_area.shp") %>%
   summarise(Percent  = sum(Percent),
             Occupation = paste0(Occupation, collapse = ", <br/>"))
 
-df_youth_unem <- read_csv("data/youth-ihad-unemployment.csv")
-df_neet <- read_csv("data/aggregate_neet_rate.csv")
-df_js <- st_read("data/js-recipient-share-map.shp")
-df_js <- df_js[!is.na(df_js$date),]
-df_js$date <- as.Date(df_js$date, "%Y-%m-%d")
-df_neet_2 <- read_csv("data/neet-entry-exit-rates.csv")
-df_duration_v_ue <- read_csv("data/duration_v_rates_unemployment.csv")
-df_pc_mismatched <- read_csv("data/percent_mismatched.csv")
-df_helpful <- read_csv("data/percent_helpful_transitions.csv")
-df_ue_gained <- read_csv("data/percent_unemployed_gained_emp.csv")
-df_neet_distance <- read_csv("data/neet_distance_fitted_values.csv")
-
-
+df_unemp <- read_csv("data/unemployment and E-to-P aggregates.csv") %>% 
+  mutate(across(where(is.numeric), round, 2))
+df_job_mobility <- read_csv("data/job mobility rate aggregates.csv") %>% 
+  mutate(across(where(is.numeric), round, 2))
+df_duration <- read_csv("data/duration unemployed shares.csv") %>% 
+  mutate(across(where(is.numeric), round, 2))
+df_occupation <- read_csv("data/two_digit_occupation_by_age.csv") %>% 
+  mutate(across(where(is.numeric), round, 2))
+df_youth_unem <- read_csv("data/youth-ihad-unemployment.csv") %>% 
+  mutate(across(where(is.numeric), round, 2))
+df_neet <- read_csv("data/aggregate_neet_rate_sa.csv") %>% 
+  mutate(across(where(is.numeric), round, 2))
+df_neet_2 <- read_csv("data/neet-entry-exit-rates.csv") %>% 
+  mutate(across(where(is.numeric), round, 2))
+df_duration_v_ue <- read_csv("data/duration_v_rates_unemployment.csv") %>% 
+  mutate(across(where(is.numeric), round, 2))
+df_pc_mismatched <- read_csv("data/percent_mismatched.csv") %>% 
+  mutate(across(where(is.numeric), round, 2))
+df_helpful <- read_csv("data/percent_helpful_transitions.csv") %>% 
+  mutate(across(where(is.numeric), round, 2))
+df_ue_gained <- read_csv("data/percent_unemployed_gained_emp.csv") %>% 
+  mutate(across(where(is.numeric), round, 2))
+df_neet_distance <- read_csv("data/neet_distance_fitted_values.csv") %>% 
+  mutate(across(where(is.numeric), round, 2))
 
 # UI ----------------------------------------------------------------------
 
