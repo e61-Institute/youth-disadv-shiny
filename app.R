@@ -678,7 +678,7 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
               )),
               selectInput("name",
                           "Select industry",
-                          unique(df_map$indstry)),
+                          unique(df_map$industry)),
               leafletOutput("map_change_jobs_industry"),
             ),
             br(),
@@ -709,7 +709,7 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
                      )),
                      selectInput("name_area",
                                  "Select location",
-                                 unique(df_map$s3_n_16)),
+                                 unique(df_map$sa3_name_16)),
                      dataTableOutput("change_jobs_industry_table")
                    ),
                    br(),
