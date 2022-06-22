@@ -39,18 +39,26 @@ theme_set(theme_bw())
 
 # Read in data ------------------------------------------------------------
 
-df_map <- st_read("data/jobcreation.shp")
-df_unemp <- read_csv("data/unemployment and E-to-P aggregates.csv")
-df_job_mobility <- read_csv("data/job mobility rate aggregates.csv")
-df_duration <- read_csv("data/duration unemployed shares.csv")
-df_map2 <- st_read("data/youth unemployment sa4 map.shp")
-df_map2 <- df_map2[!is.na(df_map2$date),]
-df_occupation <- read_csv("data/two_digit_occupation_by_age.csv")
-df_occupation_area <- st_read("data/occupation_area.shp") %>%
-  rename(Area = SA3_nam, Percent = prcnt_t, Occupation = two_nam) %>%
-  group_by(Area,age)%>%
-  summarise(Percent  = sum(Percent),
-            Occupation = paste0(Occupation, collapse = ", <br/>"))
+df_map <- readRDS("data/jobcreation.rds")
+
+df_js <- readRDS("data/js-recipient-share-map.rds") %>% 
+  filter(!is.na(date)) %>% 
+  mutate(date = as.Date(date, "%Y-%m-%d"))
+
+df_map2 <- readRDS("data/youth unemployment sa4 map.rds") %>% 
+  filter(!is.na(date))
+
+df_occupation_area <- readRDS("data/occupation_area.rds") %>%
+  rename(Area = SA3_name, Percent = percent_total, Occupation = two_name) %>%
+  group_by(Area, age) %>%
+  transmute(
+    age, Area,
+    Percent = sum(Percent),
+    Occupation = paste0(Occupation, collapse = ", <br/>"),
+    geometry
+  ) %>% 
+  dplyr::ungroup() %>% 
+  unique()
 
 df_unemp <- read_csv("data/unemployment and E-to-P aggregates.csv")
 df_job_mobility <- read_csv("data/job mobility rate aggregates.csv")
