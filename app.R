@@ -87,7 +87,7 @@ ui <- shinyUI(
     tags$head(
       tags$link(rel = "stylesheet", type = "text/css", href = "style.css"),
     ),
-   
+    
     
     
     
@@ -115,43 +115,56 @@ ui <- shinyUI(
     ## Navigation bar ####
     
     
-    tags$ul(tags$li(a(href = "#section-1", "Recovery progress"), class = "nav-bar-element"),
-            tags$li(a(href = "#section-2", "Job mobility"), class = "nav-bar-element"),
-            tags$li(a(href = "#section-3", "Long-term unemployed"), class = "nav-bar-element"),
-            tags$li(a(href = "#section-4", "Disadvantaged areas"), class = "nav-bar-element"),
-            tags$li(a(href = "#section-5", "Youth NEET"), class = "nav-bar-element"),
-            tags$li(a(href = "#section-6", "Where are the opportunities?"), class = "nav-bar-element"),
-            class = "nav-bar-container"
+    tags$ul(
+      tags$li(a(href = "#section-1", "Recovery progress"), class = "nav-bar-element"),
+      tags$li(a(href = "#section-2", "Job mobility"), class = "nav-bar-element"),
+      tags$li(a(href = "#section-3", "Long-term unemployed"), class = "nav-bar-element"),
+      tags$li(a(href = "#section-4", "Disadvantaged areas"), class = "nav-bar-element"),
+      tags$li(a(href = "#section-5", "Youth NEET"), class = "nav-bar-element"),
+      tags$li(a(href = "#section-6", "Where are the opportunities?"), class = "nav-bar-element"),
+      class = "nav-bar-container"
     ),
     
     
     
-   
-   
-    ## Section 1 ####
-
+    
+    
+    ## Section 1 - Intro ####
+    
     a(id = "section-1"),
-    tags$section(
-    fluidRow(class = "m-3 justify-content-center",
-             ### E-P + U/E time series ####
-             column(width = 12, class = "card m-2",
-              h3("The recovery from the pandemic has been uneven for vulnerable groups"),
-              br(),
-              fluidRow(width = 12,
-                column(width = 7, class = "m-2", style = "",
-                  div(
-                    plotlyOutput("emp_pop_ue_ts"),
-                    fluidRow(
-                      class = "card-body",
-                      column(6,
-                      selectInput("measure", "Select measure:", 
-                                  choices = unique(df_unemp$measure))),
-                      column(6,
-                      checkboxGroupInput("ages", "Select age groups:",
-                                         choices = unique(df_unemp$age_group),
-                                         selected = c("Total", "15-24 years"))),
-                    ),
-                  ),
+    tags$section(fluidRow(
+      class = "m-3 justify-content-center",
+      ### E-P + U/E time series ####
+      column(
+        width = 12,
+        class = "card m-2",
+        h3(
+          "The recovery from the pandemic has been uneven for vulnerable groups"
+        ),
+        br(),
+        fluidRow(
+          width = 12,
+          column(
+            width = 7,
+            class = "m-2",
+            style = "",
+            div(
+              plotlyOutput("emp_pop_ue_ts"),
+              fluidRow(
+                class = "card-body",
+                column(6,
+                       selectInput(
+                         "measure", "Select measure:",
+                         choices = unique(df_unemp$measure)
+                       )),
+                column(
+                  6,
+                  checkboxGroupInput(
+                    "ages",
+                    "Select age groups:",
+                    choices = unique(df_unemp$age_group),
+                    selected = c("Total", "15-24 years")
+                  )
                 ),
               ),
             ),
@@ -169,32 +182,41 @@ p(
   "The employment-to-population ratio for young Australians aged between 15-24 years is now higher than that of the total population after being below the total population rate throughout the 2010s.
 
 However, the unemployment rate for 15-24 year olds continues to be significantly higher than that for the total population, although the absolute rate has declined sharply from pandemic highs to be at the lowest level since 2008. This reflected the overrepresentation of young people in industries -- hospitality and arts and recreation services -- that were most affected by the pandemic.
-"),
-        
-                  ),
-                ),
-              ), 
-            )),
-          
-    
-    ## Section 2 ####
-    a(id = "section-2"),
-    tags$section(
-    fluidRow(class = "m-3 justify-content-center",
-      column(width = 12, class = "card m-2",
+"
+)
+          ),
+        ),
+      ),
+    )
+),
+
+
+  ## Section 2 - Job mobility ####
+  a(id = "section-2"),
+  tags$section(
+    fluidRow(
+      class = "m-3 justify-content-center",
+      column(
+        width = 12,
+        class = "card m-2",
         h3("Recessions make it harder to find the best match between workers and jobs"),
         br(),
         fluidRow(
           ### Job mobility by age group ####
           column(
-            width = 7, class = "m-2",
+            width = 7,
+            class = "m-2",
             div(
               plotlyOutput("job_mobility"),
-                  div(
-                  checkboxGroupInput("ages_jm", "Select age groups:",
-                                   choices = unique(df_job_mobility$age_group),
-                                   selected = c("Total", "15-24 years")),
-                  class = "card-body"),
+              div(
+                checkboxGroupInput(
+                  "ages_jm",
+                  "Select age groups:",
+                  choices = unique(df_job_mobility$age_group),
+                  selected = c("Total", "15-24 years")
+                ),
+                class = "card-body"
+              ),
               class = "m-2",
               style = ""
             ),
