@@ -59,7 +59,8 @@ df_js <- st_read("data/js-recipient-share-map.shp")
 df_js <- df_js[!is.na(df_js$date),]
 df_js$date <- as.Date(df_js$date, "%Y-%m-%d")
 df_neet_2 <- read_csv("data/neet-entry-exit-rates.csv")
-df_duration_v_ue <- read_csv("data/duration_v_rates_unemployment.csv")
+df_duration_v_ue <- read_csv("data/duration_v_rates_unemployment.csv") %>%
+  mutate(Date = as.character(Date))
 df_pc_mismatched <- read_csv("data/percent_mismatched.csv")
 df_helpful <- read_csv("data/percent_helpful_transitions.csv")
 df_ue_gained <- read_csv("data/percent_unemployed_gained_emp.csv")
@@ -436,10 +437,9 @@ Job mobility (the share of workers changing jobs in the past year) has increased
                  
                  plotlyOutput("duration_v_ue"),
                  selectInput("dur_v_ue_date", "Select date: ", 
-                             choices = unique(df_duration_v_ue$Date),
-                             selected = "2022-06-01"),
-                 p("Note: have included a date dropdown as requested, but would this be better as 
-                   a timeline?", style = "color: red")
+                             choices = unique(df_duration_v_ue$Date)),
+                 selectInput("dur_v_ue_date2", "Select Second date: ", 
+                             choices = unique(df_duration_v_ue$Date))
                  
           ),
           column(width = 4, class = "m-2",
@@ -1045,8 +1045,9 @@ server <- function(input, output, session) {
     
     df_duration_v_ue$UE <- df_duration_v_ue$UE * 100
     
-    duration_v_ue <- df_duration_v_ue %>% filter(Date == input$dur_v_ue_date) %>% 
-      plot_ly(x = ~UE, y = ~MD, type = "scatter", mode = "markers")
+    duration_v_ue <- df_duration_v_ue %>% filter(Date ==input$dur_v_ue_date| Date == input$dur_v_ue_date2) %>%
+      plot_ly(x = ~UE, y = ~MD, color = ~Date,text=~SA4, type = "scatter",  mode = "markers",
+              colors = c('#db410d','#e3ca84'))
     
     duration_v_ue <- duration_v_ue %>% layout(
       title = "Median unemployment duration v unemployment rate",
