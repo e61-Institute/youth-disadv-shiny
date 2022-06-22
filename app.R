@@ -10,8 +10,9 @@ library(shinyWidgets)
 library(leaftime)
 library(htmltools)
 library(geojsonio)
-
+library(waiter)
 theme_set(theme_bw())
+
 
 # Leaflet code (not working currently) --------------------------------------
 
@@ -62,7 +63,18 @@ df_duration_v_ue <- read_csv("data/duration_v_rates_unemployment.csv")
 df_pc_mismatched <- read_csv("data/percent_mismatched.csv")
 df_helpful <- read_csv("data/percent_helpful_transitions.csv")
 df_ue_gained <- read_csv("data/percent_unemployed_gained_emp.csv")
+
 df_neet_distance <- read_csv("data/neet_distance_fitted_values.csv")
+# utils
+
+breakerfn <- function(x){
+  df <- subset(df_neet_distance,wave %in% (seq(max(c(x-3,3)),x,1)))
+  df$frame <- x+2000
+  df$Year <- as.character(df$wave +2000)
+  return(setDT(df))
+}
+df_neet_distance <- rbindlist(lapply(c(6:20),breakerfn))
+df_neet_distance$Year <- as.factor(df_neet_distance$Year)
 
 
 
@@ -70,6 +82,7 @@ df_neet_distance <- read_csv("data/neet_distance_fitted_values.csv")
 
 ui <- shinyUI(
   fluidPage(
+    autoWaiter(),
     theme = bs_theme(version = 5,
                      bg = "#303233",
                      fg = "#ffffff"),
@@ -648,7 +661,7 @@ Job mobility (the share of workers changing jobs in the past year) has increased
       
     
     fluidRow(
-      column(width = 7, class = "m-2",
+      column(width = 4, class = "m-2",
              
              plotlyOutput("neet_distance"),  
              p("Note there appears to be an issue with the predicted values supplied - 
@@ -1240,16 +1253,17 @@ server <- function(input, output, session) {
   
   output$neet_distance <- renderPlotly({
     
-    neet_distance <- df_neet_distance %>% 
+    p <- df_neet_distance %>% 
       arrange(mindistance) %>% 
-      plot_ly(x = ~mindistance, y = ~pred, frame = ~wave, type = "scatter", mode = "lines")
-    
-    neet_distance <- neet_distance %>% layout(
-      
-      title = "Probability of NEET over distance (Males, 18-24)",
+      ggplot(aes(x=mindistance, y=pred,color=Year)) +
+        geom_line(aes(frame = frame)) +scale_colour_manual(values=heat.colors(18))+
+      theme(legend.position='none')
+    neet_distance <- ggplotly(p) %>% 
+      layout(
+      title = "Probability of NEET over distance (18-24)",
       
       xaxis = list(title = "Log distance from nearest capital city", 
-                   zeroline = FALSE, showgrid = F),
+                   zeroline = FALSE, showgrid = F, range = list(1,6)),
       yaxis = list(title = "Predicted probability of NEET status", zeroline = FALSE, showgrid = F,
                    tickformat = "1%", dtick = 0.02),
       margin = list(l = 70, r = 50, t = 50, b = 100, autoexpand = T),
