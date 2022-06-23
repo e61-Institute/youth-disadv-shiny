@@ -165,10 +165,11 @@ ui <- shinyUI(
               fluidRow(
                 class = "card-body",
                 column(6,
-                       selectInput(
+                       radioButtons(
                          "agg_measure", 
                          "Select measure:",
-                         choices = unique(df_unemp$measure)
+                         choices = unique(df_unemp$measure),
+                         selected = "Employment to population"
                        )),
                 column(
                   6,
@@ -267,11 +268,12 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
       width = 7,
       class = "m-2",
       plotlyOutput("helpful_jt"),
-      selectInput(
+      radioButtons(
         "helpful_age",
         "Select age group: ",
         choices = unique(df_helpful$Age),
-        selected = "15-24"
+        selected = "15-24",
+        inline = TRUE
       )
     ),
     column(
@@ -290,10 +292,14 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
       class = "m-2",
       div(
         plotlyOutput("occupation_intensity"),
-        div(selectInput(
-          'age_gp', 'Select age groups:',
-          choices = unique(df_occupation$age)
-        )),
+        div(
+          radioButtons(
+            "age_gp", "Select age groups:",
+            choices = unique(df_occupation$age),
+            selected = "Under 18",
+            inline = TRUE
+            )
+          ),
         class = "card-body"
       ),
       class = "m-2",
@@ -330,20 +336,22 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
           fluidRow(
             column(
               width = 6,
-              selectInput(
+              radioButtons(
                 "age_dur_1",
                 "Select first age group:",
                 choices = unique(df_duration$age_group),
-                selected = "15-24 years"
+                selected = "15-24 years",
+                inline = TRUE
               )
             ),
             column(
               width = 6,
-              selectInput(
+              radioButtons(
                 "age_dur_2",
                 "Select second age group:",
                 choices = unique(df_duration$age_group),
-                selected = "Total"
+                selected = "Total",
+                inline = TRUE
               )
             ),
             class = "card-body"
@@ -370,11 +378,12 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
             choices = unique(df_duration_v_ue$year),
             selected = "2022"
           ),
-          selectInput(
+          radioButtons(
             "dur_v_ue_age",
             "Select age group: ",
             choices = unique(df_duration_v_ue$age_bucket),
-            selected = "15-24"
+            selected = "15-24",
+            inline = TRUE
           )
         ),
         column(
@@ -394,17 +403,19 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
           class = "m-2",
           
           plotlyOutput("pc_ue_gained"),
-          selectInput(
+          radioButtons(
             "ue_to_emp_measure",
             "Select measure: ",
             choices = unique(df_ue_gained$measure),
-            selected = "Geography"
+            selected = "Geography",
+            inline = TRUE
           ),
-          selectInput(
+          radioButtons(
             "ue_to_emp_age_bucket",
             "Select age group: ",
             choices = unique(df_ue_gained$age_bucket),
-            selected = "15-24"
+            selected = "15-24",
+            inline = TRUE
           )
         ),
         column(
@@ -429,7 +440,7 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
         column(
           width = 4,
           class = "m-2",
-          selectInput(
+          radioButtons(
             "age_js",
             "Select age group: ",
             choices = unique(df_js$age_bucket),
@@ -518,7 +529,7 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
         column(
           width = 4,
           class = "m-2",
-          selectInput(
+          radioButtons(
             "age_map",
             "Select age group: ",
             choices = unique(df_map2$age),
@@ -601,23 +612,21 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
           div(plotlyOutput("neet_timeseries")),
           fluidRow(column(
             width = 6,
-            selectInput(
+            radioButtons(
               "neet_dem",
               "Select demographic: ",
-              choices = c("Total",
-                          "Gender"
-                          ),
-              selected = "Total"
+              choices = c("Total", "Gender"),
+              selected = "Total",
+              inline = TRUE
             ),
             column(
               width = 6,
               radioButtons(
                 "neet_age",
                 "Select age group: ",
-                choices = c("15-24 years",
-                            "15-19 years",
-                            "20-24 years"),
-                selected = "15-24 years"
+                choices = c("15-24 years", "15-19 years", "20-24 years"),
+                selected = "15-24 years",
+                inline = TRUE
               )
             ))
           ),
@@ -638,11 +647,12 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
             div(plotlyOutput("neet_entry_exit")),
             fluidRow(column(
               width = 6,
-              selectInput(
+              radioButtons(
                 "neet_entry_exit_dem",
                 "Select demographic: ",
                 choices = unique(df_neet_2$demo_split),
-                selected = "Total"
+                selected = "Total",
+                inline = TRUE
               )
             )),
           ),
@@ -748,7 +758,8 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
                      class = "source-text"
                    )
                  ),),
-        fluidRow(### Top 3 youth occupations ####
+        ### Top 3 youth occupations ####
+        fluidRow(
                  column(
                    width = 8,
                    class = "m-2",
@@ -756,10 +767,12 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
                      h5("Top 3 occupations worked by Youth (19-29) in region"),
                      p(em("SA3 level")),
                      leafletOutput("area_occupation"),
-                     selectInput(
+                     radioButtons(
                        "age_area",
                        "Select age group:",
-                       unique(df_occupation_area$age)
+                       unique(df_occupation_area$age),
+                       selected = "Under 25",
+                       inline = TRUE
                      )
                    ),
                    br(),
