@@ -10,8 +10,9 @@ library(shinyWidgets)
 library(leaftime)
 library(htmltools)
 library(geojsonio)
-
+library(waiter)
 theme_set(theme_bw())
+
 
 # Leaflet code (not working currently) --------------------------------------
 
@@ -67,16 +68,29 @@ df_occupation <- read_csv("data/two_digit_occupation_by_age.csv")
 df_youth_unem <- read_csv("data/youth-ihad-unemployment.csv")
 df_neet <- read_csv("data/aggregate_neet_rate_sa.csv")
 df_neet_2 <- read_csv("data/neet-entry-exit-rates.csv")
-df_duration_v_ue <- read_csv("data/duration_v_rates_unemployment.csv")
+df_duration_v_ue <- read_csv("data/duration_v_rates_unemployment.csv") %>%
+  mutate(Date = as.character(Date))
 df_pc_mismatched <- read_csv("data/percent_mismatched.csv")
 df_helpful <- read_csv("data/percent_helpful_transitions.csv")
 df_ue_gained <- read_csv("data/percent_unemployed_gained_emp.csv")
+
 df_neet_distance <- read_csv("data/neet_distance_fitted_values.csv")
+# utils
+
+breakerfn <- function(x){
+  df <- subset(df_neet_distance,wave %in% (seq(max(c(x-3,3)),x,1)))
+  df$frame <- x+2000
+  df$Year <- as.character(df$wave +2000)
+  return(setDT(df))
+}
+df_neet_distance <- rbindlist(lapply(c(6:20),breakerfn))
+df_neet_distance$Year <- as.factor(df_neet_distance$Year)
 
 # UI ----------------------------------------------------------------------
 
 ui <- shinyUI(
   fluidPage(
+    autoWaiter(),
     theme = bs_theme(version = 5,
                      bg = "#303233",
                      fg = "#ffffff"),
@@ -466,6 +480,7 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
                 selected = "Total"
               )
             ),
+
             column(
               width = 5,
               checkboxGroupInput(
@@ -712,6 +727,7 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
                                  unique(df_map$sa3_name_16)),
                      dataTableOutput("change_jobs_industry_table")
                    ),
+
                    br(),
                    p(
                      "Source: BLADE Data Industries with less than 10 firms excluded",
@@ -731,7 +747,6 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
                        "Select age group:",
                        unique(df_occupation_area$age)
                      )
-
                    ),
                    br(),
                    p("Source: MADIP ATO extracts FY20",
@@ -1024,8 +1039,9 @@ server <- function(input, output, session) {
     
     df_duration_v_ue$UE <- df_duration_v_ue$UE * 100
     
-    duration_v_ue <- df_duration_v_ue %>% filter(Date == input$dur_v_ue_date) %>% 
-      plot_ly(x = ~UE, y = ~MD, type = "scatter", mode = "markers")
+    duration_v_ue <- df_duration_v_ue %>% filter(Date ==input$dur_v_ue_date| Date == input$dur_v_ue_date2) %>%
+      plot_ly(x = ~UE, y = ~MD, color = ~Date,text=~SA4, type = "scatter",  mode = "markers",
+              colors = c('#db410d','#e3ca84'))
     
     duration_v_ue <- duration_v_ue %>% layout(
       title = "Median unemployment duration v unemployment rate",
@@ -1321,16 +1337,19 @@ server <- function(input, output, session) {
   ### Pr(NEET) by distance from CC ####
   output$neet_distance <- renderPlotly({
     
-    neet_distance <- df_neet_distance %>% 
+    p <- df_neet_distance %>% 
       arrange(mindistance) %>% 
-      plot_ly(x = ~mindistance, y = ~pred, frame = ~wave, type = "scatter", mode = "lines")
-    
-    neet_distance <- neet_distance %>% layout(
-      
-      title = "Probability of NEET over distance (Males, 18-24)",
+      ggplot(aes(x=mindistance, y=pred,color=Year)) +
+        geom_line(aes(frame = frame)) +scale_colour_manual(values=heat.colors(18))+
+      theme(legend.position='none')
+    neet_distance <- ggplotly(p) %>% 
+      layout(
+      title = "Probability of NEET over distance (18-24)",
       
       xaxis = list(title = "Log distance from nearest capital city", 
-                   zeroline = FALSE, showgrid = F, hoverformat = ".2f"),
+
+                   zeroline = FALSE, showgrid = F, range = list(1,6)),
+
       yaxis = list(title = "Predicted probability of NEET status", zeroline = FALSE, showgrid = F,
                    tickformat = "1%", dtick = 0.02, hoverformat = ".2f"),
       margin = list(l = 70, r = 50, t = 50, b = 100, autoexpand = T),
