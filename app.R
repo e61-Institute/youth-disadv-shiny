@@ -237,7 +237,7 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
     column(
       width = 4,
       class = "m-2",
-      h6("Job mismatches"),
+      h6("PENDING REAL DATA: Job mismatches"),
       p(
         "Young workers have a greater need to sort into well-matched jobs in the formative years of their careers (Topel and Ward 1992). Young job switchers experience faster wage growth than older job switchers (of around 6.5 percentage points per annum on average). This is consistent with evidence suggesting that 80 per cent of career earnings growth occurs in the first decade of work (Murphy and Welch 1990). Second, disadvantage young workers tend to experience larger wage gains from switching jobs than those that are not disadvantaged."
       )
@@ -260,7 +260,7 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
     column(
       width = 4,
       class = "m-2",
-      h6("Beneficial job transitions"),
+      h6("PENDING REAL DATA: Beneficial job transitions"),
       p("The pandemic was associated with a decline in the quality of – or what may be considered “helpful” – job transitions.  That is, the share of young workers transitioning into better matched jobs – from previously mismatched or matched jobs – declined sharply. This marked decline was not observed for older workers, nor was it observed during the GFC.")
     ),
   ),
@@ -341,8 +341,8 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
           "Long periods of time out of employment make it more difficult to transition back into employment. An elevated share of 15-24 year olds have been unemployed for 1 year or more relative to the total population. Although the COVID-19 recession exacerbated this problem, this was an ongoing concern well before the pandemic."
         )
       )),
+      ### U/E duration vs rate ####
       fluidRow(
-        ### U/E duration vs rate ####
         column(
           width = 7,
           class = "m-2",
@@ -387,7 +387,7 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
         column(
           width = 4,
           class = "m-2",
-          h6("Transitions into employment"),
+          h6("PENDING REAL DATA: Transitions into employment"),
           p(
             "[Pending real data: Comments on whether this trend has been increasing or decreasing and at times this has changed]"
           )
