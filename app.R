@@ -673,14 +673,7 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
           column(
             width = 7,
             class = "m-2",
-
-            plotlyOutput("neet_distance"),
-            p(
-              "Note there appears to be an issue with the predicted values supplied -
-               they remain constant for each wave.",
-              style = "color: red"
-            )
-
+            plotlyOutput("neet_distance")
           ),
           column(
             width = 4,
@@ -1430,6 +1423,7 @@ server <- function(input, output, session) {
       ggplot(aes(x=mindistance, y=pred,color=Year)) +
         geom_line(aes(frame = frame)) +scale_colour_manual(values=heat.colors(18))+
       theme(legend.position='none')
+    
     neet_distance <- ggplotly(p) %>% 
       layout(
       title = "Probability of NEET over distance (18-24)",
@@ -1437,7 +1431,7 @@ server <- function(input, output, session) {
       xaxis = list(title = "Log distance from nearest capital city", 
                    zeroline = FALSE, showgrid = F, range = list(1,6),
                    hoverformat = ".2f"),
-      yaxis = list(title = "Predicted probability of NEET status", zeroline = FALSE, 
+      yaxis = list(title = "Probability of NEET status", zeroline = FALSE, 
                    showgrid = F, tickformat = "1%", dtick = 0.02, hoverformat = ".2f"),
       margin = list(l = 70, r = 50, t = 50, b = 100, autoexpand = T),
       annotations = list(text = "Source: HILDA Release 2.0",
