@@ -40,6 +40,8 @@ theme_set(theme_bw())
 
 # Read in data ------------------------------------------------------------
 
+options(readr.show_types = FALSE)
+
 df_map <- readRDS("data/jobcreation.rds")
 
 df_js <- readRDS("data/js-recipient-share-map.rds") %>% 
