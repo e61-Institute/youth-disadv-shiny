@@ -346,17 +346,18 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
         column(
           width = 7,
           class = "m-2",
-          
           plotlyOutput("duration_v_ue"),
           selectInput(
-            "dur_v_ue_date",
-            "Select date: ",
-            choices = unique(df_duration_v_ue$Date),
-            selected = "2022-06-01"
+            "dur_v_ue_year",
+            "Select year: ",
+            choices = unique(df_duration_v_ue$year),
+            selected = "2022"
           ),
-          p(
-            "Note: have included a date dropdown as requested, but would this be better as a timeline?",
-            style = "color: red"
+          selectInput(
+            "dur_v_ue_age",
+            "Select age group: ",
+            choices = unique(df_duration_v_ue$age_bucket),
+            selected = "15-24"
           )
         ),
         column(
@@ -364,7 +365,7 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
           class = "m-2",
           h6("Unemployment duration and unemployment rate"),
           p(
-            "[Pending real data: Areas with a higher unemployment rate tend to have longer median unemployment durations, reflecting the difficulty that the long-term unemployed have when searching for employment.]"
+            "This graph shows monthly unemployment rates and median time since previous job pooled across years across Australia. Areas with a higher unemployment rates tend to have longer median unemployment durations, reflecting the difficulty that the long-term unemployed have when searching for employment."
           )
         )
       ),
@@ -878,7 +879,7 @@ server <- function(input, output, session) {
       showlegend = TRUE,
       title = "Top 5 occupations by age group",
       xaxis = list(title = "Year", zeroline = FALSE, showgrid = F),
-      yaxis = list(title = "Percent Total", zeroline = FALSE, showgrid = F, ticksuffix = "%", , hoverformat = ".2f"),
+      yaxis = list(title = "Percent Total", zeroline = FALSE, showgrid = F, ticksuffix = "%", hoverformat = ".2f"),
       legend = list(orientation = 'h',
                     yref = "paper", y = -.45),
       paper_bgcolor = chart_bg_color,
@@ -1022,10 +1023,19 @@ server <- function(input, output, session) {
   ### U/E duration vs rate ####
   output$duration_v_ue <- renderPlotly({
     
-    df_duration_v_ue$UE <- df_duration_v_ue$UE * 100
-    
-    duration_v_ue <- df_duration_v_ue %>% filter(Date == input$dur_v_ue_date) %>% 
-      plot_ly(x = ~UE, y = ~MD, type = "scatter", mode = "markers")
+    duration_v_ue <-
+      df_duration_v_ue %>% 
+      filter(year == input$dur_v_ue_year & age_bucket == input$dur_v_ue_age) %>%
+      plot_ly(x = ~ ue) %>% 
+      add_trace(
+        x = ~ ue,
+        y = ~ duration,
+        size = ~pop,
+        type = "scatter",
+        mode = "markers",
+        name = "Region"
+        ) %>% 
+      add_lines(x = ~ue, y = ~fitted, name = "Trendline")
     
     duration_v_ue <- duration_v_ue %>% layout(
       title = "Median unemployment duration v unemployment rate",
