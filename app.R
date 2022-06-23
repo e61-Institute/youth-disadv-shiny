@@ -61,7 +61,8 @@ df_occupation_area <- readRDS("data/occupation_area.rds") %>%
   dplyr::ungroup() %>% 
   unique()
 
-df_unemp <- read_csv("data/unemployment and E-to-P aggregates.csv")
+df_unemp <- read_csv("data/unemployment and E-to-P aggregates.csv") %>% 
+  filter(date >= "2005-01-01")
 df_job_mobility <- read_csv("data/job mobility rate aggregates.csv")
 df_duration <- read_csv("data/duration unemployed shares.csv")
 df_occupation <- read_csv("data/two_digit_occupation_by_age.csv")
@@ -69,12 +70,14 @@ df_youth_unem <- read_csv("data/youth-ihad-unemployment.csv")
 df_neet <- read_csv("data/aggregate_neet_rate_sa.csv")
 df_neet_2 <- read_csv("data/neet-entry-exit-rates.csv")
 df_duration_v_ue <- read_csv("data/duration_v_rates_unemployment.csv")
-df_pc_mismatched <- read_csv("data/percent_mismatched.csv")
-df_helpful <- read_csv("data/percent_helpful_transitions.csv")
-df_ue_gained <- read_csv("data/percent_unemployed_gained_emp.csv")
-df_educ_emp<-read_csv("data/employment_v_education.csv") %>%
-  mutate(Date = lubridate::dmy(Date))
+df_pc_mismatched <- read_csv("data/distribution_of_skill_mismatch_by_age.csv")
+df_jobswitchers <- read_csv("data/jobswitchers_by_mismatch_status.csv")
+df_ue_gained <- read_csv("data/unemployed-entry-into-employment.csv")
+df_educ_emp <- read_csv("data/employment_v_education.csv") %>%
+  mutate(Date = lubridate::dmy(Date)) %>% 
+  mutate(Employment = Employment * 100)
 df_neet_distance <- read_csv("data/neet_distance_fitted_values.csv")
+
 # utils
 
 breakerfn <- function(x){
@@ -90,7 +93,7 @@ df_neet_distance$Year <- as.factor(df_neet_distance$Year)
 
 ui <- shinyUI(
   fluidPage(
-    autoWaiter(),
+    autoWaiter(html = bs5_spinner()),
     theme = bs_theme(version = 5,
                      bg = "#303233",
                      fg = "#ffffff"),
@@ -160,23 +163,27 @@ ui <- shinyUI(
             style = "",
             div(
               plotlyOutput("emp_pop_ue_ts"),
+              p("Source: ABS Labour Force, Detailed",
+                class = "source-text"),
               fluidRow(
                 class = "card-body",
                 column(6,
-                       selectInput(
-                         "measure", "Select measure:",
-                         choices = unique(df_unemp$measure)
+                       radioButtons(
+                         "agg_measure", 
+                         "Select measure:",
+                         choices = unique(df_unemp$measure),
+                         selected = "Employment to population"
                        )),
                 column(
                   6,
                   checkboxGroupInput(
-                    "ages",
+                    "agg_ages",
                     "Select age groups:",
                     choices = unique(df_unemp$age_group),
                     selected = c("Total", "15-24 years")
                   )
                 ),
-              ),
+              )
             ),
           ),
           column(
@@ -218,6 +225,8 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
             class = "m-2",
             div(
               plotlyOutput("job_mobility"),
+              p("Source: ABS Participation, Job Search and Mobility survey",
+                class = "source-text"),
               div(
                 checkboxGroupInput(
                   "ages_jm",
@@ -245,13 +254,22 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
     column(
       width = 7,
       class = "m-2",
-      plotlyOutput("pc_mismatched")
-
+      plotlyOutput("pc_mismatched"),
+      p("Source: ABS Labour Force microdata",
+        class = "source-text"
+        ),
+      radioButtons(
+        "mismatched_age",
+        "Select age group: ",
+        choices = unique(df_pc_mismatched$age_bucket),
+        selected = "15-24",
+        inline = TRUE
+      )
     ),
     column(
       width = 4,
       class = "m-2",
-      h6("Job mismatches"),
+      h6("PENDING REAL DATA: Job mismatches"),
       p(
         "Young workers have a greater need to sort into well-matched jobs in the formative years of their careers (Topel and Ward 1992). Young job switchers experience faster wage growth than older job switchers (of around 6.5 percentage points per annum on average). This is consistent with evidence suggesting that 80 per cent of career earnings growth occurs in the first decade of work (Murphy and Welch 1990). Second, disadvantage young workers tend to experience larger wage gains from switching jobs than those that are not disadvantaged."
       )
@@ -259,22 +277,27 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
   ),
 
   fluidRow(
-    ### Helpful job transitions ####
+    ### Job switching for mismatched workers ####
     column(
       width = 7,
       class = "m-2",
-      plotlyOutput("helpful_jt"),
-      selectInput(
-        "helpful_age",
+      plotlyOutput("jobswitchers"),
+      p(
+        "Source: ABS Labour Force microdata",
+        class = "source-text"
+      ),
+      radioButtons(
+        "jobswitch_age",
         "Select age group: ",
-        choices = unique(df_helpful$Age),
-        selected = "15-24"
+        choices = unique(df_jobswitchers$age_bucket),
+        selected = "15-24",
+        inline = TRUE
       )
     ),
     column(
       width = 4,
       class = "m-2",
-      h6("Beneficial job transitions"),
+      h6("PENDING REAL DATA: Beneficial job transitions"),
       p("The pandemic was associated with a decline in the quality of – or what may be considered “helpful” – job transitions.  That is, the share of young workers transitioning into better matched jobs – from previously mismatched or matched jobs – declined sharply. This marked decline was not observed for older workers, nor was it observed during the GFC.")
     ),
   ),
@@ -287,10 +310,16 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
       class = "m-2",
       div(
         plotlyOutput("occupation_intensity"),
-        div(selectInput(
-          'age_gp', 'Select age groups:',
-          choices = unique(df_occupation$age)
-        )),
+        p("Source: MADIP",
+          class = "source-text"),
+        div(
+          radioButtons(
+            "age_gp", "Select age groups:",
+            choices = unique(df_occupation$age),
+            selected = "Under 18",
+            inline = TRUE
+            )
+          ),
         class = "card-body"
       ),
       class = "m-2",
@@ -324,23 +353,27 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
         class = "m-2",
         div(
           plotlyOutput("duration_unemployed"),
+          p("Source: ABS Labour Force, Detailed",
+            class = "source-text"),
           fluidRow(
             column(
               width = 6,
-              selectInput(
+              radioButtons(
                 "age_dur_1",
                 "Select first age group:",
                 choices = unique(df_duration$age_group),
-                selected = "15-24 years"
+                selected = "15-24 years",
+                inline = TRUE
               )
             ),
             column(
               width = 6,
-              selectInput(
+              radioButtons(
                 "age_dur_2",
                 "Select second age group:",
                 choices = unique(df_duration$age_group),
-                selected = "Total"
+                selected = "Total",
+                inline = TRUE
               )
             ),
             class = "card-body"
@@ -355,32 +388,34 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
           "Long periods of time out of employment make it more difficult to transition back into employment. An elevated share of 15-24 year olds have been unemployed for 1 year or more relative to the total population. Although the COVID-19 recession exacerbated this problem, this was an ongoing concern well before the pandemic."
         )
       )),
+      ### U/E duration vs rate ####
       fluidRow(
-        ### U/E duration vs rate ####
         column(
           width = 7,
           class = "m-2",
-          
           plotlyOutput("duration_v_ue"),
+          p("Source: ABS Labour Force microdata",
+            class = "source-text"),
           selectInput(
-            "dur_v_ue_date",
-            "Select date: ",
-            choices = unique(df_duration_v_ue$date),
-            selected = "2022-06-01"
+            "dur_v_ue_year",
+            "Select year: ",
+            choices = unique(df_duration_v_ue$year),
+            selected = "2022"
           ),
-          selectInput(
+          radioButtons(
             "dur_v_ue_age",
             "Select age group: ",
             choices = unique(df_duration_v_ue$age_bucket),
-            selected = "15-24"
-          ),
+            selected = "15-24",
+            inline = TRUE
+          )
         ),
         column(
           width = 4,
           class = "m-2",
           h6("Unemployment duration and unemployment rate"),
           p(
-            "[Pending real data: Areas with a higher unemployment rate tend to have longer median unemployment durations, reflecting the difficulty that the long-term unemployed have when searching for employment.]"
+            "This graph shows monthly unemployment rates and median time since previous job pooled across years across Australia. Areas with a higher unemployment rates tend to have longer median unemployment durations, reflecting the difficulty that the long-term unemployed have when searching for employment."
           )
         )
       ),
@@ -390,22 +425,29 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
         column(
           width = 7,
           class = "m-2",
-          
           plotlyOutput("pc_ue_gained"),
-          selectInput(
-            "ue_dur",
-            "Select unemployed duration: ",
-            choices = unique(df_ue_gained$Duration),
-            selected = "1 year +"
+          p("Source: ABS Labour Force microdata",
+            class = "source-text"),
+          radioButtons(
+            "ue_to_emp_measure",
+            "Select measure: ",
+            choices = unique(df_ue_gained$measure),
+            selected = "Geography",
+            inline = TRUE
+          ),
+          radioButtons(
+            "ue_to_emp_age_bucket",
+            "Select age group: ",
+            choices = unique(df_ue_gained$age_bucket),
+            selected = "15-24",
+            inline = TRUE
           )
         ),
         column(
           width = 4,
           class = "m-2",
           h6("Transitions into employment"),
-          p(
-            "[Pending real data: Comments on whether this trend has been increasing or decreasing and at times this has changed]"
-          )
+          p("The share of unemployed workers finding employment in a given month does not differ significantly between urban and regional areas. Workers who have been searching for work for more than six months face greater difficulty transitioning back into employment. Similarly, people who have never worked or have not worked in over 6 months, also have lower probabilities of entering employment compared to people who have worked more recently. These trends have remained consistent over the past 15 years.")
         )
       ),
       
@@ -423,7 +465,7 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
         column(
           width = 4,
           class = "m-2",
-          selectInput(
+          radioButtons(
             "age_js",
             "Select age group: ",
             choices = unique(df_js$age_bucket),
@@ -471,7 +513,11 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
         column(
           width = 7,
           class = "m-2",
-          div(plotlyOutput("youth_unem"),),
+          div(plotlyOutput("youth_unem"),
+              br(),
+              p("Source: ABS Labour Force, Detailed",
+                class = "source-text"),
+              ),
           fluidRow(
             column(
               width = 5,
@@ -482,7 +528,6 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
                 selected = "Total"
               )
             ),
-
             column(
               width = 5,
               checkboxGroupInput(
@@ -513,7 +558,7 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
         column(
           width = 4,
           class = "m-2",
-          selectInput(
+          radioButtons(
             "age_map",
             "Select age group: ",
             choices = unique(df_map2$age),
@@ -530,7 +575,7 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
         )
       ),
       div(class = "m-2",
-          p("Source: [INSERT SOURCE]", class = "source-text")),
+          p("Source: ABS Labour Force, Detailed", class = "source-text")),
       fluidRow(column(
         width = 6,
         class = "m-2",
@@ -541,7 +586,6 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
       )),
       fluidRow(
         ### Employment rate by degree level and industry ####
-        # Still need to make this graph
         column(width = 7, class = "m-2",
                div(
                  div(h5(
@@ -549,13 +593,16 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
                  ),
                  class = "card-body-2"),
                  plotlyOutput("educ_v_emp"),
-                 selectInput(
+                 br(),
+                 p("Source: ABS Labour Force, Detailed",
+                   class = "source-text"),
+                 radioButtons(
                    "age_educ_v_emp",
                    "Select age group: ",
                    choices = unique(df_educ_emp$Age),
                    selected = "15-24"
                  ),
-                 selectInput(
+                 radioButtons(
                    "sex_educ_v_emp",
                    "Select Sex: ",
                    choices = unique(df_educ_emp$Sex),
@@ -593,26 +640,27 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
         column(
           width = 7,
           class = "m-2",
-          div(plotlyOutput("neet_timeseries")),
+          div(plotlyOutput("neet_timeseries"),
+              br(),
+              p("Source: ABS Labour Force, Detailed",
+                class = "source-text")),
           fluidRow(column(
             width = 6,
-            selectInput(
+            radioButtons(
               "neet_dem",
               "Select demographic: ",
-              choices = c("Total",
-                          "Gender"
-                          ),
-              selected = "Total"
+              choices = c("Total", "Gender"),
+              selected = "Total",
+              inline = TRUE
             ),
             column(
               width = 6,
               radioButtons(
                 "neet_age",
                 "Select age group: ",
-                choices = c("15-24 years",
-                            "15-19 years",
-                            "20-24 years"),
-                selected = "15-24 years"
+                choices = c("15-24 years", "15-19 years", "20-24 years"),
+                selected = "15-24 years",
+                inline = TRUE
               )
             ))
           ),
@@ -630,14 +678,18 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
           column(
             width = 7,
             class = "m-2",
-            div(plotlyOutput("neet_entry_exit")),
+            div(plotlyOutput("neet_entry_exit"),
+                br(),
+                p("Source: ABS Labour Force, Detailed",
+                  class = "source-text")),
             fluidRow(column(
               width = 6,
-              selectInput(
+              radioButtons(
                 "neet_entry_exit_dem",
                 "Select demographic: ",
                 choices = unique(df_neet_2$demo_split),
-                selected = "Total"
+                selected = "Total",
+                inline = TRUE
               )
             )),
           ),
@@ -658,14 +710,10 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
           column(
             width = 7,
             class = "m-2",
-
             plotlyOutput("neet_distance"),
-            p(
-              "Note there appears to be an issue with the predicted values supplied -
-               they remain constant for each wave.",
-              style = "color: red"
-            )
-
+            br(),
+            p("Source: HILDA Release 20",
+              class = "source-text"),
           ),
           column(
             width = 4,
@@ -737,14 +785,14 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
                                  unique(df_map$sa3_name_16)),
                      dataTableOutput("change_jobs_industry_table")
                    ),
-
                    br(),
                    p(
                      "Source: BLADE Data Industries with less than 10 firms excluded",
                      class = "source-text"
                    )
                  ),),
-        fluidRow(### Top 3 youth occupations ####
+        ### Top 3 youth occupations ####
+        fluidRow(
                  column(
                    width = 8,
                    class = "m-2",
@@ -752,10 +800,12 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
                      h5("Top 3 occupations worked by Youth (19-29) in region"),
                      p(em("SA3 level")),
                      leafletOutput("area_occupation"),
-                     selectInput(
+                     radioButtons(
                        "age_area",
                        "Select age group:",
-                       unique(df_occupation_area$age)
+                       unique(df_occupation_area$age),
+                       selected = "Under 25",
+                       inline = TRUE
                      )
                    ),
                    br(),
@@ -782,23 +832,25 @@ server <- function(input, output, session) {
   ### E-P + U/E time series ####
   output$emp_pop_ue_ts <- renderPlotly({
   
-    req(input$ages)
-  
-    ue_graph <- df_unemp %>% filter(measure == input$measure, age_group == input$ages, date > "2000-01-01") %>%
-      plot_ly(x = ~date, y = ~value, split = ~age_group, type = "scatter", mode = "lines")
+    ue_graph <-
+      df_unemp %>% filter(measure == input$agg_measure,
+                          age_group == input$agg_ages) %>%
+      plot_ly(
+        x = ~ date,
+        y = ~ value,
+        split = ~ age_group,
+        type = "scatter",
+        mode = "lines"
+      ) %>% 
+      rangeslider(start = min(df_unemp$date), end = max(df_unemp$date))
     
     ue_graph <- ue_graph %>% layout(
       showlegend = TRUE,
       title = "Measures of employment by age group",
       xaxis = list(title = "Date", zeroline = FALSE, showgrid = F),
-      yaxis = list(title = input$measure, zeroline = FALSE, showgrid = F,
+      yaxis = list(title = input$agg_measure, zeroline = FALSE, showgrid = F,
                    ticksuffix = "%", hoverformat = ".2f"),
       margin = list(l = 70, r = 50, t = 50, b = 100),
-      annotations = list(text = "Source: ABS (2022), Labour Force, Detailed",
-                         showarrow = F,
-                         xref = "paper", x = 0,
-                         yref = "paper", y = -.35,
-                         font = list(size = 10, color = "grey")),
       paper_bgcolor = chart_bg_color,
       plot_bgcolor = chart_bg_color,
       font = list(color = chart_text_color)
@@ -824,11 +876,6 @@ server <- function(input, output, session) {
       yaxis = list(title = "Job mobility", zeroline = FALSE, showgrid = F,
                    ticksuffix = "%", hoverformat = ".2f"),
       margin = list(l = 70, r = 50, t = 50, b = 100),
-      annotations = list(text = "Source: [INSERT SOURCE]",
-                         showarrow = F,
-                         xref = "paper", x = 0,
-                         yref = "paper", y = -.35,
-                         font = list(size = 10, color = "grey")),
       paper_bgcolor = chart_bg_color,
       plot_bgcolor= chart_bg_color,
       font = list(color = chart_text_color))
@@ -837,80 +884,56 @@ server <- function(input, output, session) {
   ### Mismatched young workers ####
   output$pc_mismatched <- renderPlotly({
     
-    df_pc_mismatched$Percent_mismatch <- df_pc_mismatched$Percent_mismatch * 100
-    format(df_pc_mismatched$Year, "%Y")
-    
     pc_mismatched <- df_pc_mismatched %>%
-      plot_ly(x = ~Year, y = ~Percent_mismatch, type = 'bar')
+      filter(age_bucket == input$mismatched_age) %>% 
+      plot_ly(
+        x = ~ date,
+        y = ~ share,
+        color = ~skill_level,
+        colors = c("#1b9e77", "#d95f02", "#7570b3"),
+        type = "scatter",
+        mode = "lines"
+      )
     
     pc_mismatched <- pc_mismatched %>% layout(
-      title = "Percent of young workers mismatched",
+      title = "Share of employed people by skill matching status",
       xaxis = list(title = "Year", zeroline = FALSE, showgrid = F),
       yaxis = list(title = "% mismatched", zeroline = FALSE, showgrid = F,
                    ticksuffix = "%", hoverformat = ".2f"),
       margin = list(l = 70, r = 50, t = 50, b = 100),
-      annotations = list(text = "Source: [INSERT SOURCE]",
-                         showarrow = F,
-                         xref = "paper", x = 0,
-                         yref = "paper", y = -.35,
-                         font = list(size = 10, color = "grey")),
       paper_bgcolor = chart_bg_color,
       plot_bgcolor= chart_bg_color,
       font = list(color = chart_text_color))
     
   })
   
-  ### Helpful job transitions ####
-  output$helpful_jt <- renderPlotly({
+  ### Job switching for mismatched workers ####
+  output$jobswitchers <- renderPlotly({
     
+    jobswitchers <-
+      df_jobswitchers %>% filter(age_bucket == input$jobswitch_age) %>%
+      plot_ly(
+        x = ~ date,
+        y = ~ prop,
+        color = ~ matched_last_period,
+        colors = c("#1b9e77", "#d95f02"),
+        type = "scatter",
+        mode = "lines"
+      ) %>%
+      rangeslider(start = min(df_jobswitchers$date), end = max(df_jobswitchers$date))
     
-    df_helpful$Percent <- df_helpful$Percent * 100
-    
-    helpful_jt <- df_helpful %>% filter(Age == input$helpful_age) %>% 
-      plot_ly(x = ~Date, y = ~Percent, type = "scatter", mode = "lines")
-    
-    helpful_jt <- helpful_jt %>% layout(
-      title = "Percent of workers with helpful job transitions",
+    jobswitchers <- jobswitchers %>% layout(
+      title = "Job switching for workers with mismatched employment in previous 12 months",
       xaxis = list(title = "Date", zeroline = FALSE, showgrid = F),
       yaxis = list(title = "% workers", zeroline = FALSE, showgrid = F, ticksuffix = "%", hoverformat = ".2f"),
       margin = list(l = 70, r = 50, t = 50, b = 100),
-      annotations = list(text = "Source: [INSERT SOURCE]",
-                         showarrow = F,
-                         xref = "paper", x = 0,
-                         yref = "paper", y = -.35,
-                         font = list(size = 10, color = "grey")),
       paper_bgcolor = chart_bg_color,
       plot_bgcolor = chart_bg_color,
       font = list(color = chart_text_color))
     
   })
   
-  output$educ_v_emp <- renderPlotly({
-    
-    
-    df_educ_emp$Employment <- df_educ_emp$Employment * 100
-    
-    educ_emp <- df_educ_emp %>% filter(Age == input$age_educ_v_emp,
-                                       Sex == input$sex_educ_v_emp) %>% 
-      plot_ly(x = ~Date, y = ~Employment, color = ~Education, type = "scatter", mode = "lines")
-    
-    educ_emp <- educ_emp %>% layout(
-      title = "Employment rates by age and education level",
-      xaxis = list(title = "Date", zeroline = FALSE, showgrid = F),
-      yaxis = list(title = "% population employed", zeroline = FALSE, showgrid = F, ticksuffix = "%", hoverformat = ".2f"),
-      margin = list(l = 70, r = 50, t = 50, b = 100),
-      annotations = list(text = "Source: [INSERT SOURCE]",
-                         showarrow = F,
-                         xref = "paper", x = 0,
-                         yref = "paper", y = -.35,
-                         font = list(size = 10, color = "grey")),
-      paper_bgcolor = chart_bg_color,
-      plot_bgcolor = chart_bg_color,
-      font = list(color = chart_text_color))
-    
-  })
-  
-  
+
   ### Main occupation by age time series ####
   output$occupation_intensity <- renderPlotly({
     
@@ -998,11 +1021,6 @@ server <- function(input, output, session) {
       yaxis = list(title = "Share of unemployed", zeroline = FALSE, showgrid = F,
                    ticksuffix = "%", hoverformat = ".2f"),
       margin = list(l = 70, r = 50, t = 50, b = 100),
-      annotations = list(text = "Source: [INSERT SOURCE]",
-                         showarrow = F,
-                         xref = "paper", x = 0,
-                         yref = "paper", y = -.35,
-                         font = list(size = 10, color = "grey")),
       paper_bgcolor = chart_bg_color,
       paper_bgcolor = chart_bg_color,
       font = list(color = chart_text_color)
@@ -1073,11 +1091,20 @@ server <- function(input, output, session) {
   ### U/E duration vs rate ####
   output$duration_v_ue <- renderPlotly({
     
-    duration_v_ue <- df_duration_v_ue %>% filter(date ==input$dur_v_ue_date,
-                                                 age_bucket==input$dur_v_ue_age) %>%
-      plot_ly(x = ~ue, y = ~duration, text=~sa4_name, type = "scatter",  mode = "markers",name="point") %>%
-      add_trace(x= ~ue,y=~fitted,mode="lines",name="fitted values")
-    
+    duration_v_ue <-
+      df_duration_v_ue %>% 
+      filter(year == input$dur_v_ue_year & age_bucket == input$dur_v_ue_age) %>%
+      plot_ly(x = ~ ue) %>% 
+      add_trace(
+        x = ~ ue,
+        y = ~ duration,
+        size = ~pop,
+        type = "scatter",
+        mode = "markers",
+        name = "Region"
+        ) %>% 
+      add_lines(x = ~ue, y = ~fitted, name = "Trendline")
+
     duration_v_ue <- duration_v_ue %>% layout(
       title = "Median unemployment duration v unemployment rate",
       xaxis = list(
@@ -1109,13 +1136,22 @@ server <- function(input, output, session) {
   ### U/E regaining employment ####
   output$pc_ue_gained <- renderPlotly({
     
-    df_ue_gained$Percent <- df_ue_gained$Percent * 100
-    
-    pc_ue_gained <- df_ue_gained %>% filter(Duration == input$ue_dur) %>% 
-      plot_ly(x = ~Date, y = ~Percent, type = "scatter", mode = "lines")
+    pc_ue_gained <- df_ue_gained %>%
+      filter(measure == input$ue_to_emp_measure & age_bucket == input$ue_to_emp_age_bucket) %>%
+      plot_ly(
+        x = ~ date,
+        y = ~ value,
+        color = ~ variable,
+        colors = c("#1b9e77", "#d95f02", "#7570b3"),
+        type = "scatter",
+        mode = "lines",
+        connectgaps = TRUE
+      ) %>%
+      rangeslider(start = min(df_ue_gained$date),
+                  end = max(df_ue_gained$date))
     
     pc_ue_gained <- pc_ue_gained %>% layout(
-      title = "% unemployed who gained employment",
+      title = paste0("% unemployed who gained employment by ", input$ue_to_emp_measure),
       xaxis = list(title = "Date", zeroline = FALSE, showgrid = F),
       yaxis = list(title = "% unemployed", zeroline = FALSE, showgrid = F, ticksuffix = "%", hoverformat = ".2f"),
       margin = list(l = 70, r = 50, t = 50, b = 100),
@@ -1195,11 +1231,6 @@ server <- function(input, output, session) {
       yaxis = list(title = "Unemployment rate", zeroline = FALSE, showgrid = F,
                    ticksuffix = "%", hoverformat = ".2f"),
       margin = list(l = 70, r = 50, t = 50, b = 100, autoexpand = T),
-      annotations = list(text = "Source: ABS",
-                         showarrow = F,
-                         xref = 'paper', x = 0,
-                         yref = 'paper', y = -.5,
-                         font = list(size = 10, color = "grey")),
       paper_bgcolor = chart_bg_color,
       plot_bgcolor= chart_bg_color,
       font = list(color = chart_text_color))
@@ -1265,8 +1296,24 @@ server <- function(input, output, session) {
   
   ### Employment rate by degree level and industry ####
   
-  # Need to do
+  output$educ_v_emp <- renderPlotly({
+    
+    educ_emp <- df_educ_emp %>% filter(Age == input$age_educ_v_emp,
+                                       Sex == input$sex_educ_v_emp) %>% 
+      plot_ly(x = ~Date, y = ~Employment, color = ~Education, type = "scatter", mode = "lines")
+    
+    educ_emp <- educ_emp %>% layout(
+      title = "Employment rates by age and education level",
+      xaxis = list(title = "Date", zeroline = FALSE, showgrid = F),
+      yaxis = list(title = "% population employed", zeroline = FALSE, showgrid = F, ticksuffix = "%", hoverformat = ".2f"),
+      margin = list(l = 70, r = 50, t = 50, b = 100),
+      paper_bgcolor = chart_bg_color,
+      plot_bgcolor = chart_bg_color,
+      font = list(color = chart_text_color))
+    
+  })
   
+
   ## Section 5 ####
   
   ### Youth NEET by age/demo time series ####
@@ -1319,6 +1366,9 @@ server <- function(input, output, session) {
       }
     }
 
+    neet_timeseries <- neet_timeseries %>% 
+      rangeslider(start = min(df_neet$date), end = max(df_neet$date))
+    
     neet_timeseries <- neet_timeseries %>% layout(
       title = "Youth NEET rate by age and demographic group",
       xaxis = list(title = "Date", 
@@ -1326,11 +1376,6 @@ server <- function(input, output, session) {
       yaxis = list(title = "NEET rate", zeroline = FALSE, showgrid = F,
                    tickformat = "1%", hoverformat = ".2f"),
       margin = list(l = 70, r = 50, t = 50, b = 100, autoexpand = T),
-      annotations = list(text = "Source: ABS Labour Force Survey",
-                         showarrow = F,
-                         xref = 'paper', x = 0,
-                         yref = 'paper', y = -.35,
-                         font = list(size = 10, color = "grey")),
       paper_bgcolor = chart_bg_color,
       plot_bgcolor = chart_bg_color,
       font = list(color = chart_text_color))
@@ -1342,8 +1387,15 @@ server <- function(input, output, session) {
     
     df_neet_2$exit <- -df_neet_2$exit
     
-    neet_entry_exit <- df_neet_2 %>% filter(demo_split == input$neet_entry_exit_dem) %>% 
-      plot_ly(x = ~date, y = ~neet_flow, type = "scatter", mode = "lines", name = "NEET flow") %>% 
+    neet_entry_exit <-
+      df_neet_2 %>% filter(demo_split == input$neet_entry_exit_dem) %>%
+      plot_ly(
+        x = ~ date,
+        y = ~ neet_flow,
+        type = "scatter",
+        mode = "lines",
+        name = "NEET flow"
+      ) %>%
       rangeslider(start = min(df_neet_2$date), end = max(df_neet_2$date))
     
     neet_entry_exit <- neet_entry_exit %>% 
@@ -1358,11 +1410,6 @@ server <- function(input, output, session) {
       yaxis = list(title = "NEET rate", zeroline = FALSE, showgrid = F,
                    tickformat = "1%", hoverformat = ".2f"),
       margin = list(l = 70, r = 50, t = 50, b = 100, autoexpand = T),
-      annotations = list(text = "Source: ABS Labour Force Survey",
-                         showarrow = F,
-                         xref = 'paper', x = 0,
-                         yref = 'paper', y = -.7,
-                         font = list(size = 10, color = "grey")),
       paper_bgcolor = chart_bg_color,
       plot_bgcolor= chart_bg_color,
       font = list(color = chart_text_color))
@@ -1377,22 +1424,17 @@ server <- function(input, output, session) {
       ggplot(aes(x=mindistance, y=pred,color=Year)) +
         geom_line(aes(frame = frame)) +scale_colour_manual(values=heat.colors(18))+
       theme(legend.position='none')
+    
     neet_distance <- ggplotly(p) %>% 
       layout(
       title = "Probability of NEET over distance (18-24)",
       
       xaxis = list(title = "Log distance from nearest capital city", 
-
-                   zeroline = FALSE, showgrid = F, range = list(1,6)),
-
-      yaxis = list(title = "Predicted probability of NEET status", zeroline = FALSE, showgrid = F,
-                   tickformat = "1%", dtick = 0.02, hoverformat = ".2f"),
+                   zeroline = FALSE, showgrid = F, range = list(1,6),
+                   hoverformat = ".2f"),
+      yaxis = list(title = "Probability of NEET status", zeroline = FALSE, 
+                   showgrid = F, tickformat = "1%", dtick = 0.02, hoverformat = ".2f"),
       margin = list(l = 70, r = 50, t = 50, b = 100, autoexpand = T),
-      annotations = list(text = "Source: HILDA Release 2.0",
-                         showarrow = F,
-                         xref = 'paper', x = 0,
-                         yref = 'paper', y = -.5,
-                         font = list(size = 10, color = "grey")),
       paper_bgcolor = chart_bg_color,
       plot_bgcolor= chart_bg_color,
       font = list(color = chart_text_color)) %>% 
