@@ -68,13 +68,13 @@ df_occupation <- read_csv("data/two_digit_occupation_by_age.csv")
 df_youth_unem <- read_csv("data/youth-ihad-unemployment.csv")
 df_neet <- read_csv("data/aggregate_neet_rate_sa.csv")
 df_neet_2 <- read_csv("data/neet-entry-exit-rates.csv")
-df_duration_v_ue <- read_csv("data/duration_v_rates_unemployment.csv") %>%
-  mutate(Date = as.character(Date))
+df_duration_v_ue <- read_csv("data/duration_v_rates_unemployment.csv")
 df_pc_mismatched <- read_csv("data/percent_mismatched.csv")
 df_helpful <- read_csv("data/percent_helpful_transitions.csv")
 df_ue_gained <- read_csv("data/percent_unemployed_gained_emp.csv")
 
 df_neet_distance <- read_csv("data/neet_distance_fitted_values.csv")
+
 # utils
 
 breakerfn <- function(x){
@@ -90,7 +90,7 @@ df_neet_distance$Year <- as.factor(df_neet_distance$Year)
 
 ui <- shinyUI(
   fluidPage(
-    autoWaiter(),
+    autoWaiter(html = bs5_spinner()),
     theme = bs_theme(version = 5,
                      bg = "#303233",
                      fg = "#ffffff"),
