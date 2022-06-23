@@ -578,7 +578,6 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
       )),
       fluidRow(
         ### Employment rate by degree level and industry ####
-        # Still need to make this graph
         column(width = 7, class = "m-2",
                div(
                  div(h5(
@@ -593,7 +592,7 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
                    "age_educ_v_emp",
                    "Select age group: ",
                    choices = unique(df_educ_emp$Age),
-                   selected = "15-19 years"
+                   selected = "15-24"
                  ),
                  selectInput(
                    "sex_educ_v_emp",
@@ -916,27 +915,7 @@ server <- function(input, output, session) {
     
   })
   
-  output$educ_v_emp <- renderPlotly({
-    
-    
-    df_educ_emp$Employment <- df_educ_emp$Employment * 100
-    
-    educ_emp <- df_educ_emp %>% filter(Age == input$age_educ_v_emp,
-                                       Sex == input$sex_educ_v_emp) %>% 
-      plot_ly(x = ~Date, y = ~Employment, color = ~Education, type = "scatter", mode = "lines")
-    
-    educ_emp <- educ_emp %>% layout(
-      title = "Employment rates by age and education level",
-      xaxis = list(title = "Date", zeroline = FALSE, showgrid = F),
-      yaxis = list(title = "% population employed", zeroline = FALSE, showgrid = F, ticksuffix = "%", hoverformat = ".2f"),
-      margin = list(l = 70, r = 50, t = 50, b = 100),
-      paper_bgcolor = chart_bg_color,
-      plot_bgcolor = chart_bg_color,
-      font = list(color = chart_text_color))
-    
-  })
-  
-  
+
   ### Main occupation by age time series ####
   output$occupation_intensity <- renderPlotly({
     
@@ -1299,8 +1278,27 @@ server <- function(input, output, session) {
   
   ### Employment rate by degree level and industry ####
   
-  # Need to do
+  output$educ_v_emp <- renderPlotly({
+    
+    
+    df_educ_emp$Employment <- df_educ_emp$Employment * 100
+    
+    educ_emp <- df_educ_emp %>% filter(Age == input$age_educ_v_emp,
+                                       Sex == input$sex_educ_v_emp) %>% 
+      plot_ly(x = ~Date, y = ~Employment, color = ~Education, type = "scatter", mode = "lines")
+    
+    educ_emp <- educ_emp %>% layout(
+      title = "Employment rates by age and education level",
+      xaxis = list(title = "Date", zeroline = FALSE, showgrid = F),
+      yaxis = list(title = "% population employed", zeroline = FALSE, showgrid = F, ticksuffix = "%", hoverformat = ".2f"),
+      margin = list(l = 70, r = 50, t = 50, b = 100),
+      paper_bgcolor = chart_bg_color,
+      plot_bgcolor = chart_bg_color,
+      font = list(color = chart_text_color))
+    
+  })
   
+
   ## Section 5 ####
   
   ### Youth NEET by age/demo time series ####
