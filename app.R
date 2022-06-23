@@ -74,7 +74,7 @@ df_pc_mismatched <- read_csv("data/percent_mismatched.csv")
 df_helpful <- read_csv("data/percent_helpful_transitions.csv")
 df_ue_gained <- read_csv("data/percent_unemployed_gained_emp.csv")
 df_educ_emp<-read_csv("data/employment_v_education.csv") %>%
-  mutate(Date = lubridate::dmy(paste("01-",Date)))
+  mutate(Date = lubridate::dmy(Date))
 df_neet_distance <- read_csv("data/neet_distance_fitted_values.csv")
 # utils
 
@@ -554,7 +554,7 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
                    "age_educ_v_emp",
                    "Select age group: ",
                    choices = unique(df_educ_emp$Age),
-                   selected = "15-19 years"
+                   selected = "15-24"
                  ),
                  selectInput(
                    "sex_educ_v_emp",
