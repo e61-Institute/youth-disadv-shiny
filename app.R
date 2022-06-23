@@ -69,11 +69,12 @@ df_youth_unem <- read_csv("data/youth-ihad-unemployment.csv")
 df_neet <- read_csv("data/aggregate_neet_rate_sa.csv")
 df_neet_2 <- read_csv("data/neet-entry-exit-rates.csv")
 df_duration_v_ue <- read_csv("data/duration_v_rates_unemployment.csv") %>%
-  mutate(Date = as.character(Date))
+  mutate(date = as.character(date))
 df_pc_mismatched <- read_csv("data/percent_mismatched.csv")
 df_helpful <- read_csv("data/percent_helpful_transitions.csv")
 df_ue_gained <- read_csv("data/percent_unemployed_gained_emp.csv")
-
+df_educ_emp<-read_csv("data/employment_v_education.csv") %>%
+  mutate(Date = lubridate::dmy(paste("01-",Date)))
 df_neet_distance <- read_csv("data/neet_distance_fitted_values.csv")
 # utils
 
@@ -365,13 +366,15 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
           selectInput(
             "dur_v_ue_date",
             "Select date: ",
-            choices = unique(df_duration_v_ue$Date),
+            choices = unique(df_duration_v_ue$date),
             selected = "2022-06-01"
           ),
-          p(
-            "Note: have included a date dropdown as requested, but would this be better as a timeline?",
-            style = "color: red"
-          )
+          selectInput(
+            "dur_v_ue_age",
+            "Select age group: ",
+            choices = unique(df_duration_v_ue$age_bucket),
+            selected = "15-24"
+          ),
         ),
         column(
           width = 4,
@@ -543,16 +546,24 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
         column(width = 7, class = "m-2",
                div(
                  div(h5(
-                   "Employment rate by degree level and industry"
+                   "Employment rate by education level"
                  ),
                  class = "card-body-2"),
-                 img(
-                   src = "dot plot.png",
-                   width = "30%",
-                   height = "30%"
+                 plotlyOutput("educ_v_emp"),
+                 selectInput(
+                   "age_educ_v_emp",
+                   "Select age group: ",
+                   choices = unique(df_educ_emp$Age),
+                   selected = "15-19 years"
+                 ),
+                 selectInput(
+                   "sex_educ_v_emp",
+                   "Select Sex: ",
+                   choices = unique(df_educ_emp$Sex),
+                   selected = "Males"
                  ),
                  div(class = "m-2",
-                     p("Source: [INSERT SOURCE]", class = "source-text"),),
+                     p("Source: ABS Detailed Labour Force Survey", class = "source-text"),),
                ),),
 
         column(
@@ -875,6 +886,32 @@ server <- function(input, output, session) {
     
   })
   
+  output$educ_v_emp <- renderPlotly({
+    
+    
+    df_educ_emp$Employment <- df_educ_emp$Employment * 100
+    
+    educ_emp <- df_educ_emp %>% filter(Age == input$age_educ_v_emp,
+                                       Sex == input$sex_educ_v_emp) %>% 
+      plot_ly(x = ~Date, y = ~Employment, color = ~Education, type = "scatter", mode = "lines")
+    
+    educ_emp <- educ_emp %>% layout(
+      title = "Employment rates by age and education level",
+      xaxis = list(title = "Date", zeroline = FALSE, showgrid = F),
+      yaxis = list(title = "% population employed", zeroline = FALSE, showgrid = F, ticksuffix = "%", hoverformat = ".2f"),
+      margin = list(l = 70, r = 50, t = 50, b = 100),
+      annotations = list(text = "Source: [INSERT SOURCE]",
+                         showarrow = F,
+                         xref = "paper", x = 0,
+                         yref = "paper", y = -.35,
+                         font = list(size = 10, color = "grey")),
+      paper_bgcolor = chart_bg_color,
+      plot_bgcolor = chart_bg_color,
+      font = list(color = chart_text_color))
+    
+  })
+  
+  
   ### Main occupation by age time series ####
   output$occupation_intensity <- renderPlotly({
     
@@ -893,7 +930,7 @@ server <- function(input, output, session) {
       showlegend = TRUE,
       title = "Top 5 occupations by age group",
       xaxis = list(title = "Year", zeroline = FALSE, showgrid = F),
-      yaxis = list(title = "Percent Total", zeroline = FALSE, showgrid = F, ticksuffix = "%", , hoverformat = ".2f"),
+      yaxis = list(title = "Percent Total", zeroline = FALSE, showgrid = F, ticksuffix = "%",hoverformat = ".2f"),
       legend = list(orientation = 'h',
                     yref = "paper", y = -.45),
       paper_bgcolor = chart_bg_color,
@@ -1037,11 +1074,10 @@ server <- function(input, output, session) {
   ### U/E duration vs rate ####
   output$duration_v_ue <- renderPlotly({
     
-    df_duration_v_ue$UE <- df_duration_v_ue$UE * 100
-    
-    duration_v_ue <- df_duration_v_ue %>% filter(Date ==input$dur_v_ue_date| Date == input$dur_v_ue_date2) %>%
-      plot_ly(x = ~UE, y = ~MD, color = ~Date,text=~SA4, type = "scatter",  mode = "markers",
-              colors = c('#db410d','#e3ca84'))
+    duration_v_ue <- df_duration_v_ue %>% filter(date ==input$dur_v_ue_date,
+                                                 age_bucket==input$dur_v_ue_age) %>%
+      plot_ly(x = ~ue, y = ~duration, text=~sa4_name, type = "scatter",  mode = "markers",name="point") %>%
+      add_trace(x= ~ue,y=~fitted,mode="lines",name="fitted values")
     
     duration_v_ue <- duration_v_ue %>% layout(
       title = "Median unemployment duration v unemployment rate",
