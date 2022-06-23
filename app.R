@@ -164,13 +164,14 @@ ui <- shinyUI(
                 class = "card-body",
                 column(6,
                        selectInput(
-                         "measure", "Select measure:",
+                         "agg_measure", 
+                         "Select measure:",
                          choices = unique(df_unemp$measure)
                        )),
                 column(
                   6,
                   checkboxGroupInput(
-                    "ages",
+                    "agg_ages",
                     "Select age groups:",
                     choices = unique(df_unemp$age_group),
                     selected = c("Total", "15-24 years")
