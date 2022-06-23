@@ -162,6 +162,8 @@ ui <- shinyUI(
             style = "",
             div(
               plotlyOutput("emp_pop_ue_ts"),
+              p("Source: ABS Labour Force, Detailed",
+                class = "source-text"),
               fluidRow(
                 class = "card-body",
                 column(6,
@@ -180,7 +182,7 @@ ui <- shinyUI(
                     selected = c("Total", "15-24 years")
                   )
                 ),
-              ),
+              )
             ),
           ),
           column(
@@ -222,6 +224,8 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
             class = "m-2",
             div(
               plotlyOutput("job_mobility"),
+              p("Source: ABS Participation, Job Search and Mobility survey",
+                class = "source-text"),
               div(
                 checkboxGroupInput(
                   "ages_jm",
@@ -249,8 +253,10 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
     column(
       width = 7,
       class = "m-2",
-      plotlyOutput("pc_mismatched")
-
+      plotlyOutput("pc_mismatched"),
+      p("Source: ABS Labour Force microdata",
+        class = "source-text"
+        )
     ),
     column(
       width = 4,
@@ -268,6 +274,10 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
       width = 7,
       class = "m-2",
       plotlyOutput("helpful_jt"),
+      p(
+        "Source: ABS Labour Force microdata",
+        class = "source-text"
+      ),
       radioButtons(
         "helpful_age",
         "Select age group: ",
@@ -292,6 +302,8 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
       class = "m-2",
       div(
         plotlyOutput("occupation_intensity"),
+        p("Source: MADIP",
+          class = "source-text"),
         div(
           radioButtons(
             "age_gp", "Select age groups:",
@@ -333,6 +345,8 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
         class = "m-2",
         div(
           plotlyOutput("duration_unemployed"),
+          p("Source: ABS Labour Force, Detailed",
+            class = "source-text"),
           fluidRow(
             column(
               width = 6,
@@ -372,6 +386,8 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
           width = 7,
           class = "m-2",
           plotlyOutput("duration_v_ue"),
+          p("Source: ABS Labour Force microdata",
+            class = "source-text"),
           selectInput(
             "dur_v_ue_year",
             "Select year: ",
@@ -401,8 +417,9 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
         column(
           width = 7,
           class = "m-2",
-          
           plotlyOutput("pc_ue_gained"),
+          p("Source: ABS Labour Force microdata",
+            class = "source-text"),
           radioButtons(
             "ue_to_emp_measure",
             "Select measure: ",
@@ -488,7 +505,11 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
         column(
           width = 7,
           class = "m-2",
-          div(plotlyOutput("youth_unem"),),
+          div(plotlyOutput("youth_unem"),
+              br(),
+              p("Source: ABS Labour Force, Detailed",
+                class = "source-text"),
+              ),
           fluidRow(
             column(
               width = 5,
@@ -546,7 +567,7 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
         )
       ),
       div(class = "m-2",
-          p("Source: [INSERT SOURCE]", class = "source-text")),
+          p("Source: ABS Labour Force, Detailed", class = "source-text")),
       fluidRow(column(
         width = 6,
         class = "m-2",
@@ -565,6 +586,9 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
                  ),
                  class = "card-body-2"),
                  plotlyOutput("educ_v_emp"),
+                 br(),
+                 p("Source: ABS Labour Force, Detailed",
+                   class = "source-text"),
                  selectInput(
                    "age_educ_v_emp",
                    "Select age group: ",
@@ -609,7 +633,10 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
         column(
           width = 7,
           class = "m-2",
-          div(plotlyOutput("neet_timeseries")),
+          div(plotlyOutput("neet_timeseries"),
+              br(),
+              p("Source: ABS Labour Force, Detailed",
+                class = "source-text")),
           fluidRow(column(
             width = 6,
             radioButtons(
@@ -644,7 +671,10 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
           column(
             width = 7,
             class = "m-2",
-            div(plotlyOutput("neet_entry_exit")),
+            div(plotlyOutput("neet_entry_exit"),
+                br(),
+                p("Source: ABS Labour Force, Detailed",
+                  class = "source-text")),
             fluidRow(column(
               width = 6,
               radioButtons(
@@ -673,7 +703,10 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
           column(
             width = 7,
             class = "m-2",
-            plotlyOutput("neet_distance")
+            plotlyOutput("neet_distance"),
+            br(),
+            p("Source: HILDA Release 20",
+              class = "source-text"),
           ),
           column(
             width = 4,
@@ -811,11 +844,6 @@ server <- function(input, output, session) {
       yaxis = list(title = input$agg_measure, zeroline = FALSE, showgrid = F,
                    ticksuffix = "%", hoverformat = ".2f"),
       margin = list(l = 70, r = 50, t = 50, b = 100),
-      annotations = list(text = "Source: ABS (2022), Labour Force, Detailed",
-                         showarrow = F,
-                         xref = "paper", x = 0,
-                         yref = "paper", y = -.35,
-                         font = list(size = 10, color = "grey")),
       paper_bgcolor = chart_bg_color,
       plot_bgcolor = chart_bg_color,
       font = list(color = chart_text_color)
@@ -841,11 +869,6 @@ server <- function(input, output, session) {
       yaxis = list(title = "Job mobility", zeroline = FALSE, showgrid = F,
                    ticksuffix = "%", hoverformat = ".2f"),
       margin = list(l = 70, r = 50, t = 50, b = 100),
-      annotations = list(text = "Source: [INSERT SOURCE]",
-                         showarrow = F,
-                         xref = "paper", x = 0,
-                         yref = "paper", y = -.35,
-                         font = list(size = 10, color = "grey")),
       paper_bgcolor = chart_bg_color,
       plot_bgcolor= chart_bg_color,
       font = list(color = chart_text_color))
@@ -866,11 +889,6 @@ server <- function(input, output, session) {
       yaxis = list(title = "% mismatched", zeroline = FALSE, showgrid = F,
                    ticksuffix = "%", hoverformat = ".2f"),
       margin = list(l = 70, r = 50, t = 50, b = 100),
-      annotations = list(text = "Source: [INSERT SOURCE]",
-                         showarrow = F,
-                         xref = "paper", x = 0,
-                         yref = "paper", y = -.35,
-                         font = list(size = 10, color = "grey")),
       paper_bgcolor = chart_bg_color,
       plot_bgcolor= chart_bg_color,
       font = list(color = chart_text_color))
@@ -892,11 +910,6 @@ server <- function(input, output, session) {
       xaxis = list(title = "Date", zeroline = FALSE, showgrid = F),
       yaxis = list(title = "% workers", zeroline = FALSE, showgrid = F, ticksuffix = "%", hoverformat = ".2f"),
       margin = list(l = 70, r = 50, t = 50, b = 100),
-      annotations = list(text = "Source: [INSERT SOURCE]",
-                         showarrow = F,
-                         xref = "paper", x = 0,
-                         yref = "paper", y = -.35,
-                         font = list(size = 10, color = "grey")),
       paper_bgcolor = chart_bg_color,
       plot_bgcolor = chart_bg_color,
       font = list(color = chart_text_color))
@@ -917,11 +930,6 @@ server <- function(input, output, session) {
       xaxis = list(title = "Date", zeroline = FALSE, showgrid = F),
       yaxis = list(title = "% population employed", zeroline = FALSE, showgrid = F, ticksuffix = "%", hoverformat = ".2f"),
       margin = list(l = 70, r = 50, t = 50, b = 100),
-      annotations = list(text = "Source: [INSERT SOURCE]",
-                         showarrow = F,
-                         xref = "paper", x = 0,
-                         yref = "paper", y = -.35,
-                         font = list(size = 10, color = "grey")),
       paper_bgcolor = chart_bg_color,
       plot_bgcolor = chart_bg_color,
       font = list(color = chart_text_color))
@@ -1016,11 +1024,6 @@ server <- function(input, output, session) {
       yaxis = list(title = "Share of unemployed", zeroline = FALSE, showgrid = F,
                    ticksuffix = "%", hoverformat = ".2f"),
       margin = list(l = 70, r = 50, t = 50, b = 100),
-      annotations = list(text = "Source: [INSERT SOURCE]",
-                         showarrow = F,
-                         xref = "paper", x = 0,
-                         yref = "paper", y = -.35,
-                         font = list(size = 10, color = "grey")),
       paper_bgcolor = chart_bg_color,
       paper_bgcolor = chart_bg_color,
       font = list(color = chart_text_color)
@@ -1231,11 +1234,6 @@ server <- function(input, output, session) {
       yaxis = list(title = "Unemployment rate", zeroline = FALSE, showgrid = F,
                    ticksuffix = "%", hoverformat = ".2f"),
       margin = list(l = 70, r = 50, t = 50, b = 100, autoexpand = T),
-      annotations = list(text = "Source: ABS",
-                         showarrow = F,
-                         xref = 'paper', x = 0,
-                         yref = 'paper', y = -.5,
-                         font = list(size = 10, color = "grey")),
       paper_bgcolor = chart_bg_color,
       plot_bgcolor= chart_bg_color,
       font = list(color = chart_text_color))
@@ -1365,11 +1363,6 @@ server <- function(input, output, session) {
       yaxis = list(title = "NEET rate", zeroline = FALSE, showgrid = F,
                    tickformat = "1%", hoverformat = ".2f"),
       margin = list(l = 70, r = 50, t = 50, b = 100, autoexpand = T),
-      annotations = list(text = "Source: ABS Labour Force Survey",
-                         showarrow = F,
-                         xref = 'paper', x = 0,
-                         yref = 'paper', y = -.35,
-                         font = list(size = 10, color = "grey")),
       paper_bgcolor = chart_bg_color,
       plot_bgcolor = chart_bg_color,
       font = list(color = chart_text_color))
@@ -1404,11 +1397,6 @@ server <- function(input, output, session) {
       yaxis = list(title = "NEET rate", zeroline = FALSE, showgrid = F,
                    tickformat = "1%", hoverformat = ".2f"),
       margin = list(l = 70, r = 50, t = 50, b = 100, autoexpand = T),
-      annotations = list(text = "Source: ABS Labour Force Survey",
-                         showarrow = F,
-                         xref = 'paper', x = 0,
-                         yref = 'paper', y = -.7,
-                         font = list(size = 10, color = "grey")),
       paper_bgcolor = chart_bg_color,
       plot_bgcolor= chart_bg_color,
       font = list(color = chart_text_color))
@@ -1434,11 +1422,6 @@ server <- function(input, output, session) {
       yaxis = list(title = "Probability of NEET status", zeroline = FALSE, 
                    showgrid = F, tickformat = "1%", dtick = 0.02, hoverformat = ".2f"),
       margin = list(l = 70, r = 50, t = 50, b = 100, autoexpand = T),
-      annotations = list(text = "Source: HILDA Release 2.0",
-                         showarrow = F,
-                         xref = 'paper', x = 0,
-                         yref = 'paper', y = -.5,
-                         font = list(size = 10, color = "grey")),
       paper_bgcolor = chart_bg_color,
       plot_bgcolor= chart_bg_color,
       font = list(color = chart_text_color)) %>% 
