@@ -842,7 +842,8 @@ server <- function(input, output, session) {
         y = ~ value,
         split = ~ age_group,
         type = "scatter",
-        mode = "lines"
+        mode = "lines",
+        fill = ~""
       ) %>% 
       rangeslider(start = min(df_unemp$date), end = max(df_unemp$date))
     
@@ -868,8 +869,16 @@ server <- function(input, output, session) {
     
     req(input$ages_jm)
     
-    jm_graph <- df_job_mobility %>% filter(age_group == input$ages_jm) %>% 
-      plot_ly(x = ~date, y = ~value, split = ~age_group, type = "scatter", mode = "lines")
+    jm_graph <-
+      df_job_mobility %>% filter(age_group == input$ages_jm) %>%
+      plot_ly(
+        x = ~ date,
+        y = ~ value,
+        split = ~ age_group,
+        type = "scatter",
+        mode = "lines",
+        fill = ~""
+      )
     
     jm_graph <- jm_graph %>% layout(
       showlegend = TRUE,
@@ -894,7 +903,8 @@ server <- function(input, output, session) {
         color = ~skill_level,
         colors = c("#1b9e77", "#d95f02", "#7570b3"),
         type = "scatter",
-        mode = "lines"
+        mode = "lines",
+        fill = ~""
       )
     
     pc_mismatched <- pc_mismatched %>% layout(
@@ -920,7 +930,8 @@ server <- function(input, output, session) {
         color = ~ matched_last_period,
         colors = c("#1b9e77", "#d95f02"),
         type = "scatter",
-        mode = "lines"
+        mode = "lines",
+        fill = ~""
       ) %>%
       rangeslider(start = min(df_jobswitchers$date), end = max(df_jobswitchers$date))
     
@@ -947,8 +958,14 @@ server <- function(input, output, session) {
       slice_max(order_by = percent_total, n = 5)%>%
       ungroup()%>%
       mutate(percent_total = percent_total*100)%>%
-      plot_ly(x = ~year, y = ~percent_total, color = ~two_name, type="scatter", 
-              mode = "lines") 
+      plot_ly(
+        x = ~ year,
+        y = ~ percent_total,
+        color = ~ two_name,
+        type = "scatter",
+        mode = "lines",
+        fill = ~""
+      )
     
     jm_graph <- jm_graph %>% layout(
       showlegend = TRUE,
@@ -1103,7 +1120,8 @@ server <- function(input, output, session) {
         size = ~pop,
         type = "scatter",
         mode = "markers",
-        name = "Region"
+        name = "Region",
+        fill = ~""
         ) %>% 
       add_lines(x = ~ue, y = ~fitted, name = "Trendline")
 
@@ -1147,7 +1165,8 @@ server <- function(input, output, session) {
         colors = c("#1b9e77", "#d95f02", "#7570b3"),
         type = "scatter",
         mode = "lines",
-        connectgaps = TRUE
+        connectgaps = TRUE,
+        fill = ~""
       ) %>%
       rangeslider(start = min(df_ue_gained$date),
                   end = max(df_ue_gained$date))
@@ -1222,7 +1241,8 @@ server <- function(input, output, session) {
                 type = "scatter",
                 size = ~total,
                 mode = "markers", 
-                frame = ~Date) %>% 
+                frame = ~Date,
+                fill = ~"") %>% 
       add_lines(x = ~share_decile_1, y = ~fv, split = ~age, frame = ~Date, name = "Trendline")
     
     youth_unem_graph <- youth_unem_graph %>% layout(
@@ -1302,7 +1322,14 @@ server <- function(input, output, session) {
     
     educ_emp <- df_educ_emp %>% filter(Age == input$age_educ_v_emp,
                                        Sex == input$sex_educ_v_emp) %>% 
-      plot_ly(x = ~Date, y = ~Employment, color = ~Education, type = "scatter", mode = "lines")
+      plot_ly(
+        x = ~ Date,
+        y = ~ Employment,
+        color = ~ Education,
+        type = "scatter",
+        mode = "lines",
+        fill = ~""
+      )
     
     educ_emp <- educ_emp %>% layout(
       title = "Employment rates by age and education level",
@@ -1324,47 +1351,47 @@ server <- function(input, output, session) {
     if(input$neet_dem == "Total"){
       if(input$neet_age == "15-19 years"){
         neet_timeseries <- df_neet %>% plot_ly(x = ~date, y = ~`Total 15-19 years`,
-                                       type = "scatter", mode = "lines")
+                                       type = "scatter", mode = "lines", fill = ~"")
       }
       else if (input$neet_age == "20-24 years"){
         neet_timeseries <- df_neet %>% plot_ly(x = ~date, y = ~`Total 20-24 years`, 
-                                       type = "scatter", mode = "lines")
+                                       type = "scatter", mode = "lines", fill = ~"")
       }
       else if (input$neet_age == "15-24 years"){
         neet_timeseries <- df_neet %>% plot_ly(x = ~date, y = ~`Total 15-24 years`, 
-                                       type = "scatter", mode = "lines")
+                                       type = "scatter", mode = "lines", fill = ~"")
       }
     }
     else if (input$neet_dem == "Gender"){
       if(input$neet_age == "15-19 years"){
-        neet_timeseries <- df_neet %>% plot_ly(x = ~date) %>% 
+        neet_timeseries <- df_neet %>% plot_ly(x = ~date, fill = ~"") %>% 
           add_trace(y = ~`Males 15-19 years`, type = "scatter", mode = "lines", name = "Males") %>% 
           add_trace(y = ~`Females 15-19 years`, type = "scatter", mode = "lines", name = "Females")
       }
       else if (input$neet_age == "20-24 years"){
-        neet_timeseries <- df_neet %>% plot_ly(x = ~date) %>% 
+        neet_timeseries <- df_neet %>% plot_ly(x = ~date, fill = ~"") %>% 
           add_trace(y = ~`Males 20-24 years`, type = "scatter", mode = "lines", name = "Males") %>% 
           add_trace(y = ~`Females 20-24 years`, type = "scatter", mode = "lines", name = "Females")
       }
       else if (input$neet_age == "15-24 years"){
-        neet_timeseries <- df_neet %>% plot_ly(x = ~date) %>% 
+        neet_timeseries <- df_neet %>% plot_ly(x = ~date, fill = ~"") %>% 
           add_trace(y = ~`Males 15-24 years`, type = "scatter", mode = "lines", name = "Males") %>% 
           add_trace(y = ~`Females 15-24 years`, type = "scatter", mode = "lines", name = "Females")
       }
     }
     else if (input$neet_dem == "Education"){
       if(input$neet_age == "15-19 years"){
-        neet_timeseries <- df_neet %>% plot_ly(x = ~date) # note there is no data for this combo
+        neet_timeseries <- df_neet %>% plot_ly(x = ~date, fill = ~"") # note there is no data for this combo
       }
       else if (input$neet_age == "20-24 years"){
-        neet_timeseries <- df_neet %>% plot_ly(x = ~date) %>% 
+        neet_timeseries <- df_neet %>% plot_ly(x = ~date, fill = ~"") %>% 
           add_trace(y = ~`Year 9 or below/Never attended school 20-24 years`, type = "scatter", mode = "lines", name = "Year 9 or below") %>% 
           add_trace(y = ~`Year 10 or equivalent 20-24 years`, type = "scatter", mode = "lines", name = "Year 10 or equivalent") %>% 
           add_trace(y = ~`Year 11 or equivalent 20-24 years`, type = "scatter", mode = "lines", name = "Year 11 or equivalent") %>% 
           add_trace(y = ~`Year 12 or equivalent 20-24 years`, type = "scatter", mode = "lines", name = "Year 12 or equivalent")
       }
       else if (input$neet_age == "15-24 years"){
-        neet_timeseries <- df_neet %>% plot_ly(x = ~date) # note there is no data for this combo
+        neet_timeseries <- df_neet %>% plot_ly(x = ~date, fill = ~"") # note there is no data for this combo
       }
     }
 
@@ -1396,7 +1423,8 @@ server <- function(input, output, session) {
         y = ~ neet_flow,
         type = "scatter",
         mode = "lines",
-        name = "NEET flow"
+        name = "NEET flow", 
+        fill = ~""
       ) %>%
       rangeslider(start = min(df_neet_2$date), end = max(df_neet_2$date))
     
