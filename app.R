@@ -393,10 +393,16 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
           
           plotlyOutput("pc_ue_gained"),
           selectInput(
-            "ue_dur",
-            "Select unemployed duration: ",
-            choices = unique(df_ue_gained$Duration),
-            selected = "1 year +"
+            "ue_to_emp_measure",
+            "Select measure: ",
+            choices = unique(df_ue_gained$measure),
+            selected = "Geography"
+          ),
+          selectInput(
+            "ue_to_emp_age_bucket",
+            "Select age group: ",
+            choices = unique(df_ue_gained$age_bucket),
+            selected = "15-24"
           )
         ),
         column(
@@ -772,16 +778,23 @@ server <- function(input, output, session) {
   ### E-P + U/E time series ####
   output$emp_pop_ue_ts <- renderPlotly({
   
-    req(input$ages)
-  
-    ue_graph <- df_unemp %>% filter(measure == input$measure, age_group == input$ages, date > "2000-01-01") %>%
-      plot_ly(x = ~date, y = ~value, split = ~age_group, type = "scatter", mode = "lines")
+    ue_graph <-
+      df_unemp %>% filter(measure == input$agg_measure,
+                          age_group == input$agg_ages,
+                          date > "2000-01-01") %>%
+      plot_ly(
+        x = ~ date,
+        y = ~ value,
+        split = ~ age_group,
+        type = "scatter",
+        mode = "lines"
+      )
     
     ue_graph <- ue_graph %>% layout(
       showlegend = TRUE,
       title = "Measures of employment by age group",
       xaxis = list(title = "Date", zeroline = FALSE, showgrid = F),
-      yaxis = list(title = input$measure, zeroline = FALSE, showgrid = F,
+      yaxis = list(title = input$agg_measure, zeroline = FALSE, showgrid = F,
                    ticksuffix = "%", hoverformat = ".2f"),
       margin = list(l = 70, r = 50, t = 50, b = 100),
       annotations = list(text = "Source: ABS (2022), Labour Force, Detailed",
@@ -1082,13 +1095,22 @@ server <- function(input, output, session) {
   ### U/E regaining employment ####
   output$pc_ue_gained <- renderPlotly({
     
-    df_ue_gained$Percent <- df_ue_gained$Percent * 100
-    
-    pc_ue_gained <- df_ue_gained %>% filter(Duration == input$ue_dur) %>% 
-      plot_ly(x = ~Date, y = ~Percent, type = "scatter", mode = "lines")
+    pc_ue_gained <- df_ue_gained %>%
+      filter(measure == input$ue_to_emp_measure & age_bucket == input$ue_to_emp_age_bucket) %>%
+      plot_ly(
+        x = ~ date,
+        y = ~ value,
+        color = ~ variable,
+        colors = c("#1b9e77", "#d95f02", "#7570b3"),
+        type = "scatter",
+        mode = "lines",
+        connectgaps = TRUE
+      ) %>%
+      rangeslider(start = min(df_ue_gained$date),
+                  end = max(df_ue_gained$date))
     
     pc_ue_gained <- pc_ue_gained %>% layout(
-      title = "% unemployed who gained employment",
+      title = paste0("% unemployed who gained employment by ", input$ue_to_emp_measure),
       xaxis = list(title = "Date", zeroline = FALSE, showgrid = F),
       yaxis = list(title = "% unemployed", zeroline = FALSE, showgrid = F, ticksuffix = "%", hoverformat = ".2f"),
       margin = list(l = 70, r = 50, t = 50, b = 100),
@@ -1315,9 +1337,17 @@ server <- function(input, output, session) {
     
     df_neet_2$exit <- -df_neet_2$exit
     
-    neet_entry_exit <- df_neet_2 %>% filter(demo_split == input$neet_entry_exit_dem) %>% 
-      plot_ly(x = ~date, y = ~neet_flow, type = "scatter", mode = "lines", name = "NEET flow") %>% 
-      rangeslider(start = min(df_neet_2$date), end = max(df_neet_2$date))
+    neet_entry_exit <-
+      df_neet_2 %>% filter(demo_split == input$neet_entry_exit_dem) %>%
+      plot_ly(
+        x = ~ date,
+        y = ~ neet_flow,
+        type = "scatter",
+        mode = "lines",
+        name = "NEET flow"
+      ) %>%
+      rangeslider(start = min(df_neet_2$date),
+                  end = max(df_neet_2$date))
     
     neet_entry_exit <- neet_entry_exit %>% 
       add_trace(x = ~date, y = ~entry, type = 'scatter', fill = 'tozeroy', name = "Entries") %>% 
