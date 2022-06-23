@@ -13,8 +13,6 @@ setAccountInfo(name = error_on_missing_name("SHINY_ACC_NAME"),
                secret = error_on_missing_name("SECRET"))
 # Deploy the application.
 deployApp(
-  appFiles = c("app.R" #, you can specify which files to deploy, 
-               #or keep this NULL to deploy everything
-  ),
+  appFiles = NULL, # you can specify which files to deploy, or keep this NULL to deploy everything
   appName = error_on_missing_name("MASTERNAME"),
   appTitle = "shinyapplication")
