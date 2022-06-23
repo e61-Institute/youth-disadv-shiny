@@ -408,10 +408,8 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
         column(
           width = 4,
           class = "m-2",
-          h6("PENDING REAL DATA: Transitions into employment"),
-          p(
-            "[Pending real data: Comments on whether this trend has been increasing or decreasing and at times this has changed]"
-          )
+          h6("Transitions into employment"),
+          p("The share of unemployed workers finding employment in a given month does not differ significantly between urban and regional areas. Workers who have been searching for work for more than six months face greater difficulty transitioning back into employment. Similarly, people who have never worked or have not worked in over 6 months, also have lower probabilities of entering employment compared to people who have worked more recently. These trends have remained consistent over the past 15 years.")
         )
       ),
       
