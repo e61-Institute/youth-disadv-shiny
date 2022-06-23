@@ -1214,7 +1214,7 @@ server <- function(input, output, session) {
    
     
     youth_unem_graph <- df_youth_unem %>% 
-      filter(age == input$age_youth_unem, sex == input$sex_youth_unem) %>%
+      filter(age %in% input$age_youth_unem, sex == input$sex_youth_unem) %>%
       rename(Date = date) %>% 
       plot_ly(x = ~share_decile_1) %>% 
       add_trace(x = ~share_decile_1, y = ~ue_rate, 
