@@ -61,7 +61,8 @@ df_occupation_area <- readRDS("data/occupation_area.rds") %>%
   dplyr::ungroup() %>% 
   unique()
 
-df_unemp <- read_csv("data/unemployment and E-to-P aggregates.csv")
+df_unemp <- read_csv("data/unemployment and E-to-P aggregates.csv") %>% 
+  filter(date >= "2005-01-01")
 df_job_mobility <- read_csv("data/job mobility rate aggregates.csv")
 df_duration <- read_csv("data/duration unemployed shares.csv")
 df_occupation <- read_csv("data/two_digit_occupation_by_age.csv")
@@ -787,15 +788,15 @@ server <- function(input, output, session) {
   
     ue_graph <-
       df_unemp %>% filter(measure == input$agg_measure,
-                          age_group == input$agg_ages,
-                          date > "2000-01-01") %>%
+                          age_group == input$agg_ages) %>%
       plot_ly(
         x = ~ date,
         y = ~ value,
         split = ~ age_group,
         type = "scatter",
         mode = "lines"
-      )
+      ) %>% 
+      rangeslider(start = min(df_unemp$date), end = max(df_unemp$date))
     
     ue_graph <- ue_graph %>% layout(
       showlegend = TRUE,
@@ -877,7 +878,8 @@ server <- function(input, output, session) {
     df_helpful$Percent <- df_helpful$Percent * 100
     
     helpful_jt <- df_helpful %>% filter(Age == input$helpful_age) %>% 
-      plot_ly(x = ~Date, y = ~Percent, type = "scatter", mode = "lines")
+      plot_ly(x = ~Date, y = ~Percent, type = "scatter", mode = "lines") %>% 
+      rangeslider(start = min(df_helpful$date), end = max(df_helpful$date))
     
     helpful_jt <- helpful_jt %>% layout(
       title = "Percent of workers with helpful job transitions",
@@ -1347,6 +1349,9 @@ server <- function(input, output, session) {
       }
     }
 
+    neet_timeseries <- neet_timeseries %>% 
+      rangeslider(start = min(df_neet$date), end = max(df_neet$date))
+    
     neet_timeseries <- neet_timeseries %>% layout(
       title = "Youth NEET rate by age and demographic group",
       xaxis = list(title = "Date", 
@@ -1379,8 +1384,7 @@ server <- function(input, output, session) {
         mode = "lines",
         name = "NEET flow"
       ) %>%
-      rangeslider(start = min(df_neet_2$date),
-                  end = max(df_neet_2$date))
+      rangeslider(start = min(df_neet_2$date), end = max(df_neet_2$date))
     
     neet_entry_exit <- neet_entry_exit %>% 
       add_trace(x = ~date, y = ~entry, type = 'scatter', fill = 'tozeroy', name = "Entries") %>% 
