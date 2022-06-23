@@ -70,8 +70,8 @@ df_youth_unem <- read_csv("data/youth-ihad-unemployment.csv")
 df_neet <- read_csv("data/aggregate_neet_rate_sa.csv")
 df_neet_2 <- read_csv("data/neet-entry-exit-rates.csv")
 df_duration_v_ue <- read_csv("data/duration_v_rates_unemployment.csv")
-df_pc_mismatched <- read_csv("data/percent_mismatched.csv")
-df_helpful <- read_csv("data/percent_helpful_transitions.csv")
+df_pc_mismatched <- read_csv("data/distribution_of_skill_mismatch_by_age.csv")
+df_jobswitchers <- read_csv("data/jobswitchers_by_mismatch_status.csv")
 df_ue_gained <- read_csv("data/unemployed-entry-into-employment.csv")
 df_educ_emp <- read_csv("data/employment_v_education.csv") %>%
   mutate(Date = lubridate::dmy(Date)) %>% 
@@ -257,7 +257,14 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
       plotlyOutput("pc_mismatched"),
       p("Source: ABS Labour Force microdata",
         class = "source-text"
-        )
+        ),
+      radioButtons(
+        "mismatched_age",
+        "Select age group: ",
+        choices = unique(df_pc_mismatched$age_bucket),
+        selected = "15-24",
+        inline = TRUE
+      )
     ),
     column(
       width = 4,
@@ -270,19 +277,19 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
   ),
 
   fluidRow(
-    ### Helpful job transitions ####
+    ### Job switching for mismatched workers ####
     column(
       width = 7,
       class = "m-2",
-      plotlyOutput("helpful_jt"),
+      plotlyOutput("jobswitchers"),
       p(
         "Source: ABS Labour Force microdata",
         class = "source-text"
       ),
       radioButtons(
-        "helpful_age",
+        "jobswitch_age",
         "Select age group: ",
-        choices = unique(df_helpful$Age),
+        choices = unique(df_jobswitchers$age_bucket),
         selected = "15-24",
         inline = TRUE
       )
@@ -877,14 +884,19 @@ server <- function(input, output, session) {
   ### Mismatched young workers ####
   output$pc_mismatched <- renderPlotly({
     
-    df_pc_mismatched$Percent_mismatch <- df_pc_mismatched$Percent_mismatch * 100
-    format(df_pc_mismatched$Year, "%Y")
-    
     pc_mismatched <- df_pc_mismatched %>%
-      plot_ly(x = ~Year, y = ~Percent_mismatch, type = 'bar')
+      filter(age_bucket == input$mismatched_age) %>% 
+      plot_ly(
+        x = ~ date,
+        y = ~ share,
+        color = ~skill_level,
+        colors = c("#1b9e77", "#d95f02", "#7570b3"),
+        type = "scatter",
+        mode = "lines"
+      )
     
     pc_mismatched <- pc_mismatched %>% layout(
-      title = "Percent of young workers mismatched",
+      title = "Share of employed people by skill matching status",
       xaxis = list(title = "Year", zeroline = FALSE, showgrid = F),
       yaxis = list(title = "% mismatched", zeroline = FALSE, showgrid = F,
                    ticksuffix = "%", hoverformat = ".2f"),
@@ -895,18 +907,23 @@ server <- function(input, output, session) {
     
   })
   
-  ### Helpful job transitions ####
-  output$helpful_jt <- renderPlotly({
+  ### Job switching for mismatched workers ####
+  output$jobswitchers <- renderPlotly({
     
+    jobswitchers <-
+      df_jobswitchers %>% filter(age_bucket == input$jobswitch_age) %>%
+      plot_ly(
+        x = ~ date,
+        y = ~ prop,
+        color = ~ matched_last_period,
+        colors = c("#1b9e77", "#d95f02"),
+        type = "scatter",
+        mode = "lines"
+      ) %>%
+      rangeslider(start = min(df_jobswitchers$date), end = max(df_jobswitchers$date))
     
-    df_helpful$Percent <- df_helpful$Percent * 100
-    
-    helpful_jt <- df_helpful %>% filter(Age == input$helpful_age) %>% 
-      plot_ly(x = ~Date, y = ~Percent, type = "scatter", mode = "lines") %>% 
-      rangeslider(start = min(df_helpful$date), end = max(df_helpful$date))
-    
-    helpful_jt <- helpful_jt %>% layout(
-      title = "Percent of workers with helpful job transitions",
+    jobswitchers <- jobswitchers %>% layout(
+      title = "Job switching for workers with mismatched employment in previous 12 months",
       xaxis = list(title = "Date", zeroline = FALSE, showgrid = F),
       yaxis = list(title = "% workers", zeroline = FALSE, showgrid = F, ticksuffix = "%", hoverformat = ".2f"),
       margin = list(l = 70, r = 50, t = 50, b = 100),
