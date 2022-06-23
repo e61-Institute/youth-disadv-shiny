@@ -74,7 +74,8 @@ df_pc_mismatched <- read_csv("data/percent_mismatched.csv")
 df_helpful <- read_csv("data/percent_helpful_transitions.csv")
 df_ue_gained <- read_csv("data/unemployed-entry-into-employment.csv")
 df_educ_emp <- read_csv("data/employment_v_education.csv") %>%
-  mutate(Date = lubridate::dmy(paste("01-", Date)))
+  mutate(Date = lubridate::dmy(Date)) %>% 
+  mutate(Employment = Employment * 100)
 df_neet_distance <- read_csv("data/neet_distance_fitted_values.csv")
 
 # utils
@@ -588,13 +589,13 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
                  br(),
                  p("Source: ABS Labour Force, Detailed",
                    class = "source-text"),
-                 selectInput(
+                 radioButtons(
                    "age_educ_v_emp",
                    "Select age group: ",
                    choices = unique(df_educ_emp$Age),
                    selected = "15-24"
                  ),
-                 selectInput(
+                 radioButtons(
                    "sex_educ_v_emp",
                    "Select Sex: ",
                    choices = unique(df_educ_emp$Sex),
@@ -1279,9 +1280,6 @@ server <- function(input, output, session) {
   ### Employment rate by degree level and industry ####
   
   output$educ_v_emp <- renderPlotly({
-    
-    
-    df_educ_emp$Employment <- df_educ_emp$Employment * 100
     
     educ_emp <- df_educ_emp %>% filter(Age == input$age_educ_v_emp,
                                        Sex == input$sex_educ_v_emp) %>% 
