@@ -40,7 +40,7 @@ theme_set(theme_bw())
 
 # Read in data ------------------------------------------------------------
 
-options(readr.show_types = FALSE)
+options(readr.show_col_types = FALSE)
 
 df_map <- readRDS("data/jobcreation.rds")
 
