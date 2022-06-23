@@ -68,8 +68,7 @@ df_occupation <- read_csv("data/two_digit_occupation_by_age.csv")
 df_youth_unem <- read_csv("data/youth-ihad-unemployment.csv")
 df_neet <- read_csv("data/aggregate_neet_rate_sa.csv")
 df_neet_2 <- read_csv("data/neet-entry-exit-rates.csv")
-df_duration_v_ue <- read_csv("data/duration_v_rates_unemployment.csv") %>%
-  mutate(date = as.character(date))
+df_duration_v_ue <- read_csv("data/duration_v_rates_unemployment.csv")
 df_pc_mismatched <- read_csv("data/percent_mismatched.csv")
 df_helpful <- read_csv("data/percent_helpful_transitions.csv")
 df_ue_gained <- read_csv("data/percent_unemployed_gained_emp.csv")
@@ -930,7 +929,7 @@ server <- function(input, output, session) {
       showlegend = TRUE,
       title = "Top 5 occupations by age group",
       xaxis = list(title = "Year", zeroline = FALSE, showgrid = F),
-      yaxis = list(title = "Percent Total", zeroline = FALSE, showgrid = F, ticksuffix = "%",hoverformat = ".2f"),
+      yaxis = list(title = "Percent Total", zeroline = FALSE, showgrid = F, ticksuffix = "%", hoverformat = ".2f"),
       legend = list(orientation = 'h',
                     yref = "paper", y = -.45),
       paper_bgcolor = chart_bg_color,
