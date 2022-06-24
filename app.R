@@ -13,31 +13,6 @@ library(geojsonio)
 library(waiter)
 theme_set(theme_bw())
 
-
-# Leaflet code (not working currently) --------------------------------------
-
-# df_map2 <- st_read("data/youth unemployment sa4 map.shp")
-# df_map2 <- df_map2[!is.na(df_map2$date),]
-
-# Unemployment <- df_map2 %>% filter(age == "15-24 years",
-#                                    sex == "Total") 
-# 
-# Unemployment$start <- as.Date(Unemployment$date, "%Y-%m-%d")
-# Unemployment$end <- as.Date(Unemployment$date, "%Y-%m-%d")
-# 
-# unemployment_geo <- geojsonio::geojson_json(Unemployment, lat = "cent_lt", lon = "cent_lng")
-# 
-# domain <- c(0,50)
-# 
-# pal <- colorNumeric("OrRd",domain = domain)
-# 
-# leaflet(Unemployment) %>% 
-#   addPolygons(stroke = FALSE, smoothFactor = 0.2,color = ~pal(Unemployment$value),
-#               fillOpacity = 0.7) %>%
-#   addProviderTiles(providers$Esri.WorldGrayCanvas) %>%
-#   addLegend("bottomright",opacity = 1, pal = pal,values=~domain, title = "Unemployed share (%)") %>% 
-#   addTimeline(data = unemployment_geo)
-
 # Read in data ------------------------------------------------------------
 
 options(readr.show_col_types = FALSE)
@@ -729,94 +704,95 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
 
       )
     ))),
-    
-    
-    ## Section 6 - Opportunities ####
-    a(id = "section-6"),
-    tags$section(fluidRow(
-      class = "m-3 justify-content-center",
-      column(
-        width = 12,
-        class = "card m-2",
-        h3(
-          "Where are the opportunities to exit disadvantage and vulnerability?"
-        ),
-        fluidRow(
-          ### Map: Change in jobs by industry/location ####
-          column(
-            width = 7,
-            class = "m-2",
-            div(
-              h5("Net change in jobs by industry and location"),
-              p(em(
-                "Change in jobs per 1000 workers between 2002 - 2021"
-              )),
-              selectInput("name",
-                          "Select industry",
-                          unique(df_map$industry)),
-              leafletOutput("map_change_jobs_industry"),
-            ),
-            br(),
-            p(
-              "Source: BLADE Data Industries with less than 10 firms excluded",
-              class = "source-text"
-            )
-          ),
 
-          column(
-            width = 4,
-            class = "m-2",
-            br(),
-            h6("Employment opportunities vary by region and industry"),
-            p("Employment opportunities vary by industry and across Australia. Young people living in more disadvantaged regions may have to relocate to find opportunities that best match their interests and skills."),
-            p("The graph shows net changes in jobs by industry. A net increase in jobs indicates that the industry is growing in a region, while a decrease indicates a decline. The table supplements this with a gross measure that shows how many new jobs were created in an industry, without taking into account job destruction."),
-            p("The most common occupation and industries for young people (under 25 years) tend to be in hospitality, sales and carers positions. This is true across most regions, and these industries make up a larger share of employment. In contrast, the most common occupations and industry for older workers vary much more across regions and are less concentrated.")
+
+
+  ## Section 6 - Opportunities ####
+  a(id = "section-6"),
+  tags$section(fluidRow(
+    class = "m-3 justify-content-center",
+    column(
+      width = 12,
+      class = "card m-2",
+      h3(
+        "Where are the opportunities to exit disadvantage and vulnerability?"
+      ),
+      fluidRow(
+        ### Map: Change in jobs by industry/location ####
+        column(
+          width = 7,
+          class = "m-2",
+          div(
+            h5("Net change in jobs by industry and location"),
+            p(em(
+              "Change in jobs per 1000 workers between 2002 - 2021"
+            )),
+            selectInput("name",
+                        "Select industry",
+                        unique(df_map$industry)),
+            leafletOutput("map_change_jobs_industry"),
           ),
+          br(),
+          p(
+            "Source: BLADE Data Industries with less than 10 firms excluded",
+            class = "source-text"
+          )
         ),
-        fluidRow(### Table: Change in jobs by industry/location ####
-                 column(
-                   width = 8,
-                   class = "m-2",
-                   div(
-                     h5("Table: change in jobs by industry and location"),
-                     p(em(
-                       "Change in jobs per 1000 workers between 2002 - 2021"
-                     )),
-                     selectInput("name_area",
-                                 "Select location",
-                                 unique(df_map$sa3_name_16)),
-                     dataTableOutput("change_jobs_industry_table")
-                   ),
-                   br(),
-                   p(
-                     "Source: BLADE Data Industries with less than 10 firms excluded",
-                     class = "source-text"
+
+        column(
+          width = 4,
+          class = "m-2",
+          br(),
+          h6("Employment opportunities vary by region and industry"),
+          p("Employment opportunities vary by industry and across Australia. Young people living in more disadvantaged regions may have to relocate to find opportunities that best match their interests and skills."),
+          p("The graph shows net changes in jobs by industry. A net increase in jobs indicates that the industry is growing in a region, while a decrease indicates a decline. The table supplements this with a gross measure that shows how many new jobs were created in an industry, without taking into account job destruction."),
+          p("The most common occupation and industries for young people (under 25 years) tend to be in hospitality, sales and carers positions. This is true across most regions, and these industries make up a larger share of employment. In contrast, the most common occupations and industry for older workers vary much more across regions and are less concentrated.")
+        ),
+      ),
+      fluidRow(### Table: Change in jobs by industry/location ####
+               column(
+                 width = 8,
+                 class = "m-2",
+                 div(
+                   h5("Table: change in jobs by industry and location"),
+                   p(em(
+                     "Change in jobs per 1000 workers between 2002 - 2021"
+                   )),
+                   selectInput("name_area",
+                               "Select location",
+                               unique(df_map$sa3_name_16)),
+                   dataTableOutput("change_jobs_industry_table")
+                 ),
+                 br(),
+                 p(
+                   "Source: BLADE Data Industries with less than 10 firms excluded",
+                   class = "source-text"
+                 )
+               ),),
+      ### Top 3 youth occupations ####
+      fluidRow(
+               column(
+                 width = 8,
+                 class = "m-2",
+                 div(
+                   h5("Top 3 occupations worked by Youth (19-29) in region"),
+                   p(em("SA3 level")),
+                   leafletOutput("area_occupation"),
+                   radioButtons(
+                     "age_area",
+                     "Select age group:",
+                     unique(df_occupation_area$age),
+                     selected = "Under 25",
+                     inline = TRUE
                    )
-                 ),),
-        ### Top 3 youth occupations ####
-        fluidRow(
-                 column(
-                   width = 8,
-                   class = "m-2",
-                   div(
-                     h5("Top 3 occupations worked by Youth (19-29) in region"),
-                     p(em("SA3 level")),
-                     leafletOutput("area_occupation"),
-                     radioButtons(
-                       "age_area",
-                       "Select age group:",
-                       unique(df_occupation_area$age),
-                       selected = "Under 25",
-                       inline = TRUE
-                     )
-                   ),
-                   br(),
-                   p("Source: MADIP ATO extracts FY20",
-                     class = "source-text")
-                 ))
-      )
-    ))
-  )
+                 ),
+                 br(),
+                 p("Source: MADIP ATO extracts FY20",
+                   class = "source-text")
+               ))
+)
+))
+)
 )
  
             
