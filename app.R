@@ -13,32 +13,9 @@ library(geojsonio)
 library(waiter)
 theme_set(theme_bw())
 
-
-# Leaflet code (not working currently) --------------------------------------
-
-# df_map2 <- st_read("data/youth unemployment sa4 map.shp")
-# df_map2 <- df_map2[!is.na(df_map2$date),]
-
-# Unemployment <- df_map2 %>% filter(age == "15-24 years",
-#                                    sex == "Total") 
-# 
-# Unemployment$start <- as.Date(Unemployment$date, "%Y-%m-%d")
-# Unemployment$end <- as.Date(Unemployment$date, "%Y-%m-%d")
-# 
-# unemployment_geo <- geojsonio::geojson_json(Unemployment, lat = "cent_lt", lon = "cent_lng")
-# 
-# domain <- c(0,50)
-# 
-# pal <- colorNumeric("OrRd",domain = domain)
-# 
-# leaflet(Unemployment) %>% 
-#   addPolygons(stroke = FALSE, smoothFactor = 0.2,color = ~pal(Unemployment$value),
-#               fillOpacity = 0.7) %>%
-#   addProviderTiles(providers$Esri.WorldGrayCanvas) %>%
-#   addLegend("bottomright",opacity = 1, pal = pal,values=~domain, title = "Unemployed share (%)") %>% 
-#   addTimeline(data = unemployment_geo)
-
 # Read in data ------------------------------------------------------------
+
+options(readr.show_col_types = FALSE)
 
 df_map <- readRDS("data/jobcreation.rds")
 
@@ -727,94 +704,94 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
 
       )
     ))),
-    
-    
-    ## Section 6 - Opportunities ####
-    a(id = "section-6"),
-    tags$section(fluidRow(
-      class = "m-3 justify-content-center",
-      column(
-        width = 12,
-        class = "card m-2",
-        h3(
-          "Where are the opportunities to exit disadvantage and vulnerability?"
-        ),
-        fluidRow(
-          ### Map: Change in jobs by industry/location ####
-          column(
-            width = 7,
-            class = "m-2",
-            div(
-              h5("Net change in jobs by industry and location"),
-              p(em(
-                "Change in jobs per 1000 workers between 2002 - 2021"
-              )),
-              selectInput("name",
-                          "Select industry",
-                          unique(df_map$industry)),
-              leafletOutput("map_change_jobs_industry"),
-            ),
-            br(),
-            p(
-              "Source: BLADE Data Industries with less than 10 firms excluded",
-              class = "source-text"
-            )
-          ),
 
-          column(
-            width = 4,
-            class = "m-2",
-            br(),
-            h6("Employment opportunities vary by region and industry"),
-            p("Employment opportunities vary by industry and across Australia. Young people living in more disadvantaged regions may have to relocate to find opportunities that best match their interests and skills."),
-            p("The graph shows net changes in jobs by industry. A net increase in jobs indicates that the industry is growing in a region, while a decrease indicates a decline. The table supplements this with a gross measure that shows how many new jobs were created in an industry, without taking into account job destruction."),
-            p("The most common occupation and industries for young people (under 25 years) tend to be in hospitality, sales and carers positions. This is true across most regions, and these industries make up a larger share of employment. In contrast, the most common occupations and industry for older workers vary much more across regions and are less concentrated.")
+  ## Section 6 - Opportunities ####
+  a(id = "section-6"),
+  tags$section(fluidRow(
+    class = "m-3 justify-content-center",
+    column(
+      width = 12,
+      class = "card m-2",
+      h3(
+        "Where are the opportunities to exit disadvantage and vulnerability?"
+      ),
+      fluidRow(
+        ### Map: Change in jobs by industry/location ####
+        column(
+          width = 7,
+          class = "m-2",
+          div(
+            h5("Net change in jobs by industry and location"),
+            p(em(
+              "Change in jobs per 1000 workers between 2002 - 2021"
+            )),
+            selectInput("name",
+                        "Select industry",
+                        unique(df_map$industry)),
+            leafletOutput("map_change_jobs_industry"),
           ),
+          br(),
+          p(
+            "Source: BLADE Data Industries with less than 10 firms excluded",
+            class = "source-text"
+          )
         ),
-        fluidRow(### Table: Change in jobs by industry/location ####
-                 column(
-                   width = 8,
-                   class = "m-2",
-                   div(
-                     h5("Table: change in jobs by industry and location"),
-                     p(em(
-                       "Change in jobs per 1000 workers between 2002 - 2021"
-                     )),
-                     selectInput("name_area",
-                                 "Select location",
-                                 unique(df_map$sa3_name_16)),
-                     dataTableOutput("change_jobs_industry_table")
-                   ),
-                   br(),
-                   p(
-                     "Source: BLADE Data Industries with less than 10 firms excluded",
-                     class = "source-text"
+
+        column(
+          width = 4,
+          class = "m-2",
+          br(),
+          h6("Employment opportunities vary by region and industry"),
+          p("Employment opportunities vary by industry and across Australia. Young people living in more disadvantaged regions may have to relocate to find opportunities that best match their interests and skills."),
+          p("The graph shows net changes in jobs by industry. A net increase in jobs indicates that the industry is growing in a region, while a decrease indicates a decline. The table supplements this with a gross measure that shows how many new jobs were created in an industry, without taking into account job destruction."),
+          p("The most common occupation and industries for young people (under 25 years) tend to be in hospitality, sales and carers positions. This is true across most regions, and these industries make up a larger share of employment. In contrast, the most common occupations and industry for older workers vary much more across regions and are less concentrated.")
+        ),
+      ),
+      ### Table: Change in jobs by industry/location ####
+      fluidRow(
+               column(
+                 width = 8,
+                 class = "m-2",
+                 div(
+                   h5("Table: change in jobs by industry and location"),
+                   p(em(
+                     "Change in jobs per 1000 workers between 2002 - 2021"
+                   )),
+                   selectInput("name_area",
+                               "Select location",
+                               unique(df_map$sa3_name_16)),
+                   dataTableOutput("change_jobs_industry_table")
+                 ),
+                 br(),
+                 p(
+                   "Source: BLADE Data Industries with less than 10 firms excluded",
+                   class = "source-text"
+                 )
+               ),),
+      ### Top 3 youth occupations ####
+      fluidRow(
+               column(
+                 width = 8,
+                 class = "m-2",
+                 div(
+                   h5("Top 3 occupations worked by Youth (19-29) in region"),
+                   p(em("SA3 level")),
+                   leafletOutput("area_occupation"),
+                   radioButtons(
+                     "age_area",
+                     "Select age group:",
+                     unique(df_occupation_area$age),
+                     selected = "Under 25",
+                     inline = TRUE
                    )
-                 ),),
-        ### Top 3 youth occupations ####
-        fluidRow(
-                 column(
-                   width = 8,
-                   class = "m-2",
-                   div(
-                     h5("Top 3 occupations worked by Youth (19-29) in region"),
-                     p(em("SA3 level")),
-                     leafletOutput("area_occupation"),
-                     radioButtons(
-                       "age_area",
-                       "Select age group:",
-                       unique(df_occupation_area$age),
-                       selected = "Under 25",
-                       inline = TRUE
-                     )
-                   ),
-                   br(),
-                   p("Source: MADIP ATO extracts FY20",
-                     class = "source-text")
-                 ))
-      )
-    ))
-  )
+                 ),
+                 br(),
+                 p("Source: MADIP ATO extracts FY20",
+                   class = "source-text")
+               ))
+)
+))
+)
 )
  
             
@@ -840,7 +817,8 @@ server <- function(input, output, session) {
         y = ~ value,
         split = ~ age_group,
         type = "scatter",
-        mode = "lines"
+        mode = "lines",
+        fill = ~""
       ) %>% 
       rangeslider(start = min(df_unemp$date), end = max(df_unemp$date))
     
@@ -866,8 +844,16 @@ server <- function(input, output, session) {
     
     req(input$ages_jm)
     
-    jm_graph <- df_job_mobility %>% filter(age_group == input$ages_jm) %>% 
-      plot_ly(x = ~date, y = ~value, split = ~age_group, type = "scatter", mode = "lines")
+    jm_graph <-
+      df_job_mobility %>% filter(age_group == input$ages_jm) %>%
+      plot_ly(
+        x = ~ date,
+        y = ~ value,
+        split = ~ age_group,
+        type = "scatter",
+        mode = "lines",
+        fill = ~""
+      )
     
     jm_graph <- jm_graph %>% layout(
       showlegend = TRUE,
@@ -892,7 +878,8 @@ server <- function(input, output, session) {
         color = ~skill_level,
         colors = c("#1b9e77", "#d95f02", "#7570b3"),
         type = "scatter",
-        mode = "lines"
+        mode = "lines",
+        fill = ~""
       )
     
     pc_mismatched <- pc_mismatched %>% layout(
@@ -918,7 +905,8 @@ server <- function(input, output, session) {
         color = ~ matched_last_period,
         colors = c("#1b9e77", "#d95f02"),
         type = "scatter",
-        mode = "lines"
+        mode = "lines",
+        fill = ~""
       ) %>%
       rangeslider(start = min(df_jobswitchers$date), end = max(df_jobswitchers$date))
     
@@ -945,8 +933,14 @@ server <- function(input, output, session) {
       slice_max(order_by = percent_total, n = 5)%>%
       ungroup()%>%
       mutate(percent_total = percent_total*100)%>%
-      plot_ly(x = ~year, y = ~percent_total, color = ~two_name, type="scatter", 
-              mode = "lines") 
+      plot_ly(
+        x = ~ year,
+        y = ~ percent_total,
+        color = ~ two_name,
+        type = "scatter",
+        mode = "lines",
+        fill = ~""
+      )
     
     jm_graph <- jm_graph %>% layout(
       showlegend = TRUE,
@@ -1101,7 +1095,8 @@ server <- function(input, output, session) {
         size = ~pop,
         type = "scatter",
         mode = "markers",
-        name = "Region"
+        name = "Region",
+        fill = ~""
         ) %>% 
       add_lines(x = ~ue, y = ~fitted, name = "Trendline")
 
@@ -1145,7 +1140,8 @@ server <- function(input, output, session) {
         colors = c("#1b9e77", "#d95f02", "#7570b3"),
         type = "scatter",
         mode = "lines",
-        connectgaps = TRUE
+        connectgaps = TRUE,
+        fill = ~""
       ) %>%
       rangeslider(start = min(df_ue_gained$date),
                   end = max(df_ue_gained$date))
@@ -1212,7 +1208,7 @@ server <- function(input, output, session) {
    
     
     youth_unem_graph <- df_youth_unem %>% 
-      filter(age == input$age_youth_unem, sex == input$sex_youth_unem) %>%
+      filter(age %in% input$age_youth_unem, sex == input$sex_youth_unem) %>%
       rename(Date = date) %>% 
       plot_ly(x = ~share_decile_1) %>% 
       add_trace(x = ~share_decile_1, y = ~ue_rate, 
@@ -1220,7 +1216,8 @@ server <- function(input, output, session) {
                 type = "scatter",
                 size = ~total,
                 mode = "markers", 
-                frame = ~Date) %>% 
+                frame = ~Date,
+                fill = ~"") %>% 
       add_lines(x = ~share_decile_1, y = ~fv, split = ~age, frame = ~Date, name = "Trendline")
     
     youth_unem_graph <- youth_unem_graph %>% layout(
@@ -1298,10 +1295,18 @@ server <- function(input, output, session) {
   
   output$educ_v_emp <- renderPlotly({
     
-    educ_emp <- df_educ_emp %>% filter(Age == input$age_educ_v_emp,
-                                       Sex == input$sex_educ_v_emp) %>% 
-      plot_ly(x = ~Date, y = ~Employment, color = ~Education, type = "scatter", mode = "lines")
-    
+    educ_emp <- df_educ_emp %>% 
+      filter(Age == input$age_educ_v_emp,
+             Sex == input$sex_educ_v_emp) %>%
+      plot_ly(
+        x = ~ Date,
+        y = ~ Employment,
+        color = ~ Education,
+        type = "scatter",
+        mode = "lines",
+        fill = ~""
+      )
+
     educ_emp <- educ_emp %>% layout(
       title = "Employment rates by age and education level",
       xaxis = list(title = "Date", zeroline = FALSE, showgrid = F),
@@ -1322,47 +1327,47 @@ server <- function(input, output, session) {
     if(input$neet_dem == "Total"){
       if(input$neet_age == "15-19 years"){
         neet_timeseries <- df_neet %>% plot_ly(x = ~date, y = ~`Total 15-19 years`,
-                                       type = "scatter", mode = "lines")
+                                       type = "scatter", mode = "lines", fill = ~"")
       }
       else if (input$neet_age == "20-24 years"){
         neet_timeseries <- df_neet %>% plot_ly(x = ~date, y = ~`Total 20-24 years`, 
-                                       type = "scatter", mode = "lines")
+                                       type = "scatter", mode = "lines", fill = ~"")
       }
       else if (input$neet_age == "15-24 years"){
         neet_timeseries <- df_neet %>% plot_ly(x = ~date, y = ~`Total 15-24 years`, 
-                                       type = "scatter", mode = "lines")
+                                       type = "scatter", mode = "lines", fill = ~"")
       }
     }
     else if (input$neet_dem == "Gender"){
       if(input$neet_age == "15-19 years"){
-        neet_timeseries <- df_neet %>% plot_ly(x = ~date) %>% 
+        neet_timeseries <- df_neet %>% plot_ly(x = ~date, fill = ~"") %>% 
           add_trace(y = ~`Males 15-19 years`, type = "scatter", mode = "lines", name = "Males") %>% 
           add_trace(y = ~`Females 15-19 years`, type = "scatter", mode = "lines", name = "Females")
       }
       else if (input$neet_age == "20-24 years"){
-        neet_timeseries <- df_neet %>% plot_ly(x = ~date) %>% 
+        neet_timeseries <- df_neet %>% plot_ly(x = ~date, fill = ~"") %>% 
           add_trace(y = ~`Males 20-24 years`, type = "scatter", mode = "lines", name = "Males") %>% 
           add_trace(y = ~`Females 20-24 years`, type = "scatter", mode = "lines", name = "Females")
       }
       else if (input$neet_age == "15-24 years"){
-        neet_timeseries <- df_neet %>% plot_ly(x = ~date) %>% 
+        neet_timeseries <- df_neet %>% plot_ly(x = ~date, fill = ~"") %>% 
           add_trace(y = ~`Males 15-24 years`, type = "scatter", mode = "lines", name = "Males") %>% 
           add_trace(y = ~`Females 15-24 years`, type = "scatter", mode = "lines", name = "Females")
       }
     }
     else if (input$neet_dem == "Education"){
       if(input$neet_age == "15-19 years"){
-        neet_timeseries <- df_neet %>% plot_ly(x = ~date) # note there is no data for this combo
+        neet_timeseries <- df_neet %>% plot_ly(x = ~date, fill = ~"") # note there is no data for this combo
       }
       else if (input$neet_age == "20-24 years"){
-        neet_timeseries <- df_neet %>% plot_ly(x = ~date) %>% 
+        neet_timeseries <- df_neet %>% plot_ly(x = ~date, fill = ~"") %>% 
           add_trace(y = ~`Year 9 or below/Never attended school 20-24 years`, type = "scatter", mode = "lines", name = "Year 9 or below") %>% 
           add_trace(y = ~`Year 10 or equivalent 20-24 years`, type = "scatter", mode = "lines", name = "Year 10 or equivalent") %>% 
           add_trace(y = ~`Year 11 or equivalent 20-24 years`, type = "scatter", mode = "lines", name = "Year 11 or equivalent") %>% 
           add_trace(y = ~`Year 12 or equivalent 20-24 years`, type = "scatter", mode = "lines", name = "Year 12 or equivalent")
       }
       else if (input$neet_age == "15-24 years"){
-        neet_timeseries <- df_neet %>% plot_ly(x = ~date) # note there is no data for this combo
+        neet_timeseries <- df_neet %>% plot_ly(x = ~date, fill = ~"") # note there is no data for this combo
       }
     }
 
@@ -1394,7 +1399,8 @@ server <- function(input, output, session) {
         y = ~ neet_flow,
         type = "scatter",
         mode = "lines",
-        name = "NEET flow"
+        name = "NEET flow", 
+        fill = ~""
       ) %>%
       rangeslider(start = min(df_neet_2$date), end = max(df_neet_2$date))
     
