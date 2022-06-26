@@ -705,7 +705,6 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
       )
     ))),
 
-
   ## Section 6 - Opportunities ####
   a(id = "section-6"),
   tags$section(fluidRow(
@@ -792,7 +791,6 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
 )
 ))
 )
-
 )
  
             
