@@ -1,6 +1,7 @@
 library(shiny)
 library(bslib)
 library(leaflet)
+library(leaflet.extras)
 library(data.table)
 library(magrittr)
 library(tidyverse)
@@ -13,32 +14,9 @@ library(geojsonio)
 library(waiter)
 theme_set(theme_bw())
 
-
-# Leaflet code (not working currently) --------------------------------------
-
-# df_map2 <- st_read("data/youth unemployment sa4 map.shp")
-# df_map2 <- df_map2[!is.na(df_map2$date),]
-
-# Unemployment <- df_map2 %>% filter(age == "15-24 years",
-#                                    sex == "Total") 
-# 
-# Unemployment$start <- as.Date(Unemployment$date, "%Y-%m-%d")
-# Unemployment$end <- as.Date(Unemployment$date, "%Y-%m-%d")
-# 
-# unemployment_geo <- geojsonio::geojson_json(Unemployment, lat = "cent_lt", lon = "cent_lng")
-# 
-# domain <- c(0,50)
-# 
-# pal <- colorNumeric("OrRd",domain = domain)
-# 
-# leaflet(Unemployment) %>% 
-#   addPolygons(stroke = FALSE, smoothFactor = 0.2,color = ~pal(Unemployment$value),
-#               fillOpacity = 0.7) %>%
-#   addProviderTiles(providers$Esri.WorldGrayCanvas) %>%
-#   addLegend("bottomright",opacity = 1, pal = pal,values=~domain, title = "Unemployed share (%)") %>% 
-#   addTimeline(data = unemployment_geo)
-
 # Read in data ------------------------------------------------------------
+
+options(readr.show_col_types = FALSE)
 
 df_map <- readRDS("data/jobcreation.rds")
 
@@ -189,12 +167,12 @@ ui <- shinyUI(
           column(
             width = 4,
             class = "m-2",
-            h6("Introduction"),
+            h6("Aggregate labour market measures indicate a strong recovery"),
             p(
               "In aggregate terms the recovery has been strong, unemployment is at historic lows, while the employment-to-population ratio is well above pre-pandemic levels. Although aggregate labour market indicators show that as a whole, the labour market is strong, including for young Australians, the recovery has been uneven for some groups of vulnerable young people, which this data visualisation will explore.
 "
             ),
-h6("Employment-to-population and unemployment"),
+h6("The employment-to-population ratio is high and unemployment is low"),
 p(
   "The employment-to-population ratio for young Australians aged between 15-24 years is now higher than that of the total population after being below the total population rate throughout the 2010s.
 
@@ -243,7 +221,7 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
           column(
             width = 4,
             class = "m-2",
-            h6("Job mobility"),
+            h6("Job mobility has recovered from COVID-19 levels"),
             p("Recessions cause a decrease in the quality of job matches for two reasons. The relative shortage of high-quality jobs in a downturn forces workers to shift down the job quality ladder and potentially take jobs to which they are less well matched. In addition, recessions often damage labour mobility prospects, which can lead recent entrants to be trapped in poorly matched jobs.  Thus, the incidence of mismatch is likely to be greater following a sustained period of weakness in the labour market."),
             p("Job mobility (the share of workers changing jobs in the past year) has increased in 2022, following declines in 2020 and 2021 relative to pre-pandemic levels. The pandemic constrained the ability of workers to move location and switch to better matched jobs, hampering their ability to climb the job ladder. This effect appears to have eased, although part of the increase in mobility may represent a partial catch-up on previous years.")
           ),
@@ -269,9 +247,12 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
     column(
       width = 4,
       class = "m-2",
-      h6("PENDING REAL DATA: Job mismatches"),
+      h6("Job mismatch rates are broadly unchanged"),
       p(
         "Young workers have a greater need to sort into well-matched jobs in the formative years of their careers (Topel and Ward 1992). Young job switchers experience faster wage growth than older job switchers (of around 6.5 percentage points per annum on average). This is consistent with evidence suggesting that 80 per cent of career earnings growth occurs in the first decade of work (Murphy and Welch 1990). Second, disadvantage young workers tend to experience larger wage gains from switching jobs than those that are not disadvantaged."
+      ),
+      p(
+        "Job match quality is measured using an individual’s highest level of educational attainment (measured in discrete buckets: below year 10, years 10-12, advanced diploma, bachelor degree or post-graduate degree) relative to the modal level of education of all workers in the same occupation (using two digit ANZSCO 2013 codes) and age group.  A worker is considered underskilled if their level of educational attainment is below the mode, overskilled if above and matched if equal to the mode.  Multiple modes in an occupation are tie broken by taking the highest level of education as the mode."
       )
     ),
   ),
@@ -297,8 +278,12 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
     column(
       width = 4,
       class = "m-2",
-      h6("PENDING REAL DATA: Beneficial job transitions"),
-      p("The pandemic was associated with a decline in the quality of – or what may be considered “helpful” – job transitions.  That is, the share of young workers transitioning into better matched jobs – from previously mismatched or matched jobs – declined sharply. This marked decline was not observed for older workers, nor was it observed during the GFC.")
+      h6("The rate of beneficial job transitions is steady"),
+      p("Job switching is an important mechanism for improving the productivity of mismatched workers by reallocating their labour to firms where they are more productive. The pandemic resulted in a sharp decline in the rate of job-switching among workers who we considered mis-matched (over- or under-skilled) in their occupation 12 months ago."
+      ),
+      p(
+        "This decline in job switching was particularly pronounced amongst mismatched workers for all age groups. Job switching is particularly important for younger workers, as a failure to switch jobs can hamper their ability to climb the job ladder and increase their incomes.  Fortunately, the rate of job-switching has recovered in the 12 months to February 2022."
+        )
     ),
   ),
 
@@ -328,9 +313,9 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
     column(
       width = 4,
       class = "m-2",
-      h6("Main youth occupations"),
+      h6("Young people increasingly work in lower-skilled services roles"),
       p("Employment opportunities for young people are primarily in services, specifically in hospitality, food preparation and sales assistant roles. The share of young people in these roles is highest in younger age groups, reflecting young people taking up these jobs part-time alongside further education or as their first jobs after completing secondary education."),
-      p("For 23-25 year olds, the share of employment in these roles is smaller, reflecting a larger share of this cohort having completed tertiary education and working in roles requiring post-secondary qualifications. However, in the lead-up to the pandemic, the share of 23-25 year olds still working in hospitality or sales has been increasing[, potentially driven by a larger share remaining in tertiary education or worse employment prospects in other industries.]")
+      p("For 23-25 year olds, the share of employment in these roles is smaller, reflecting a larger share of this cohort having completed tertiary education and working in roles requiring post-secondary qualifications. However, in the lead-up to the pandemic, the share of 23-25 year olds still working in hospitality or sales has been increasing, potentially driven by a larger share remaining in tertiary education or worse employment prospects in other industries.")
     )
   )
   )
@@ -383,7 +368,7 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
       fluidRow(column(
         width = 6,
         class = "m-2",
-        h6("Duration of unemployment by age group"),
+        h6("A large share of unemployed youth have been unemployed long-term"),
         p(
           "Long periods of time out of employment make it more difficult to transition back into employment. An elevated share of 15-24 year olds have been unemployed for 1 year or more relative to the total population. Although the COVID-19 recession exacerbated this problem, this was an ongoing concern well before the pandemic."
         )
@@ -396,11 +381,17 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
           plotlyOutput("duration_v_ue"),
           p("Source: ABS Labour Force microdata",
             class = "source-text"),
-          selectInput(
-            "dur_v_ue_year",
-            "Select year: ",
+          sliderTextInput(
+            "dur_v_ue_year_1",
+            "Select first year: ",
             choices = unique(df_duration_v_ue$year),
-            selected = "2022"
+            selected = min(df_duration_v_ue$year)
+          ),
+          sliderTextInput(
+            "dur_v_ue_year_2",
+            "Select second year: ",
+            choices = unique(df_duration_v_ue$year),
+            selected = min(df_duration_v_ue$year)
           ),
           radioButtons(
             "dur_v_ue_age",
@@ -413,7 +404,7 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
         column(
           width = 4,
           class = "m-2",
-          h6("Unemployment duration and unemployment rate"),
+          h6("Unemployment rates and duration are positively correlated"),
           p(
             "This graph shows monthly unemployment rates and median time since previous job pooled across years across Australia. Areas with a higher unemployment rates tend to have longer median unemployment durations, reflecting the difficulty that the long-term unemployed have when searching for employment."
           )
@@ -446,7 +437,7 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
         column(
           width = 4,
           class = "m-2",
-          h6("Transitions into employment"),
+          h6("The long-term unemployed face greater difficulty finding work"),
           p("The share of unemployed workers finding employment in a given month does not differ significantly between urban and regional areas. Workers who have been searching for work for more than six months face greater difficulty transitioning back into employment. Similarly, people who have never worked or have not worked in over 6 months, also have lower probabilities of entering employment compared to people who have worked more recently. These trends have remained consistent over the past 15 years.")
         )
       ),
@@ -465,19 +456,12 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
         column(
           width = 4,
           class = "m-2",
-          radioButtons(
-            "age_js",
-            "Select age group: ",
-            choices = unique(df_js$age_bucket),
-            selected = "18-24"
+          h6("Jobseeker recipient share for 18-24 year olds"),
+          p(
+            "This map uses illion data to estimate the relative shares of Jobseeker and Youth Allowance (for job seekers) payments in regions across Australia. The data are presented as an index, with higher numbers indicating a greater relative share of the population in that region are on support payments compared to the rest of Australia."
           ),
-          sliderTextInput(
-            "timeline_js",
-            "Select date: ",
-            choices = seq(min(df_js$date), max(df_js$date), by = "months"),
-            selected = min(df_js$date),
-            animate = animationOptions(interval = 1000, loop = F)
-            # Note that animation needs to be fixed - it currently causes the map to reload, which takes too much time
+          p(
+            "Whilst the share of individuals on support payments change over time, the general trend is for areas that are associated with greater disadvantage such as outer suburban and regional Australia to have larger relative shares of individuals on support payments."
           )
         )
       ),
@@ -486,14 +470,23 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
       fluidRow(column(
         width = 6,
         class = "m-2",
-        h6("Jobseeker recipient share for 18-24 year olds"),
-        p(
-          "This map uses illion data to estimate the relative shares of Jobseeker and Youth Allowance (for job seekers) payments in regions across Australia. The data are presented as an index, with higher numbers indicating a greater relative share of the population in that region are on support payments compared to the rest of Australia."
+        radioButtons(
+          "age_js",
+          "Select age group: ",
+          choices = unique(df_js$age_bucket),
+          selected = "18-24",
+          inline = TRUE
         ),
-        p(
-          "Whilst the share of individuals on support payments change over time, the general trend is for areas that are associated with greater disadvantage such as outer suburban and regional Australia to have larger relative shares of individuals on support payments."
+        sliderTextInput(
+          "timeline_js",
+          "Select date: ",
+          choices = seq(min(df_js$date), max(df_js$date), by = "months"),
+          selected = min(df_js$date),
+          animate = animationOptions(interval = 1000, loop = F)
+          # Note that animation needs to be fixed - it currently causes the map to reload, which takes too much time
         )
-      ), ),
+      ), 
+      ),
     )
     )
   ), 
@@ -554,24 +547,13 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
       fluidRow(
         ### Unemployed share by age group over time ####
         column(width = 7, class = "m-2",
-               leafletOutput("map2"),),
+               leafletOutput("map2"),
+               ),
         column(
           width = 4,
           class = "m-2",
-          radioButtons(
-            "age_map",
-            "Select age group: ",
-            choices = unique(df_map2$age),
-            selected = "15-24 years"
-          ),
-          sliderTextInput(
-            "timeline",
-            "Select date: ",
-            choices = seq(min(df_map2$date), max(df_map2$date), by = "months"),
-            selected = min(df_map2$date),
-            animate = animationOptions(interval = 1000, loop = F)
-            # Note that animation needs to be fixed - it currently causes the map to reload, which takes too much time
-          )
+          h6("Unemployment is higher for youth"),
+          p("Across Australia, youth unemployment is higher than that of the total labour market. This trend holds in both capital cities and regional Australia, and across time.")
         )
       ),
       div(class = "m-2",
@@ -579,9 +561,19 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
       fluidRow(column(
         width = 6,
         class = "m-2",
-        h6("Unemployment by age group and region"),
-        p(
-          "Youth unemployment rates tend to be higher than that of the total population and this is true at the regional level as well."
+        radioButtons(
+          "age_map",
+          "Select age group: ",
+          choices = unique(df_map2$age),
+          selected = "15-24 years"
+        ),
+        sliderTextInput(
+          "timeline",
+          "Select date: ",
+          choices = seq(min(df_map2$date), max(df_map2$date), by = "months"),
+          selected = min(df_map2$date),
+          animate = animationOptions(interval = 1000, loop = F)
+          # Note that animation needs to be fixed - it currently causes the map to reload, which takes too much time
         )
       )),
       fluidRow(
@@ -615,8 +607,9 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
         column(
           width = 4,
           class = "m-2",
-          h6("First takeaway"),
-          p("This graph still needs to be made")
+          h6("More education tends to increase employment"),
+          p("Across age and gender groups, higher levels of education are associated with higher employment rates. People who have not completed high school have the lowest employment rates, whereas people who have completed Bachelor-level or higher qualifications have the strongest rates of employment."),
+          p("Note that the employment rates for 15-24 year old postgraduates is highly variable due to a small sample and the fact that many people in this age group would still be in education rather than having completed postgraduate qualifications.")
         )
       )
 
@@ -643,9 +636,10 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
           div(plotlyOutput("neet_timeseries"),
               br(),
               p("Source: ABS Labour Force, Detailed",
-                class = "source-text")),
+                class = "source-text")
+              ),
           fluidRow(column(
-            width = 6,
+            width = 10,
             radioButtons(
               "neet_dem",
               "Select demographic: ",
@@ -654,7 +648,7 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
               inline = TRUE
             ),
             column(
-              width = 6,
+              width = 10,
               radioButtons(
                 "neet_age",
                 "Select age group: ",
@@ -663,14 +657,14 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
                 inline = TRUE
               )
             ))
-          ),
-          column(
-            width = 9,
-            class = "m-2",
-            h6("Youth NEET tends to increase during economic downturns"),
-            p(
-              "The share of youth who are not in employment, education or training (NEET) has been broadly steady in Australia since 2000. The share tends to increase during economic downturns, such as the Global Financial Crisis in 2008 and the COVID-19 recession in 2020. In the past two years the aggregate NEET rate has declined back towards historic levels."
-            )
+          )
+        ),
+        column(
+          width = 4,
+          class = "m-2",
+          h6("Youth NEET tends to increase during economic downturns"),
+          p(
+            "The share of youth who are not in employment, education or training (NEET) has been broadly steady in Australia since 2000. The share tends to increase during economic downturns, such as the Global Financial Crisis in 2008 and the COVID-19 recession in 2020. In the past two years the aggregate NEET rate has declined back towards historic levels."
           )
         ),
         fluidRow(
@@ -727,94 +721,94 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
 
       )
     ))),
-    
-    
-    ## Section 6 - Opportunities ####
-    a(id = "section-6"),
-    tags$section(fluidRow(
-      class = "m-3 justify-content-center",
-      column(
-        width = 12,
-        class = "card m-2",
-        h3(
-          "Where are the opportunities to exit disadvantage and vulnerability?"
-        ),
-        fluidRow(
-          ### Map: Change in jobs by industry/location ####
-          column(
-            width = 7,
-            class = "m-2",
-            div(
-              h5("Net change in jobs by industry and location"),
-              p(em(
-                "Change in jobs per 1000 workers between 2002 - 2021"
-              )),
-              selectInput("name",
-                          "Select industry",
-                          unique(df_map$industry)),
-              leafletOutput("map_change_jobs_industry"),
-            ),
-            br(),
-            p(
-              "Source: BLADE Data Industries with less than 10 firms excluded",
-              class = "source-text"
-            )
-          ),
 
-          column(
-            width = 4,
-            class = "m-2",
-            br(),
-            h6("Employment opportunities vary by region and industry"),
-            p("Employment opportunities vary by industry and across Australia. Young people living in more disadvantaged regions may have to relocate to find opportunities that best match their interests and skills."),
-            p("The graph shows net changes in jobs by industry. A net increase in jobs indicates that the industry is growing in a region, while a decrease indicates a decline. The table supplements this with a gross measure that shows how many new jobs were created in an industry, without taking into account job destruction."),
-            p("The most common occupation and industries for young people (under 25 years) tend to be in hospitality, sales and carers positions. This is true across most regions, and these industries make up a larger share of employment. In contrast, the most common occupations and industry for older workers vary much more across regions and are less concentrated.")
+  ## Section 6 - Opportunities ####
+  a(id = "section-6"),
+  tags$section(fluidRow(
+    class = "m-3 justify-content-center",
+    column(
+      width = 12,
+      class = "card m-2",
+      h3(
+        "Where are the opportunities to exit disadvantage and vulnerability?"
+      ),
+      fluidRow(
+        ### Map: Change in jobs by industry/location ####
+        column(
+          width = 7,
+          class = "m-2",
+          div(
+            h5("Net change in jobs by industry and location"),
+            p(em(
+              "Change in jobs per 1000 workers between 2002 - 2021"
+            )),
+            selectInput("name",
+                        "Select industry",
+                        unique(df_map$industry)),
+            leafletOutput("map_change_jobs_industry"),
           ),
+          br(),
+          p(
+            "Source: ABS BLADE Data Industries with less than 10 firms excluded",
+            class = "source-text"
+          )
         ),
-        fluidRow(### Table: Change in jobs by industry/location ####
-                 column(
-                   width = 8,
-                   class = "m-2",
-                   div(
-                     h5("Table: change in jobs by industry and location"),
-                     p(em(
-                       "Change in jobs per 1000 workers between 2002 - 2021"
-                     )),
-                     selectInput("name_area",
-                                 "Select location",
-                                 unique(df_map$sa3_name_16)),
-                     dataTableOutput("change_jobs_industry_table")
-                   ),
-                   br(),
-                   p(
-                     "Source: BLADE Data Industries with less than 10 firms excluded",
-                     class = "source-text"
+
+        column(
+          width = 4,
+          class = "m-2",
+          br(),
+          h6("Employment opportunities vary by region and industry"),
+          p("Employment opportunities vary by industry and across Australia. Young people living in more disadvantaged regions may have to relocate to find opportunities that best match their interests and skills."),
+          p("The graph shows net changes in jobs by industry. A net increase in jobs indicates that the industry is growing in a region, while a decrease indicates a decline. The table supplements this with a gross measure that shows how many new jobs were created in an industry, without taking into account job destruction."),
+          p("The most common occupation and industries for young people (under 25 years) tend to be in hospitality, sales and carers positions. This is true across most regions, and these industries make up a larger share of employment. In contrast, the most common occupations and industry for older workers vary much more across regions and are less concentrated.")
+        ),
+      ),
+      ### Table: Change in jobs by industry/location ####
+      fluidRow(
+               column(
+                 width = 8,
+                 class = "m-2",
+                 div(
+                   h5("Table: change in jobs by industry and location"),
+                   p(em(
+                     "Change in jobs per 1000 workers between 2002 - 2021"
+                   )),
+                   selectInput("name_area",
+                               "Select location",
+                               unique(df_map$sa3_name_16)),
+                   dataTableOutput("change_jobs_industry_table")
+                 ),
+                 br(),
+                 p(
+                   "Source: BLADE Data Industries with less than 10 firms excluded",
+                   class = "source-text"
+                 )
+               ),),
+      ### Top 3 youth occupations ####
+      fluidRow(
+               column(
+                 width = 8,
+                 class = "m-2",
+                 div(
+                   h5("Top 3 occupations worked by Youth (19-29) in region"),
+                   p(em("SA3 level")),
+                   leafletOutput("area_occupation"),
+                   radioButtons(
+                     "age_area",
+                     "Select age group:",
+                     unique(df_occupation_area$age),
+                     selected = "Under 25",
+                     inline = TRUE
                    )
-                 ),),
-        ### Top 3 youth occupations ####
-        fluidRow(
-                 column(
-                   width = 8,
-                   class = "m-2",
-                   div(
-                     h5("Top 3 occupations worked by Youth (19-29) in region"),
-                     p(em("SA3 level")),
-                     leafletOutput("area_occupation"),
-                     radioButtons(
-                       "age_area",
-                       "Select age group:",
-                       unique(df_occupation_area$age),
-                       selected = "Under 25",
-                       inline = TRUE
-                     )
-                   ),
-                   br(),
-                   p("Source: MADIP ATO extracts FY20",
-                     class = "source-text")
-                 ))
-      )
-    ))
-  )
+                 ),
+                 br(),
+                 p("Source: MADIP ATO extracts FY20",
+                   class = "source-text")
+               ))
+)
+))
+)
 )
  
             
@@ -840,7 +834,8 @@ server <- function(input, output, session) {
         y = ~ value,
         split = ~ age_group,
         type = "scatter",
-        mode = "lines"
+        mode = "lines",
+        fill = ~""
       ) %>% 
       rangeslider(start = min(df_unemp$date), end = max(df_unemp$date))
     
@@ -866,8 +861,16 @@ server <- function(input, output, session) {
     
     req(input$ages_jm)
     
-    jm_graph <- df_job_mobility %>% filter(age_group == input$ages_jm) %>% 
-      plot_ly(x = ~date, y = ~value, split = ~age_group, type = "scatter", mode = "lines")
+    jm_graph <-
+      df_job_mobility %>% filter(age_group == input$ages_jm) %>%
+      plot_ly(
+        x = ~ date,
+        y = ~ value,
+        split = ~ age_group,
+        type = "scatter",
+        mode = "lines",
+        fill = ~""
+      )
     
     jm_graph <- jm_graph %>% layout(
       showlegend = TRUE,
@@ -892,7 +895,8 @@ server <- function(input, output, session) {
         color = ~skill_level,
         colors = c("#1b9e77", "#d95f02", "#7570b3"),
         type = "scatter",
-        mode = "lines"
+        mode = "lines",
+        fill = ~""
       )
     
     pc_mismatched <- pc_mismatched %>% layout(
@@ -918,7 +922,8 @@ server <- function(input, output, session) {
         color = ~ matched_last_period,
         colors = c("#1b9e77", "#d95f02"),
         type = "scatter",
-        mode = "lines"
+        mode = "lines",
+        fill = ~""
       ) %>%
       rangeslider(start = min(df_jobswitchers$date), end = max(df_jobswitchers$date))
     
@@ -945,8 +950,14 @@ server <- function(input, output, session) {
       slice_max(order_by = percent_total, n = 5)%>%
       ungroup()%>%
       mutate(percent_total = percent_total*100)%>%
-      plot_ly(x = ~year, y = ~percent_total, color = ~two_name, type="scatter", 
-              mode = "lines") 
+      plot_ly(
+        x = ~ year,
+        y = ~ percent_total,
+        color = ~ two_name,
+        type = "scatter",
+        mode = "lines",
+        fill = ~""
+      )
     
     jm_graph <- jm_graph %>% layout(
       showlegend = TRUE,
@@ -1093,17 +1104,24 @@ server <- function(input, output, session) {
     
     duration_v_ue <-
       df_duration_v_ue %>% 
-      filter(year == input$dur_v_ue_year & age_bucket == input$dur_v_ue_age) %>%
+      filter(
+        year %in% c(input$dur_v_ue_year_1, input$dur_v_ue_year_2) & 
+          age_bucket == input$dur_v_ue_age) %>%
       plot_ly(x = ~ ue) %>% 
       add_trace(
         x = ~ ue,
         y = ~ duration,
+        split = ~year,
         size = ~pop,
+        text = ~ sprintf("%s (%s %s)", 
+                         sa4_name, lubridate::month(date, label = TRUE), year(date)),
+        name = ~year,
+        hoverinfo = "text",
         type = "scatter",
         mode = "markers",
-        name = "Region"
+        fill = ~""
         ) %>% 
-      add_lines(x = ~ue, y = ~fitted, name = "Trendline")
+      add_lines(x = ~ue, y = ~fitted, split = ~year, name = "Trendline")
 
     duration_v_ue <- duration_v_ue %>% layout(
       title = "Median unemployment duration v unemployment rate",
@@ -1145,7 +1163,8 @@ server <- function(input, output, session) {
         colors = c("#1b9e77", "#d95f02", "#7570b3"),
         type = "scatter",
         mode = "lines",
-        connectgaps = TRUE
+        connectgaps = TRUE,
+        fill = ~""
       ) %>%
       rangeslider(start = min(df_ue_gained$date),
                   end = max(df_ue_gained$date))
@@ -1195,9 +1214,8 @@ server <- function(input, output, session) {
         pal = pal,
         values =  ~ domain,
         title = "Index (lower is better)"
-      )
-    
-    
+      ) %>% 
+      addFullscreenControl()
     
   })
   
@@ -1212,7 +1230,7 @@ server <- function(input, output, session) {
    
     
     youth_unem_graph <- df_youth_unem %>% 
-      filter(age == input$age_youth_unem, sex == input$sex_youth_unem) %>%
+      filter(age %in% input$age_youth_unem, sex == input$sex_youth_unem) %>%
       rename(Date = date) %>% 
       plot_ly(x = ~share_decile_1) %>% 
       add_trace(x = ~share_decile_1, y = ~ue_rate, 
@@ -1220,7 +1238,8 @@ server <- function(input, output, session) {
                 type = "scatter",
                 size = ~total,
                 mode = "markers", 
-                frame = ~Date) %>% 
+                frame = ~Date,
+                fill = ~"") %>% 
       add_lines(x = ~share_decile_1, y = ~fv, split = ~age, frame = ~Date, name = "Trendline")
     
     youth_unem_graph <- youth_unem_graph %>% layout(
@@ -1288,9 +1307,8 @@ server <- function(input, output, session) {
         pal = pal,
         values =  ~ domain,
         title = "Unemployed share (%)"
-      )
-    
-    
+      ) %>% 
+      addFullscreenControl()
     
   })
   
@@ -1298,10 +1316,18 @@ server <- function(input, output, session) {
   
   output$educ_v_emp <- renderPlotly({
     
-    educ_emp <- df_educ_emp %>% filter(Age == input$age_educ_v_emp,
-                                       Sex == input$sex_educ_v_emp) %>% 
-      plot_ly(x = ~Date, y = ~Employment, color = ~Education, type = "scatter", mode = "lines")
-    
+    educ_emp <- df_educ_emp %>% 
+      filter(Age == input$age_educ_v_emp,
+             Sex == input$sex_educ_v_emp) %>%
+      plot_ly(
+        x = ~ Date,
+        y = ~ Employment,
+        color = ~ Education,
+        type = "scatter",
+        mode = "lines",
+        fill = ~""
+      )
+
     educ_emp <- educ_emp %>% layout(
       title = "Employment rates by age and education level",
       xaxis = list(title = "Date", zeroline = FALSE, showgrid = F),
@@ -1322,47 +1348,47 @@ server <- function(input, output, session) {
     if(input$neet_dem == "Total"){
       if(input$neet_age == "15-19 years"){
         neet_timeseries <- df_neet %>% plot_ly(x = ~date, y = ~`Total 15-19 years`,
-                                       type = "scatter", mode = "lines")
+                                       type = "scatter", mode = "lines", fill = ~"")
       }
       else if (input$neet_age == "20-24 years"){
         neet_timeseries <- df_neet %>% plot_ly(x = ~date, y = ~`Total 20-24 years`, 
-                                       type = "scatter", mode = "lines")
+                                       type = "scatter", mode = "lines", fill = ~"")
       }
       else if (input$neet_age == "15-24 years"){
         neet_timeseries <- df_neet %>% plot_ly(x = ~date, y = ~`Total 15-24 years`, 
-                                       type = "scatter", mode = "lines")
+                                       type = "scatter", mode = "lines", fill = ~"")
       }
     }
     else if (input$neet_dem == "Gender"){
       if(input$neet_age == "15-19 years"){
-        neet_timeseries <- df_neet %>% plot_ly(x = ~date) %>% 
+        neet_timeseries <- df_neet %>% plot_ly(x = ~date, fill = ~"") %>% 
           add_trace(y = ~`Males 15-19 years`, type = "scatter", mode = "lines", name = "Males") %>% 
           add_trace(y = ~`Females 15-19 years`, type = "scatter", mode = "lines", name = "Females")
       }
       else if (input$neet_age == "20-24 years"){
-        neet_timeseries <- df_neet %>% plot_ly(x = ~date) %>% 
+        neet_timeseries <- df_neet %>% plot_ly(x = ~date, fill = ~"") %>% 
           add_trace(y = ~`Males 20-24 years`, type = "scatter", mode = "lines", name = "Males") %>% 
           add_trace(y = ~`Females 20-24 years`, type = "scatter", mode = "lines", name = "Females")
       }
       else if (input$neet_age == "15-24 years"){
-        neet_timeseries <- df_neet %>% plot_ly(x = ~date) %>% 
+        neet_timeseries <- df_neet %>% plot_ly(x = ~date, fill = ~"") %>% 
           add_trace(y = ~`Males 15-24 years`, type = "scatter", mode = "lines", name = "Males") %>% 
           add_trace(y = ~`Females 15-24 years`, type = "scatter", mode = "lines", name = "Females")
       }
     }
     else if (input$neet_dem == "Education"){
       if(input$neet_age == "15-19 years"){
-        neet_timeseries <- df_neet %>% plot_ly(x = ~date) # note there is no data for this combo
+        neet_timeseries <- df_neet %>% plot_ly(x = ~date, fill = ~"") # note there is no data for this combo
       }
       else if (input$neet_age == "20-24 years"){
-        neet_timeseries <- df_neet %>% plot_ly(x = ~date) %>% 
+        neet_timeseries <- df_neet %>% plot_ly(x = ~date, fill = ~"") %>% 
           add_trace(y = ~`Year 9 or below/Never attended school 20-24 years`, type = "scatter", mode = "lines", name = "Year 9 or below") %>% 
           add_trace(y = ~`Year 10 or equivalent 20-24 years`, type = "scatter", mode = "lines", name = "Year 10 or equivalent") %>% 
           add_trace(y = ~`Year 11 or equivalent 20-24 years`, type = "scatter", mode = "lines", name = "Year 11 or equivalent") %>% 
           add_trace(y = ~`Year 12 or equivalent 20-24 years`, type = "scatter", mode = "lines", name = "Year 12 or equivalent")
       }
       else if (input$neet_age == "15-24 years"){
-        neet_timeseries <- df_neet %>% plot_ly(x = ~date) # note there is no data for this combo
+        neet_timeseries <- df_neet %>% plot_ly(x = ~date, fill = ~"") # note there is no data for this combo
       }
     }
 
@@ -1394,7 +1420,8 @@ server <- function(input, output, session) {
         y = ~ neet_flow,
         type = "scatter",
         mode = "lines",
-        name = "NEET flow"
+        name = "NEET flow", 
+        fill = ~""
       ) %>%
       rangeslider(start = min(df_neet_2$date), end = max(df_neet_2$date))
     
@@ -1494,7 +1521,8 @@ server <- function(input, output, session) {
         pal = pal2,
         values = ~ domain,
         title = "Net Change in Jobs"
-      )
+      ) %>% 
+      addFullscreenControl()
     
   })
   
@@ -1534,8 +1562,8 @@ server <- function(input, output, session) {
         opacity = 0.5,
         title = " % Total Employment",
         position = "bottomright"
-      )
-    
+      ) %>% 
+      addFullscreenControl()
     
   })
   
