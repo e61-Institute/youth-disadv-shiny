@@ -21,7 +21,7 @@ options(readr.show_col_types = FALSE)
 df_map <- readRDS("data/jobcreation.rds")
 
 df_js <- readRDS("data/js-recipient-share-map.rds") %>% 
-  filter(!is.na(date)) %>% 
+  filter(!is.na(date) & date >= "2021-01-01") %>% 
   mutate(date = as.Date(date, "%Y-%m-%d"))
 
 df_map2 <- readRDS("data/youth unemployment sa4 map.rds") %>% 
