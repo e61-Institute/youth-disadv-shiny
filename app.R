@@ -405,9 +405,8 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
           width = 4,
           class = "m-2",
           h6("Unemployment rates and duration are positively correlated"),
-          p(
-            "This graph shows monthly unemployment rates and median time since previous job pooled across years across Australia. Areas with a higher unemployment rates tend to have longer median unemployment durations, reflecting the difficulty that the long-term unemployed have when searching for employment."
-          )
+          p("This graph shows the relationship between the unemployment rate and the median time since previous employment across different areas of Australia. Areas with a higher unemployment rates tend to have longer median unemployment durations, reflecting the difficulty that the long-term unemployed have when searching for employment. As the unemployment rate declines, the median time between jobs will decline if a greater number of long term unemployed enter employment relative to the newly unemployed."),
+          p("To overcome small cell counts, geographic areas are a custom mix of states, GCCSA areas and SA4s, with higher granularity taken where the sample size allowed. The line of best fit for each selected year highlights the relationship between the two variables.  A steeper line indicates a stronger relationship between the variables.")
         )
       ),
       
@@ -438,7 +437,8 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
           width = 4,
           class = "m-2",
           h6("The long-term unemployed face greater difficulty finding work"),
-          p("The share of unemployed workers finding employment in a given month does not differ significantly between urban and regional areas. Workers who have been searching for work for more than six months face greater difficulty transitioning back into employment. Similarly, people who have never worked or have not worked in over 6 months, also have lower probabilities of entering employment compared to people who have worked more recently. These trends have remained consistent over the past 15 years.")
+          p("This graph visualises the rate of churn amongst the unemployed, plotting the percentage of unemployed who enter employment by age group as well as geographic area, duration of job search and duration since last employed."),
+          p("The share of unemployed workers finding employment in a given month is broadly similar across urban and regional areas, with unemployed workers in urban and regional areas benefiting from the strong labour market recovery. Workers who have been searching for work for more than six months face greater difficulty transitioning back into employment. Similarly, people who have never worked or have not worked in over 6 months, also have lower probabilities of entering employment compared to people who have worked more recently. These trends have remained consistent over the past 15 years.")
         )
       ),
       
@@ -458,10 +458,10 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
           class = "m-2",
           h6("Jobseeker recipient share for 18-24 year olds"),
           p(
-            "This map uses illion data to estimate the relative shares of Jobseeker and Youth Allowance (for job seekers) payments in regions across Australia. The data are presented as an index, with higher numbers indicating a greater relative share of the population in that region are on support payments compared to the rest of Australia."
+            "This map uses illion data to estimate the relative shares of Jobseeker and Youth Allowance (for job seekers) payments in regions across Australia. The data are presented as an index between 0 and 100, with higher numbers indicating a greater relative share of the population in that region are on support payments compared to the rest of Australia."
           ),
           p(
-            "Whilst the share of individuals on support payments change over time, the general trend is for areas that are associated with greater disadvantage such as outer suburban and regional Australia to have larger relative shares of individuals on support payments."
+            "Whilst the share of individuals on support payments change over time, areas that are associated with greater disadvantage such as outer suburban and regional Australia tend to have larger relative shares of individuals on support payments."
           )
         )
       ),
@@ -663,9 +663,8 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
           width = 4,
           class = "m-2",
           h6("Youth NEET tends to increase during economic downturns"),
-          p(
-            "The share of youth who are not in employment, education or training (NEET) has been broadly steady in Australia since 2000. The share tends to increase during economic downturns, such as the Global Financial Crisis in 2008 and the COVID-19 recession in 2020. In the past two years the aggregate NEET rate has declined back towards historic levels."
-          )
+          p("This graph plots the percentage of young people who are currently in NEET status in each month, breaking it down by gender and age group.  The rate of NEET status is a key indicator of engagement in the labour market, tending to grow during economic downturns such as the GFC."),
+          p("The share of youth who are not in employment, education or training (NEET) has been broadly steady in Australia since 2000. The share tends to increase during economic downturns, such as the Global Financial Crisis in 2008 and the COVID-19 recession in 2020. After increasing during the pandemic, the aggregate NEET rate has declined back towards pre-pandemic levels.")
         ),
         fluidRow(
           ### NEET entry and exit rates ####
@@ -692,10 +691,9 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
             width = 4,
             class = "m-2",
             h6("The COVID-19 recession drove a large increase in NEET"),
-            p(
-              "The flow of people into NEET increased sharply in 2020, driven by the COVID-19 recession. The subsequent rapid recovery in the labour market saw a large flow out of NEET status. This flow was common across capital cities and regions, and across both males and females"
-            )
-          )
+            p("This graph breaks down the flow of entry and exit from NEET status by gender and geographic area. The orange area plots the percentage of young people who enter NEET status in any given month, the green area plots the percentage of young people who exit NEET status, and the NEET flow line plots the net entry rate."),
+            p("The flow of people into NEET increased sharply in 2020, driven by the COVID-19 recession. The subsequent rapid recovery in the labour market saw a large flow out of NEET status. This flow was common across capital cities and regions, and across both males and females")
+        )
         ),
 
 
