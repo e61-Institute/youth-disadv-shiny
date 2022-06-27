@@ -482,7 +482,7 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
           "Select date: ",
           choices = seq(min(df_js$date), max(df_js$date), by = "months"),
           selected = min(df_js$date),
-          animate = animationOptions(interval = 1000, loop = F)
+          animate = animationOptions(interval = 1000, loop = FALSE)
           # Note that animation needs to be fixed - it currently causes the map to reload, which takes too much time
         )
       ), 
@@ -572,7 +572,7 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
           "Select date: ",
           choices = seq(min(df_map2$date), max(df_map2$date), by = "months"),
           selected = min(df_map2$date),
-          animate = animationOptions(interval = 1000, loop = F)
+          animate = animationOptions(interval = 1000, loop = FALSE)
           # Note that animation needs to be fixed - it currently causes the map to reload, which takes too much time
         )
       )),
@@ -840,8 +840,8 @@ server <- function(input, output, session) {
     ue_graph <- ue_graph %>% layout(
       showlegend = TRUE,
       title = "Measures of employment by age group",
-      xaxis = list(title = "Date", zeroline = FALSE, showgrid = F),
-      yaxis = list(title = input$agg_measure, zeroline = FALSE, showgrid = F,
+      xaxis = list(title = "Date", zeroline = FALSE, showgrid = FALSE),
+      yaxis = list(title = input$agg_measure, zeroline = FALSE, showgrid = FALSE,
                    ticksuffix = "%", hoverformat = ".2f"),
       margin = list(l = 70, r = 50, t = 50, b = 100),
       paper_bgcolor = chart_bg_color,
@@ -873,8 +873,8 @@ server <- function(input, output, session) {
     jm_graph <- jm_graph %>% layout(
       showlegend = TRUE,
       title = "Job mobility by age group",
-      xaxis = list(title = "Date", zeroline = FALSE, showgrid = F),
-      yaxis = list(title = "Job mobility", zeroline = FALSE, showgrid = F,
+      xaxis = list(title = "Date", zeroline = FALSE, showgrid = FALSE),
+      yaxis = list(title = "Job mobility", zeroline = FALSE, showgrid = FALSE,
                    ticksuffix = "%", hoverformat = ".2f"),
       margin = list(l = 70, r = 50, t = 50, b = 100),
       paper_bgcolor = chart_bg_color,
@@ -899,8 +899,8 @@ server <- function(input, output, session) {
     
     pc_mismatched <- pc_mismatched %>% layout(
       title = "Share of employed people by skill matching status",
-      xaxis = list(title = "Year", zeroline = FALSE, showgrid = F),
-      yaxis = list(title = "% mismatched", zeroline = FALSE, showgrid = F,
+      xaxis = list(title = "Year", zeroline = FALSE, showgrid = FALSE),
+      yaxis = list(title = "% mismatched", zeroline = FALSE, showgrid = FALSE,
                    ticksuffix = "%", hoverformat = ".2f"),
       margin = list(l = 70, r = 50, t = 50, b = 100),
       paper_bgcolor = chart_bg_color,
@@ -927,8 +927,8 @@ server <- function(input, output, session) {
     
     jobswitchers <- jobswitchers %>% layout(
       title = "Job switching for workers with mismatched employment in previous 12 months",
-      xaxis = list(title = "Date", zeroline = FALSE, showgrid = F),
-      yaxis = list(title = "% workers", zeroline = FALSE, showgrid = F, ticksuffix = "%", hoverformat = ".2f"),
+      xaxis = list(title = "Date", zeroline = FALSE, showgrid = FALSE),
+      yaxis = list(title = "% workers", zeroline = FALSE, showgrid = FALSE, ticksuffix = "%", hoverformat = ".2f"),
       margin = list(l = 70, r = 50, t = 50, b = 100),
       paper_bgcolor = chart_bg_color,
       plot_bgcolor = chart_bg_color,
@@ -960,8 +960,8 @@ server <- function(input, output, session) {
     jm_graph <- jm_graph %>% layout(
       showlegend = TRUE,
       title = "Top 5 occupations by age group",
-      xaxis = list(title = "Year", zeroline = FALSE, showgrid = F),
-      yaxis = list(title = "Percent Total", zeroline = FALSE, showgrid = F, ticksuffix = "%", hoverformat = ".2f"),
+      xaxis = list(title = "Year", zeroline = FALSE, showgrid = FALSE),
+      yaxis = list(title = "Percent Total", zeroline = FALSE, showgrid = FALSE, ticksuffix = "%", hoverformat = ".2f"),
       legend = list(orientation = 'h',
                     yref = "paper", y = -.45),
       paper_bgcolor = chart_bg_color,
@@ -985,49 +985,49 @@ server <- function(input, output, session) {
                               measure == "10 years or more"), 
                 x = ~date, y = ~share_of_ue, type = "scatter", mode = "none", 
                 stackgroup = "one", legendgroup = "10 years or more",
-                name = ~measure, showlegend = F, fillcolor = "#db410d") %>% 
+                name = ~measure, showlegend = FALSE, fillcolor = "#db410d") %>% 
       add_trace(data = filter(df_duration, age_group == input$age_dur_1,
                               measure == "5-9 years ago"), 
                 x = ~date, y = ~share_of_ue, type = "scatter", mode = "none", 
                 stackgroup = "one", legendgroup = "5-9 years ago",
-                name = ~measure, showlegend = F, fillcolor = "#db520d") %>%
+                name = ~measure, showlegend = FALSE, fillcolor = "#db520d") %>%
       add_trace(data = filter(df_duration, age_group == input$age_dur_1,
                               measure == "3-4 years ago"), 
                 x = ~date, y = ~share_of_ue, type = "scatter", mode = "none", 
                 stackgroup = "one", legendgroup = "3-4 years ago",
-                name = ~measure, showlegend = F, fillcolor = "#db6d0d") %>% 
+                name = ~measure, showlegend = FALSE, fillcolor = "#db6d0d") %>% 
       add_trace(data = filter(df_duration, age_group == input$age_dur_1,
                               measure == "1-2 years ago"), 
                 x = ~date, y = ~share_of_ue, type = "scatter", mode = "none", 
                 stackgroup = "one", legendgroup = "1-2 years ago", 
-                name = ~measure, showlegend = F, fillcolor = "#db8c0d") %>% 
+                name = ~measure, showlegend = FALSE, fillcolor = "#db8c0d") %>% 
       add_trace(data = filter(df_duration, age_group == input$age_dur_1,
                               measure == "6-12 months ago"), 
                 x = ~date, y = ~share_of_ue, type = "scatter", mode = "none", 
                 stackgroup = "one", legendgroup = "6-12 months ago",
-                name = ~measure, showlegend = F, fillcolor = "#d9a53f") %>%
+                name = ~measure, showlegend = FALSE, fillcolor = "#d9a53f") %>%
       add_trace(data = filter(df_duration, age_group == input$age_dur_1,
                               measure == "3-6 months ago"), 
                 x = ~date, y = ~share_of_ue, type = "scatter", mode = "none", 
                 stackgroup = "one", legendgroup = "3-6 months ago",
-                name = ~measure, showlegend = F, fillcolor = "#e3ca84") %>%
+                name = ~measure, showlegend = FALSE, fillcolor = "#e3ca84") %>%
       add_trace(data = filter(df_duration, age_group == input$age_dur_1,
                               measure == "Less than 3 months ago"), 
                 x = ~date, y = ~share_of_ue, type = "scatter", mode = "none", 
                 stackgroup = "one", legendgroup = "Less than 3 months ago",
-                name = ~measure, showlegend = F, fillcolor = "#e8dc9e") %>%
+                name = ~measure, showlegend = FALSE, fillcolor = "#e8dc9e") %>%
       add_trace(data = filter(df_duration, age_group == input$age_dur_1,
                               measure == "Never worked before"), 
                 x = ~date, y = ~share_of_ue, type = "scatter", mode = "none", 
                 stackgroup = "one", legendgroup = "Never worked before",
-                name = ~measure, showlegend = F, fillcolor = "#9a9c9b")
+                name = ~measure, showlegend = FALSE, fillcolor = "#9a9c9b")
     
     
     dur_graph_1 <- dur_graph_1 %>% layout(
       
       title = "Duration of unemployment by age group",
-      xaxis = list(title = input$age_dur_1, zeroline = FALSE, showgrid = F),
-      yaxis = list(title = "Share of unemployed", zeroline = FALSE, showgrid = F,
+      xaxis = list(title = input$age_dur_1, zeroline = FALSE, showgrid = FALSE),
+      yaxis = list(title = "Share of unemployed", zeroline = FALSE, showgrid = FALSE,
                    ticksuffix = "%", hoverformat = ".2f"),
       margin = list(l = 70, r = 50, t = 50, b = 100),
       paper_bgcolor = chart_bg_color,
@@ -1042,48 +1042,48 @@ server <- function(input, output, session) {
                               measure == "10 years or more"), 
                 x = ~date, y = ~share_of_ue, type = "scatter", mode = "none", 
                 stackgroup = "one", legendgroup = "10 years or more",
-                name = ~measure, showlegend = T, fillcolor = "#db410d") %>% 
+                name = ~measure, showlegend = TRUE, fillcolor = "#db410d") %>% 
       add_trace(data = filter(df_duration, age_group == input$age_dur_2,
                               measure == "5-9 years ago"), 
                 x = ~date, y = ~share_of_ue, type = "scatter", mode = "none", 
                 stackgroup = "one", legendgroup = "5-9 years ago",
-                name = ~measure, showlegend = T, fillcolor = "#db520d") %>%
+                name = ~measure, showlegend = TRUE, fillcolor = "#db520d") %>%
       add_trace(data = filter(df_duration, age_group == input$age_dur_2,
                               measure == "3-4 years ago"), 
                 x = ~date, y = ~share_of_ue, type = "scatter", mode = "none", 
                 stackgroup = "one", legendgroup = "3-4 years ago",
-                name = ~measure, showlegend = T, fillcolor = "#db6d0d") %>% 
+                name = ~measure, showlegend = TRUE, fillcolor = "#db6d0d") %>% 
       add_trace(data = filter(df_duration, age_group == input$age_dur_2,
                               measure == "1-2 years ago"), 
                 x = ~date, y = ~share_of_ue, type = "scatter", mode = "none", 
                 stackgroup = "one", legendgroup = "1-2 years ago", 
-                name = ~measure, showlegend = T, fillcolor = "#db8c0d") %>% 
+                name = ~measure, showlegend = TRUE, fillcolor = "#db8c0d") %>% 
       add_trace(data = filter(df_duration, age_group == input$age_dur_2,
                               measure == "6-12 months ago"), 
                 x = ~date, y = ~share_of_ue, type = "scatter", mode = "none", 
                 stackgroup = "one", legendgroup = "6-12 months ago",
-                name = ~measure, showlegend = T, fillcolor = "#d9a53f") %>%
+                name = ~measure, showlegend = TRUE, fillcolor = "#d9a53f") %>%
       add_trace(data = filter(df_duration, age_group == input$age_dur_2,
                               measure == "3-6 months ago"), 
                 x = ~date, y = ~share_of_ue, type = "scatter", mode = "none", 
                 stackgroup = "one", legendgroup = "3-6 months ago",
-                name = ~measure, showlegend = T, fillcolor = "#e3ca84") %>%
+                name = ~measure, showlegend = TRUE, fillcolor = "#e3ca84") %>%
       add_trace(data = filter(df_duration, age_group == input$age_dur_2,
                               measure == "Less than 3 months ago"), 
                 x = ~date, y = ~share_of_ue, type = "scatter", mode = "none", 
                 stackgroup = "one", legendgroup = "Less than 3 months ago",
-                name = ~measure, showlegend = T, fillcolor = "#e8dc9e") %>%
+                name = ~measure, showlegend = TRUE, fillcolor = "#e8dc9e") %>%
       add_trace(data = filter(df_duration, age_group == input$age_dur_2,
                               measure == "Never worked before"), 
                 x = ~date, y = ~share_of_ue, type = "scatter", mode = "none", 
                 stackgroup = "one", legendgroup = "Never worked before",
-                name = ~measure, showlegend = T, fillcolor = "#9a9c9b")
+                name = ~measure, showlegend = TRUE, fillcolor = "#9a9c9b")
       
 
     dur_graph_2 <- dur_graph_2 %>% layout(
       title = "Duration of unemployment by age group",
-      xaxis = list(title = input$age_dur_2, zeroline = FALSE, showgrid = F),
-      yaxis = list(title = "Share of unemployed persons", zeroline = FALSE, showgrid = F,
+      xaxis = list(title = input$age_dur_2, zeroline = FALSE, showgrid = FALSE),
+      yaxis = list(title = "Share of unemployed persons", zeroline = FALSE, showgrid = FALSE,
                    ticksuffix = "%", hoverformat = ".2f"),
       margin = list(l = 70, r = 50, t = 50, b = 100),
       paper_bgcolor = chart_bg_color,
@@ -1092,7 +1092,7 @@ server <- function(input, output, session) {
       legend = list(title = list(text = "Time since last employed"), traceorder = "reversed")
     )
     
-    dur_graph <- subplot(dur_graph_1, dur_graph_2, titleX = T, shareY = T, 
+    dur_graph <- subplot(dur_graph_1, dur_graph_2, titleX = TRUE, shareY = TRUE, 
                          margin = 0.02)
     
   })
@@ -1126,14 +1126,14 @@ server <- function(input, output, session) {
       xaxis = list(
         title = "Unemployment rate",
         zeroline = FALSE,
-        showgrid = F,
+        showgrid = FALSE,
         ticksuffix = "%",
         hoverformat = ".2f"
       ),
       yaxis = list(
         title = "Median duration unemployed (months)",
         zeroline = FALSE,
-        showgrid = F,
+        showgrid = FALSE,
         hoverformat = ".2f"
       ),
       margin = list(
@@ -1169,8 +1169,8 @@ server <- function(input, output, session) {
     
     pc_ue_gained <- pc_ue_gained %>% layout(
       title = paste0("% unemployed who gained employment by ", input$ue_to_emp_measure),
-      xaxis = list(title = "Date", zeroline = FALSE, showgrid = F),
-      yaxis = list(title = "% unemployed", zeroline = FALSE, showgrid = F, ticksuffix = "%", hoverformat = ".2f"),
+      xaxis = list(title = "Date", zeroline = FALSE, showgrid = FALSE),
+      yaxis = list(title = "% unemployed", zeroline = FALSE, showgrid = FALSE, ticksuffix = "%", hoverformat = ".2f"),
       margin = list(l = 70, r = 50, t = 50, b = 100),
       paper_bgcolor = chart_bg_color,
       plot_bgcolor = chart_bg_color,
@@ -1244,17 +1244,17 @@ server <- function(input, output, session) {
       showlegend = TRUE,
       title = "Unemployment rate against share of households who are disadvantaged",
       xaxis = list(title = "Share of households in bottom decile of disadvantage", 
-                   zeroline = FALSE, showgrid = F, ticksuffix = "%", margin = list(b = 100)),
-      yaxis = list(title = "Unemployment rate", zeroline = FALSE, showgrid = F,
+                   zeroline = FALSE, showgrid = FALSE, ticksuffix = "%", margin = list(b = 100)),
+      yaxis = list(title = "Unemployment rate", zeroline = FALSE, showgrid = FALSE,
                    ticksuffix = "%", hoverformat = ".2f"),
-      margin = list(l = 70, r = 50, t = 50, b = 100, autoexpand = T),
+      margin = list(l = 70, r = 50, t = 50, b = 100, autoexpand = TRUE),
       paper_bgcolor = chart_bg_color,
       plot_bgcolor= chart_bg_color,
       font = list(color = chart_text_color))
     
     youth_unem_graph <- youth_unem_graph %>% 
       animation_opts(
-        frame = 200, transition = 200,  easing = "linear", redraw = F
+        frame = 200, transition = 200,  easing = "linear", redraw = FALSE
       ) %>%
       animation_slider(
         currentvalue = list(font = list(size = 12, color = "grey")),
@@ -1328,8 +1328,8 @@ server <- function(input, output, session) {
 
     educ_emp <- educ_emp %>% layout(
       title = "Employment rates by age and education level",
-      xaxis = list(title = "Date", zeroline = FALSE, showgrid = F),
-      yaxis = list(title = "% population employed", zeroline = FALSE, showgrid = F, ticksuffix = "%", hoverformat = ".2f"),
+      xaxis = list(title = "Date", zeroline = FALSE, showgrid = FALSE),
+      yaxis = list(title = "% population employed", zeroline = FALSE, showgrid = FALSE, ticksuffix = "%", hoverformat = ".2f"),
       margin = list(l = 70, r = 50, t = 50, b = 100),
       paper_bgcolor = chart_bg_color,
       plot_bgcolor = chart_bg_color,
@@ -1396,10 +1396,10 @@ server <- function(input, output, session) {
     neet_timeseries <- neet_timeseries %>% layout(
       title = "Youth NEET rate by age and demographic group",
       xaxis = list(title = "Date", 
-                   zeroline = FALSE, showgrid = F, margin = list(b = 100)),
-      yaxis = list(title = "NEET rate", zeroline = FALSE, showgrid = F,
+                   zeroline = FALSE, showgrid = FALSE, margin = list(b = 100)),
+      yaxis = list(title = "NEET rate", zeroline = FALSE, showgrid = FALSE,
                    tickformat = "1%", hoverformat = ".2f"),
-      margin = list(l = 70, r = 50, t = 50, b = 100, autoexpand = T),
+      margin = list(l = 70, r = 50, t = 50, b = 100, autoexpand = TRUE),
       paper_bgcolor = chart_bg_color,
       plot_bgcolor = chart_bg_color,
       font = list(color = chart_text_color))
@@ -1431,10 +1431,10 @@ server <- function(input, output, session) {
       
       title = "NEET entry and exit rates",
       xaxis = list(title = "Date", 
-                   zeroline = FALSE, showgrid = F, margin = list(b = 100)),
-      yaxis = list(title = "NEET rate", zeroline = FALSE, showgrid = F,
+                   zeroline = FALSE, showgrid = FALSE, margin = list(b = 100)),
+      yaxis = list(title = "NEET rate", zeroline = FALSE, showgrid = FALSE,
                    tickformat = "1%", hoverformat = ".2f"),
-      margin = list(l = 70, r = 50, t = 50, b = 100, autoexpand = T),
+      margin = list(l = 70, r = 50, t = 50, b = 100, autoexpand = TRUE),
       paper_bgcolor = chart_bg_color,
       plot_bgcolor= chart_bg_color,
       font = list(color = chart_text_color))
@@ -1466,7 +1466,7 @@ server <- function(input, output, session) {
                      zeroline = FALSE, showgrid = FALSE, range = list(1, 6),
                      hoverformat = ".2f"),
         yaxis = list(title = "Probability of NEET status", zeroline = FALSE, 
-                     showgrid = F, tickformat = "1%", dtick = 0.02, hoverformat = ".2f"),
+                     showgrid = FALSE, tickformat = "1%", dtick = 0.02, hoverformat = ".2f"),
         margin = list(l = 70, r = 50, t = 50, b = 100, autoexpand = TRUE),
         paper_bgcolor = chart_bg_color,
         plot_bgcolor= chart_bg_color,
@@ -1588,11 +1588,11 @@ server <- function(input, output, session) {
   },
   options = list(
     pageLength = 5,
-    searching = F,
-    paging = F,
+    searching = FALSE,
+    paging = FALSE,
     scrollY = 200,
-    scrollCollapse = T,
-    fixedHeader = T
+    scrollCollapse = TRUE,
+    fixedHeader = TRUE
   ))
  }
 
