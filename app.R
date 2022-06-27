@@ -1444,27 +1444,36 @@ server <- function(input, output, session) {
   ### Pr(NEET) by distance from CC ####
   output$neet_distance <- renderPlotly({
     
-    p <- df_neet_distance %>% 
-      arrange(mindistance) %>% 
-      ggplot(aes(x=mindistance, y=pred,color=Year)) +
-        geom_line(aes(frame = frame)) +scale_colour_manual(values=heat.colors(18))+
-      theme(legend.position='none')
+    p <- df_neet_distance %>%
+      mutate(label = sprintf("Current year: %s\nComparison year: %s\nProbability: %s", frame, Year, round(pred, 2))) %>% 
+      arrange(mindistance) %>%
+      ggplot(aes(
+        x = mindistance,
+        y = pred,
+        color = Year
+      )) +
+      geom_line(aes(
+        frame = frame,
+        label = label
+      )) + 
+      scale_colour_manual(values = heat.colors(18))+
+      theme(legend.position = "none")
     
-    neet_distance <- ggplotly(p) %>% 
+    neet_distance <- ggplotly(p, tooltip = "label") %>% 
       layout(
-      title = "Probability of NEET over distance (18-24)",
-      
-      xaxis = list(title = "Log distance from nearest capital city", 
-                   zeroline = FALSE, showgrid = F, range = list(1,6),
-                   hoverformat = ".2f"),
-      yaxis = list(title = "Probability of NEET status", zeroline = FALSE, 
-                   showgrid = F, tickformat = "1%", dtick = 0.02, hoverformat = ".2f"),
-      margin = list(l = 70, r = 50, t = 50, b = 100, autoexpand = T),
-      paper_bgcolor = chart_bg_color,
-      plot_bgcolor= chart_bg_color,
-      font = list(color = chart_text_color)) %>% 
+        title = "Probability of NEET over distance (18-24)",
+        xaxis = list(title = "Log distance from nearest capital city", 
+                     zeroline = FALSE, showgrid = FALSE, range = list(1, 6),
+                     hoverformat = ".2f"),
+        yaxis = list(title = "Probability of NEET status", zeroline = FALSE, 
+                     showgrid = F, tickformat = "1%", dtick = 0.02, hoverformat = ".2f"),
+        margin = list(l = 70, r = 50, t = 50, b = 100, autoexpand = TRUE),
+        paper_bgcolor = chart_bg_color,
+        plot_bgcolor= chart_bg_color,
+        font = list(color = chart_text_color)
+        ) %>% 
       animation_opts(
-        frame = 200, transition = 200,  easing = "linear", redraw = F
+        frame = 200, transition = 200,  easing = "linear", redraw = FALSE
       ) %>%
       animation_slider(
         currentvalue = list(font = list(size = 12, color = "grey")),
