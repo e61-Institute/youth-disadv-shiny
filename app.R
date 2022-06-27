@@ -1,6 +1,7 @@
 library(shiny)
 library(bslib)
 library(leaflet)
+library(leaflet.extras)
 library(data.table)
 library(magrittr)
 library(tidyverse)
@@ -741,7 +742,7 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
           ),
           br(),
           p(
-            "Source: BLADE Data Industries with less than 10 firms excluded",
+            "Source: ABS BLADE Data Industries with less than 10 firms excluded",
             class = "source-text"
           )
         ),
@@ -1200,9 +1201,8 @@ server <- function(input, output, session) {
         pal = pal,
         values =  ~ domain,
         title = "Index (lower is better)"
-      )
-    
-    
+      ) %>% 
+      addFullscreenControl()
     
   })
   
@@ -1294,9 +1294,8 @@ server <- function(input, output, session) {
         pal = pal,
         values =  ~ domain,
         title = "Unemployed share (%)"
-      )
-    
-    
+      ) %>% 
+      addFullscreenControl()
     
   })
   
@@ -1509,7 +1508,8 @@ server <- function(input, output, session) {
         pal = pal2,
         values = ~ domain,
         title = "Net Change in Jobs"
-      )
+      ) %>% 
+      addFullscreenControl()
     
   })
   
@@ -1549,8 +1549,8 @@ server <- function(input, output, session) {
         opacity = 0.5,
         title = " % Total Employment",
         position = "bottomright"
-      )
-    
+      ) %>% 
+      addFullscreenControl()
     
   })
   
