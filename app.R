@@ -381,11 +381,17 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
           plotlyOutput("duration_v_ue"),
           p("Source: ABS Labour Force microdata",
             class = "source-text"),
-          selectInput(
-            "dur_v_ue_year",
-            "Select year: ",
+          sliderTextInput(
+            "dur_v_ue_year_1",
+            "Select first year: ",
             choices = unique(df_duration_v_ue$year),
-            selected = "2022"
+            selected = min(df_duration_v_ue$year)
+          ),
+          sliderTextInput(
+            "dur_v_ue_year_2",
+            "Select second year: ",
+            choices = unique(df_duration_v_ue$year),
+            selected = min(df_duration_v_ue$year)
           ),
           radioButtons(
             "dur_v_ue_age",
@@ -1098,18 +1104,24 @@ server <- function(input, output, session) {
     
     duration_v_ue <-
       df_duration_v_ue %>% 
-      filter(year == input$dur_v_ue_year & age_bucket == input$dur_v_ue_age) %>%
+      filter(
+        year %in% c(input$dur_v_ue_year_1, input$dur_v_ue_year_2) & 
+          age_bucket == input$dur_v_ue_age) %>%
       plot_ly(x = ~ ue) %>% 
       add_trace(
         x = ~ ue,
         y = ~ duration,
+        split = ~year,
         size = ~pop,
+        text = ~ sprintf("%s (%s %s)", 
+                         sa4_name, lubridate::month(date, label = TRUE), year(date)),
+        name = ~year,
+        hoverinfo = "text",
         type = "scatter",
         mode = "markers",
-        name = "Region",
         fill = ~""
         ) %>% 
-      add_lines(x = ~ue, y = ~fitted, name = "Trendline")
+      add_lines(x = ~ue, y = ~fitted, split = ~year, name = "Trendline")
 
     duration_v_ue <- duration_v_ue %>% layout(
       title = "Median unemployment duration v unemployment rate",
