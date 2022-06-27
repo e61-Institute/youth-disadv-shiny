@@ -441,7 +441,6 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
           p("The share of unemployed workers finding employment in a given month is broadly similar across urban and regional areas, with unemployed workers in urban and regional areas benefiting from the strong labour market recovery. Workers who have been searching for work for more than six months face greater difficulty transitioning back into employment. Similarly, people who have never worked or have not worked in over 6 months, also have lower probabilities of entering employment compared to people who have worked more recently. These trends have remained consistent over the past 15 years.")
         )
       ),
-      
       div(
         class = "m-2",
         br(),
