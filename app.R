@@ -167,12 +167,12 @@ ui <- shinyUI(
           column(
             width = 4,
             class = "m-2",
-            h6("Introduction"),
+            h6("Aggregate labour market measures indicate a strong recovery"),
             p(
               "In aggregate terms the recovery has been strong, unemployment is at historic lows, while the employment-to-population ratio is well above pre-pandemic levels. Although aggregate labour market indicators show that as a whole, the labour market is strong, including for young Australians, the recovery has been uneven for some groups of vulnerable young people, which this data visualisation will explore.
 "
             ),
-h6("Employment-to-population and unemployment"),
+h6("The employment-to-population ratio is high and unemployment is low"),
 p(
   "The employment-to-population ratio for young Australians aged between 15-24 years is now higher than that of the total population after being below the total population rate throughout the 2010s.
 
@@ -221,7 +221,7 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
           column(
             width = 4,
             class = "m-2",
-            h6("Job mobility"),
+            h6("Job mobility has recovered from COVID-19 levels"),
             p("Recessions cause a decrease in the quality of job matches for two reasons. The relative shortage of high-quality jobs in a downturn forces workers to shift down the job quality ladder and potentially take jobs to which they are less well matched. In addition, recessions often damage labour mobility prospects, which can lead recent entrants to be trapped in poorly matched jobs.  Thus, the incidence of mismatch is likely to be greater following a sustained period of weakness in the labour market."),
             p("Job mobility (the share of workers changing jobs in the past year) has increased in 2022, following declines in 2020 and 2021 relative to pre-pandemic levels. The pandemic constrained the ability of workers to move location and switch to better matched jobs, hampering their ability to climb the job ladder. This effect appears to have eased, although part of the increase in mobility may represent a partial catch-up on previous years.")
           ),
@@ -247,7 +247,7 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
     column(
       width = 4,
       class = "m-2",
-      h6("Job mismatches"),
+      h6("Job mismatch rates are broadly unchanged"),
       p(
         "Young workers have a greater need to sort into well-matched jobs in the formative years of their careers (Topel and Ward 1992). Young job switchers experience faster wage growth than older job switchers (of around 6.5 percentage points per annum on average). This is consistent with evidence suggesting that 80 per cent of career earnings growth occurs in the first decade of work (Murphy and Welch 1990). Second, disadvantage young workers tend to experience larger wage gains from switching jobs than those that are not disadvantaged."
       ),
@@ -278,7 +278,7 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
     column(
       width = 4,
       class = "m-2",
-      h6("Beneficial job transitions"),
+      h6("The rate of beneficial job transitions is steady"),
       p("Job switching is an important mechanism for improving the productivity of mismatched workers by reallocating their labour to firms where they are more productive. The pandemic resulted in a sharp decline in the rate of job-switching among workers who we considered mis-matched (over- or under-skilled) in their occupation 12 months ago."
       ),
       p(
@@ -313,7 +313,7 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
     column(
       width = 4,
       class = "m-2",
-      h6("Main youth occupations"),
+      h6("Young people increasingly work in lower-skilled services roles"),
       p("Employment opportunities for young people are primarily in services, specifically in hospitality, food preparation and sales assistant roles. The share of young people in these roles is highest in younger age groups, reflecting young people taking up these jobs part-time alongside further education or as their first jobs after completing secondary education."),
       p("For 23-25 year olds, the share of employment in these roles is smaller, reflecting a larger share of this cohort having completed tertiary education and working in roles requiring post-secondary qualifications. However, in the lead-up to the pandemic, the share of 23-25 year olds still working in hospitality or sales has been increasing, potentially driven by a larger share remaining in tertiary education or worse employment prospects in other industries.")
     )
@@ -368,7 +368,7 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
       fluidRow(column(
         width = 6,
         class = "m-2",
-        h6("Duration of unemployment by age group"),
+        h6("A large share of unemployed youth have been unemployed long-term"),
         p(
           "Long periods of time out of employment make it more difficult to transition back into employment. An elevated share of 15-24 year olds have been unemployed for 1 year or more relative to the total population. Although the COVID-19 recession exacerbated this problem, this was an ongoing concern well before the pandemic."
         )
@@ -398,7 +398,7 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
         column(
           width = 4,
           class = "m-2",
-          h6("Unemployment duration and unemployment rate"),
+          h6("Unemployment rates and duration are positively correlated"),
           p(
             "This graph shows monthly unemployment rates and median time since previous job pooled across years across Australia. Areas with a higher unemployment rates tend to have longer median unemployment durations, reflecting the difficulty that the long-term unemployed have when searching for employment."
           )
@@ -431,7 +431,7 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
         column(
           width = 4,
           class = "m-2",
-          h6("Transitions into employment"),
+          h6("The long-term unemployed face greater difficulty finding work"),
           p("The share of unemployed workers finding employment in a given month does not differ significantly between urban and regional areas. Workers who have been searching for work for more than six months face greater difficulty transitioning back into employment. Similarly, people who have never worked or have not worked in over 6 months, also have lower probabilities of entering employment compared to people who have worked more recently. These trends have remained consistent over the past 15 years.")
         )
       ),
@@ -450,19 +450,12 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
         column(
           width = 4,
           class = "m-2",
-          radioButtons(
-            "age_js",
-            "Select age group: ",
-            choices = unique(df_js$age_bucket),
-            selected = "18-24"
+          h6("Jobseeker recipient share for 18-24 year olds"),
+          p(
+            "This map uses illion data to estimate the relative shares of Jobseeker and Youth Allowance (for job seekers) payments in regions across Australia. The data are presented as an index, with higher numbers indicating a greater relative share of the population in that region are on support payments compared to the rest of Australia."
           ),
-          sliderTextInput(
-            "timeline_js",
-            "Select date: ",
-            choices = seq(min(df_js$date), max(df_js$date), by = "months"),
-            selected = min(df_js$date),
-            animate = animationOptions(interval = 1000, loop = F)
-            # Note that animation needs to be fixed - it currently causes the map to reload, which takes too much time
+          p(
+            "Whilst the share of individuals on support payments change over time, the general trend is for areas that are associated with greater disadvantage such as outer suburban and regional Australia to have larger relative shares of individuals on support payments."
           )
         )
       ),
@@ -471,14 +464,23 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
       fluidRow(column(
         width = 6,
         class = "m-2",
-        h6("Jobseeker recipient share for 18-24 year olds"),
-        p(
-          "This map uses illion data to estimate the relative shares of Jobseeker and Youth Allowance (for job seekers) payments in regions across Australia. The data are presented as an index, with higher numbers indicating a greater relative share of the population in that region are on support payments compared to the rest of Australia."
+        radioButtons(
+          "age_js",
+          "Select age group: ",
+          choices = unique(df_js$age_bucket),
+          selected = "18-24",
+          inline = TRUE
         ),
-        p(
-          "Whilst the share of individuals on support payments change over time, the general trend is for areas that are associated with greater disadvantage such as outer suburban and regional Australia to have larger relative shares of individuals on support payments."
+        sliderTextInput(
+          "timeline_js",
+          "Select date: ",
+          choices = seq(min(df_js$date), max(df_js$date), by = "months"),
+          selected = min(df_js$date),
+          animate = animationOptions(interval = 1000, loop = F)
+          # Note that animation needs to be fixed - it currently causes the map to reload, which takes too much time
         )
-      ), ),
+      ), 
+      ),
     )
     )
   ), 
@@ -539,24 +541,13 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
       fluidRow(
         ### Unemployed share by age group over time ####
         column(width = 7, class = "m-2",
-               leafletOutput("map2"),),
+               leafletOutput("map2"),
+               ),
         column(
           width = 4,
           class = "m-2",
-          radioButtons(
-            "age_map",
-            "Select age group: ",
-            choices = unique(df_map2$age),
-            selected = "15-24 years"
-          ),
-          sliderTextInput(
-            "timeline",
-            "Select date: ",
-            choices = seq(min(df_map2$date), max(df_map2$date), by = "months"),
-            selected = min(df_map2$date),
-            animate = animationOptions(interval = 1000, loop = F)
-            # Note that animation needs to be fixed - it currently causes the map to reload, which takes too much time
-          )
+          h6("Unemployment is higher for youth"),
+          p("Across Australia, youth unemployment is higher than that of the total labour market. This trend holds in both capital cities and regional Australia, and across time.")
         )
       ),
       div(class = "m-2",
@@ -564,9 +555,19 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
       fluidRow(column(
         width = 6,
         class = "m-2",
-        h6("Unemployment by age group and region"),
-        p(
-          "Youth unemployment rates tend to be higher than that of the total population and this is true at the regional level as well."
+        radioButtons(
+          "age_map",
+          "Select age group: ",
+          choices = unique(df_map2$age),
+          selected = "15-24 years"
+        ),
+        sliderTextInput(
+          "timeline",
+          "Select date: ",
+          choices = seq(min(df_map2$date), max(df_map2$date), by = "months"),
+          selected = min(df_map2$date),
+          animate = animationOptions(interval = 1000, loop = F)
+          # Note that animation needs to be fixed - it currently causes the map to reload, which takes too much time
         )
       )),
       fluidRow(
