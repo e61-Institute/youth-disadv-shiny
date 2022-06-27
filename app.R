@@ -21,7 +21,7 @@ options(readr.show_col_types = FALSE)
 df_map <- readRDS("data/jobcreation.rds")
 
 df_js <- readRDS("data/js-recipient-share-map.rds") %>% 
-  filter(!is.na(date)) %>% 
+  filter(!is.na(date) & date >= "2021-01-01") %>% 
   mutate(date = as.Date(date, "%Y-%m-%d"))
 
 df_map2 <- readRDS("data/youth unemployment sa4 map.rds") %>% 
@@ -405,9 +405,8 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
           width = 4,
           class = "m-2",
           h6("Unemployment rates and duration are positively correlated"),
-          p(
-            "This graph shows monthly unemployment rates and median time since previous job pooled across years across Australia. Areas with a higher unemployment rates tend to have longer median unemployment durations, reflecting the difficulty that the long-term unemployed have when searching for employment."
-          )
+          p("This graph shows the relationship between the unemployment rate and the median time since previous employment across different areas of Australia. Areas with a higher unemployment rates tend to have longer median unemployment durations, reflecting the difficulty that the long-term unemployed have when searching for employment. As the unemployment rate declines, the median time between jobs will decline if a greater number of long term unemployed enter employment relative to the newly unemployed."),
+          p("To overcome small cell counts, geographic areas are a custom mix of states, GCCSA areas and SA4s, with higher granularity taken where the sample size allowed. The line of best fit for each selected year highlights the relationship between the two variables.  A steeper line indicates a stronger relationship between the variables.")
         )
       ),
       
@@ -438,10 +437,10 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
           width = 4,
           class = "m-2",
           h6("The long-term unemployed face greater difficulty finding work"),
-          p("The share of unemployed workers finding employment in a given month does not differ significantly between urban and regional areas. Workers who have been searching for work for more than six months face greater difficulty transitioning back into employment. Similarly, people who have never worked or have not worked in over 6 months, also have lower probabilities of entering employment compared to people who have worked more recently. These trends have remained consistent over the past 15 years.")
+          p("This graph visualises the rate of churn amongst the unemployed, plotting the percentage of unemployed who enter employment by age group as well as geographic area, duration of job search and duration since last employed."),
+          p("The share of unemployed workers finding employment in a given month is broadly similar across urban and regional areas, with unemployed workers in urban and regional areas benefiting from the strong labour market recovery. Workers who have been searching for work for more than six months face greater difficulty transitioning back into employment. Similarly, people who have never worked or have not worked in over 6 months, also have lower probabilities of entering employment compared to people who have worked more recently. These trends have remained consistent over the past 15 years.")
         )
       ),
-      
       div(
         class = "m-2",
         br(),
@@ -458,10 +457,10 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
           class = "m-2",
           h6("Jobseeker recipient share for 18-24 year olds"),
           p(
-            "This map uses illion data to estimate the relative shares of Jobseeker and Youth Allowance (for job seekers) payments in regions across Australia. The data are presented as an index, with higher numbers indicating a greater relative share of the population in that region are on support payments compared to the rest of Australia."
+            "This map uses illion data to estimate the relative shares of Jobseeker and Youth Allowance (for job seekers) payments in regions across Australia. The data are presented as an index between 0 and 100, with higher numbers indicating a greater relative share of the population in that region are on support payments compared to the rest of Australia."
           ),
           p(
-            "Whilst the share of individuals on support payments change over time, the general trend is for areas that are associated with greater disadvantage such as outer suburban and regional Australia to have larger relative shares of individuals on support payments."
+            "Whilst the share of individuals on support payments change over time, areas that are associated with greater disadvantage such as outer suburban and regional Australia tend to have larger relative shares of individuals on support payments."
           )
         )
       ),
@@ -482,7 +481,7 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
           "Select date: ",
           choices = seq(min(df_js$date), max(df_js$date), by = "months"),
           selected = min(df_js$date),
-          animate = animationOptions(interval = 1000, loop = F)
+          animate = animationOptions(interval = 1000, loop = FALSE)
           # Note that animation needs to be fixed - it currently causes the map to reload, which takes too much time
         )
       ), 
@@ -572,7 +571,7 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
           "Select date: ",
           choices = seq(min(df_map2$date), max(df_map2$date), by = "months"),
           selected = min(df_map2$date),
-          animate = animationOptions(interval = 1000, loop = F)
+          animate = animationOptions(interval = 1000, loop = FALSE)
           # Note that animation needs to be fixed - it currently causes the map to reload, which takes too much time
         )
       )),
@@ -663,9 +662,8 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
           width = 4,
           class = "m-2",
           h6("Youth NEET tends to increase during economic downturns"),
-          p(
-            "The share of youth who are not in employment, education or training (NEET) has been broadly steady in Australia since 2000. The share tends to increase during economic downturns, such as the Global Financial Crisis in 2008 and the COVID-19 recession in 2020. In the past two years the aggregate NEET rate has declined back towards historic levels."
-          )
+          p("This graph plots the percentage of young people who are currently in NEET status in each month, breaking it down by gender and age group.  The rate of NEET status is a key indicator of engagement in the labour market, tending to grow during economic downturns such as the GFC."),
+          p("The share of youth who are not in employment, education or training (NEET) has been broadly steady in Australia since 2000. The share tends to increase during economic downturns, such as the Global Financial Crisis in 2008 and the COVID-19 recession in 2020. After increasing during the pandemic, the aggregate NEET rate has declined back towards pre-pandemic levels.")
         ),
         fluidRow(
           ### NEET entry and exit rates ####
@@ -692,10 +690,9 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
             width = 4,
             class = "m-2",
             h6("The COVID-19 recession drove a large increase in NEET"),
-            p(
-              "The flow of people into NEET increased sharply in 2020, driven by the COVID-19 recession. The subsequent rapid recovery in the labour market saw a large flow out of NEET status. This flow was common across capital cities and regions, and across both males and females"
-            )
-          )
+            p("This graph breaks down the flow of entry and exit from NEET status by gender and geographic area. The orange area plots the percentage of young people who enter NEET status in any given month, the green area plots the percentage of young people who exit NEET status, and the NEET flow line plots the net entry rate."),
+            p("The flow of people into NEET increased sharply in 2020, driven by the COVID-19 recession. The subsequent rapid recovery in the labour market saw a large flow out of NEET status. This flow was common across capital cities and regions, and across both males and females")
+        )
         ),
 
 
@@ -842,8 +839,8 @@ server <- function(input, output, session) {
     ue_graph <- ue_graph %>% layout(
       showlegend = TRUE,
       title = "Measures of employment by age group",
-      xaxis = list(title = "Date", zeroline = FALSE, showgrid = F),
-      yaxis = list(title = input$agg_measure, zeroline = FALSE, showgrid = F,
+      xaxis = list(title = "Date", zeroline = FALSE, showgrid = FALSE),
+      yaxis = list(title = input$agg_measure, zeroline = FALSE, showgrid = FALSE,
                    ticksuffix = "%", hoverformat = ".2f"),
       margin = list(l = 70, r = 50, t = 50, b = 100),
       paper_bgcolor = chart_bg_color,
@@ -875,8 +872,8 @@ server <- function(input, output, session) {
     jm_graph <- jm_graph %>% layout(
       showlegend = TRUE,
       title = "Job mobility by age group",
-      xaxis = list(title = "Date", zeroline = FALSE, showgrid = F),
-      yaxis = list(title = "Job mobility", zeroline = FALSE, showgrid = F,
+      xaxis = list(title = "Date", zeroline = FALSE, showgrid = FALSE),
+      yaxis = list(title = "Job mobility", zeroline = FALSE, showgrid = FALSE,
                    ticksuffix = "%", hoverformat = ".2f"),
       margin = list(l = 70, r = 50, t = 50, b = 100),
       paper_bgcolor = chart_bg_color,
@@ -901,8 +898,8 @@ server <- function(input, output, session) {
     
     pc_mismatched <- pc_mismatched %>% layout(
       title = "Share of employed people by skill matching status",
-      xaxis = list(title = "Year", zeroline = FALSE, showgrid = F),
-      yaxis = list(title = "% mismatched", zeroline = FALSE, showgrid = F,
+      xaxis = list(title = "Year", zeroline = FALSE, showgrid = FALSE),
+      yaxis = list(title = "% mismatched", zeroline = FALSE, showgrid = FALSE,
                    ticksuffix = "%", hoverformat = ".2f"),
       margin = list(l = 70, r = 50, t = 50, b = 100),
       paper_bgcolor = chart_bg_color,
@@ -929,8 +926,8 @@ server <- function(input, output, session) {
     
     jobswitchers <- jobswitchers %>% layout(
       title = "Job switching for workers with mismatched employment in previous 12 months",
-      xaxis = list(title = "Date", zeroline = FALSE, showgrid = F),
-      yaxis = list(title = "% workers", zeroline = FALSE, showgrid = F, ticksuffix = "%", hoverformat = ".2f"),
+      xaxis = list(title = "Date", zeroline = FALSE, showgrid = FALSE),
+      yaxis = list(title = "% workers", zeroline = FALSE, showgrid = FALSE, ticksuffix = "%", hoverformat = ".2f"),
       margin = list(l = 70, r = 50, t = 50, b = 100),
       paper_bgcolor = chart_bg_color,
       plot_bgcolor = chart_bg_color,
@@ -962,8 +959,8 @@ server <- function(input, output, session) {
     jm_graph <- jm_graph %>% layout(
       showlegend = TRUE,
       title = "Top 5 occupations by age group",
-      xaxis = list(title = "Year", zeroline = FALSE, showgrid = F),
-      yaxis = list(title = "Percent Total", zeroline = FALSE, showgrid = F, ticksuffix = "%", hoverformat = ".2f"),
+      xaxis = list(title = "Year", zeroline = FALSE, showgrid = FALSE),
+      yaxis = list(title = "Percent Total", zeroline = FALSE, showgrid = FALSE, ticksuffix = "%", hoverformat = ".2f"),
       legend = list(orientation = 'h',
                     yref = "paper", y = -.45),
       paper_bgcolor = chart_bg_color,
@@ -987,49 +984,49 @@ server <- function(input, output, session) {
                               measure == "10 years or more"), 
                 x = ~date, y = ~share_of_ue, type = "scatter", mode = "none", 
                 stackgroup = "one", legendgroup = "10 years or more",
-                name = ~measure, showlegend = F, fillcolor = "#db410d") %>% 
+                name = ~measure, showlegend = FALSE, fillcolor = "#db410d") %>% 
       add_trace(data = filter(df_duration, age_group == input$age_dur_1,
                               measure == "5-9 years ago"), 
                 x = ~date, y = ~share_of_ue, type = "scatter", mode = "none", 
                 stackgroup = "one", legendgroup = "5-9 years ago",
-                name = ~measure, showlegend = F, fillcolor = "#db520d") %>%
+                name = ~measure, showlegend = FALSE, fillcolor = "#db520d") %>%
       add_trace(data = filter(df_duration, age_group == input$age_dur_1,
                               measure == "3-4 years ago"), 
                 x = ~date, y = ~share_of_ue, type = "scatter", mode = "none", 
                 stackgroup = "one", legendgroup = "3-4 years ago",
-                name = ~measure, showlegend = F, fillcolor = "#db6d0d") %>% 
+                name = ~measure, showlegend = FALSE, fillcolor = "#db6d0d") %>% 
       add_trace(data = filter(df_duration, age_group == input$age_dur_1,
                               measure == "1-2 years ago"), 
                 x = ~date, y = ~share_of_ue, type = "scatter", mode = "none", 
                 stackgroup = "one", legendgroup = "1-2 years ago", 
-                name = ~measure, showlegend = F, fillcolor = "#db8c0d") %>% 
+                name = ~measure, showlegend = FALSE, fillcolor = "#db8c0d") %>% 
       add_trace(data = filter(df_duration, age_group == input$age_dur_1,
                               measure == "6-12 months ago"), 
                 x = ~date, y = ~share_of_ue, type = "scatter", mode = "none", 
                 stackgroup = "one", legendgroup = "6-12 months ago",
-                name = ~measure, showlegend = F, fillcolor = "#d9a53f") %>%
+                name = ~measure, showlegend = FALSE, fillcolor = "#d9a53f") %>%
       add_trace(data = filter(df_duration, age_group == input$age_dur_1,
                               measure == "3-6 months ago"), 
                 x = ~date, y = ~share_of_ue, type = "scatter", mode = "none", 
                 stackgroup = "one", legendgroup = "3-6 months ago",
-                name = ~measure, showlegend = F, fillcolor = "#e3ca84") %>%
+                name = ~measure, showlegend = FALSE, fillcolor = "#e3ca84") %>%
       add_trace(data = filter(df_duration, age_group == input$age_dur_1,
                               measure == "Less than 3 months ago"), 
                 x = ~date, y = ~share_of_ue, type = "scatter", mode = "none", 
                 stackgroup = "one", legendgroup = "Less than 3 months ago",
-                name = ~measure, showlegend = F, fillcolor = "#e8dc9e") %>%
+                name = ~measure, showlegend = FALSE, fillcolor = "#e8dc9e") %>%
       add_trace(data = filter(df_duration, age_group == input$age_dur_1,
                               measure == "Never worked before"), 
                 x = ~date, y = ~share_of_ue, type = "scatter", mode = "none", 
                 stackgroup = "one", legendgroup = "Never worked before",
-                name = ~measure, showlegend = F, fillcolor = "#9a9c9b")
+                name = ~measure, showlegend = FALSE, fillcolor = "#9a9c9b")
     
     
     dur_graph_1 <- dur_graph_1 %>% layout(
       
       title = "Duration of unemployment by age group",
-      xaxis = list(title = input$age_dur_1, zeroline = FALSE, showgrid = F),
-      yaxis = list(title = "Share of unemployed", zeroline = FALSE, showgrid = F,
+      xaxis = list(title = input$age_dur_1, zeroline = FALSE, showgrid = FALSE),
+      yaxis = list(title = "Share of unemployed", zeroline = FALSE, showgrid = FALSE,
                    ticksuffix = "%", hoverformat = ".2f"),
       margin = list(l = 70, r = 50, t = 50, b = 100),
       paper_bgcolor = chart_bg_color,
@@ -1044,48 +1041,48 @@ server <- function(input, output, session) {
                               measure == "10 years or more"), 
                 x = ~date, y = ~share_of_ue, type = "scatter", mode = "none", 
                 stackgroup = "one", legendgroup = "10 years or more",
-                name = ~measure, showlegend = T, fillcolor = "#db410d") %>% 
+                name = ~measure, showlegend = TRUE, fillcolor = "#db410d") %>% 
       add_trace(data = filter(df_duration, age_group == input$age_dur_2,
                               measure == "5-9 years ago"), 
                 x = ~date, y = ~share_of_ue, type = "scatter", mode = "none", 
                 stackgroup = "one", legendgroup = "5-9 years ago",
-                name = ~measure, showlegend = T, fillcolor = "#db520d") %>%
+                name = ~measure, showlegend = TRUE, fillcolor = "#db520d") %>%
       add_trace(data = filter(df_duration, age_group == input$age_dur_2,
                               measure == "3-4 years ago"), 
                 x = ~date, y = ~share_of_ue, type = "scatter", mode = "none", 
                 stackgroup = "one", legendgroup = "3-4 years ago",
-                name = ~measure, showlegend = T, fillcolor = "#db6d0d") %>% 
+                name = ~measure, showlegend = TRUE, fillcolor = "#db6d0d") %>% 
       add_trace(data = filter(df_duration, age_group == input$age_dur_2,
                               measure == "1-2 years ago"), 
                 x = ~date, y = ~share_of_ue, type = "scatter", mode = "none", 
                 stackgroup = "one", legendgroup = "1-2 years ago", 
-                name = ~measure, showlegend = T, fillcolor = "#db8c0d") %>% 
+                name = ~measure, showlegend = TRUE, fillcolor = "#db8c0d") %>% 
       add_trace(data = filter(df_duration, age_group == input$age_dur_2,
                               measure == "6-12 months ago"), 
                 x = ~date, y = ~share_of_ue, type = "scatter", mode = "none", 
                 stackgroup = "one", legendgroup = "6-12 months ago",
-                name = ~measure, showlegend = T, fillcolor = "#d9a53f") %>%
+                name = ~measure, showlegend = TRUE, fillcolor = "#d9a53f") %>%
       add_trace(data = filter(df_duration, age_group == input$age_dur_2,
                               measure == "3-6 months ago"), 
                 x = ~date, y = ~share_of_ue, type = "scatter", mode = "none", 
                 stackgroup = "one", legendgroup = "3-6 months ago",
-                name = ~measure, showlegend = T, fillcolor = "#e3ca84") %>%
+                name = ~measure, showlegend = TRUE, fillcolor = "#e3ca84") %>%
       add_trace(data = filter(df_duration, age_group == input$age_dur_2,
                               measure == "Less than 3 months ago"), 
                 x = ~date, y = ~share_of_ue, type = "scatter", mode = "none", 
                 stackgroup = "one", legendgroup = "Less than 3 months ago",
-                name = ~measure, showlegend = T, fillcolor = "#e8dc9e") %>%
+                name = ~measure, showlegend = TRUE, fillcolor = "#e8dc9e") %>%
       add_trace(data = filter(df_duration, age_group == input$age_dur_2,
                               measure == "Never worked before"), 
                 x = ~date, y = ~share_of_ue, type = "scatter", mode = "none", 
                 stackgroup = "one", legendgroup = "Never worked before",
-                name = ~measure, showlegend = T, fillcolor = "#9a9c9b")
+                name = ~measure, showlegend = TRUE, fillcolor = "#9a9c9b")
       
 
     dur_graph_2 <- dur_graph_2 %>% layout(
       title = "Duration of unemployment by age group",
-      xaxis = list(title = input$age_dur_2, zeroline = FALSE, showgrid = F),
-      yaxis = list(title = "Share of unemployed persons", zeroline = FALSE, showgrid = F,
+      xaxis = list(title = input$age_dur_2, zeroline = FALSE, showgrid = FALSE),
+      yaxis = list(title = "Share of unemployed persons", zeroline = FALSE, showgrid = FALSE,
                    ticksuffix = "%", hoverformat = ".2f"),
       margin = list(l = 70, r = 50, t = 50, b = 100),
       paper_bgcolor = chart_bg_color,
@@ -1094,7 +1091,7 @@ server <- function(input, output, session) {
       legend = list(title = list(text = "Time since last employed"), traceorder = "reversed")
     )
     
-    dur_graph <- subplot(dur_graph_1, dur_graph_2, titleX = T, shareY = T, 
+    dur_graph <- subplot(dur_graph_1, dur_graph_2, titleX = TRUE, shareY = TRUE, 
                          margin = 0.02)
     
   })
@@ -1128,14 +1125,14 @@ server <- function(input, output, session) {
       xaxis = list(
         title = "Unemployment rate",
         zeroline = FALSE,
-        showgrid = F,
+        showgrid = FALSE,
         ticksuffix = "%",
         hoverformat = ".2f"
       ),
       yaxis = list(
         title = "Median duration unemployed (months)",
         zeroline = FALSE,
-        showgrid = F,
+        showgrid = FALSE,
         hoverformat = ".2f"
       ),
       margin = list(
@@ -1171,8 +1168,8 @@ server <- function(input, output, session) {
     
     pc_ue_gained <- pc_ue_gained %>% layout(
       title = paste0("% unemployed who gained employment by ", input$ue_to_emp_measure),
-      xaxis = list(title = "Date", zeroline = FALSE, showgrid = F),
-      yaxis = list(title = "% unemployed", zeroline = FALSE, showgrid = F, ticksuffix = "%", hoverformat = ".2f"),
+      xaxis = list(title = "Date", zeroline = FALSE, showgrid = FALSE),
+      yaxis = list(title = "% unemployed", zeroline = FALSE, showgrid = FALSE, ticksuffix = "%", hoverformat = ".2f"),
       margin = list(l = 70, r = 50, t = 50, b = 100),
       paper_bgcolor = chart_bg_color,
       plot_bgcolor = chart_bg_color,
@@ -1246,17 +1243,17 @@ server <- function(input, output, session) {
       showlegend = TRUE,
       title = "Unemployment rate against share of households who are disadvantaged",
       xaxis = list(title = "Share of households in bottom decile of disadvantage", 
-                   zeroline = FALSE, showgrid = F, ticksuffix = "%", margin = list(b = 100)),
-      yaxis = list(title = "Unemployment rate", zeroline = FALSE, showgrid = F,
+                   zeroline = FALSE, showgrid = FALSE, ticksuffix = "%", margin = list(b = 100)),
+      yaxis = list(title = "Unemployment rate", zeroline = FALSE, showgrid = FALSE,
                    ticksuffix = "%", hoverformat = ".2f"),
-      margin = list(l = 70, r = 50, t = 50, b = 100, autoexpand = T),
+      margin = list(l = 70, r = 50, t = 50, b = 100, autoexpand = TRUE),
       paper_bgcolor = chart_bg_color,
       plot_bgcolor= chart_bg_color,
       font = list(color = chart_text_color))
     
     youth_unem_graph <- youth_unem_graph %>% 
       animation_opts(
-        frame = 200, transition = 200,  easing = "linear", redraw = F
+        frame = 200, transition = 200,  easing = "linear", redraw = FALSE
       ) %>%
       animation_slider(
         currentvalue = list(font = list(size = 12, color = "grey")),
@@ -1330,8 +1327,8 @@ server <- function(input, output, session) {
 
     educ_emp <- educ_emp %>% layout(
       title = "Employment rates by age and education level",
-      xaxis = list(title = "Date", zeroline = FALSE, showgrid = F),
-      yaxis = list(title = "% population employed", zeroline = FALSE, showgrid = F, ticksuffix = "%", hoverformat = ".2f"),
+      xaxis = list(title = "Date", zeroline = FALSE, showgrid = FALSE),
+      yaxis = list(title = "% population employed", zeroline = FALSE, showgrid = FALSE, ticksuffix = "%", hoverformat = ".2f"),
       margin = list(l = 70, r = 50, t = 50, b = 100),
       paper_bgcolor = chart_bg_color,
       plot_bgcolor = chart_bg_color,
@@ -1398,10 +1395,10 @@ server <- function(input, output, session) {
     neet_timeseries <- neet_timeseries %>% layout(
       title = "Youth NEET rate by age and demographic group",
       xaxis = list(title = "Date", 
-                   zeroline = FALSE, showgrid = F, margin = list(b = 100)),
-      yaxis = list(title = "NEET rate", zeroline = FALSE, showgrid = F,
+                   zeroline = FALSE, showgrid = FALSE, margin = list(b = 100)),
+      yaxis = list(title = "NEET rate", zeroline = FALSE, showgrid = FALSE,
                    tickformat = "1%", hoverformat = ".2f"),
-      margin = list(l = 70, r = 50, t = 50, b = 100, autoexpand = T),
+      margin = list(l = 70, r = 50, t = 50, b = 100, autoexpand = TRUE),
       paper_bgcolor = chart_bg_color,
       plot_bgcolor = chart_bg_color,
       font = list(color = chart_text_color))
@@ -1433,10 +1430,10 @@ server <- function(input, output, session) {
       
       title = "NEET entry and exit rates",
       xaxis = list(title = "Date", 
-                   zeroline = FALSE, showgrid = F, margin = list(b = 100)),
-      yaxis = list(title = "NEET rate", zeroline = FALSE, showgrid = F,
+                   zeroline = FALSE, showgrid = FALSE, margin = list(b = 100)),
+      yaxis = list(title = "NEET rate", zeroline = FALSE, showgrid = FALSE,
                    tickformat = "1%", hoverformat = ".2f"),
-      margin = list(l = 70, r = 50, t = 50, b = 100, autoexpand = T),
+      margin = list(l = 70, r = 50, t = 50, b = 100, autoexpand = TRUE),
       paper_bgcolor = chart_bg_color,
       plot_bgcolor= chart_bg_color,
       font = list(color = chart_text_color))
@@ -1446,27 +1443,36 @@ server <- function(input, output, session) {
   ### Pr(NEET) by distance from CC ####
   output$neet_distance <- renderPlotly({
     
-    p <- df_neet_distance %>% 
-      arrange(mindistance) %>% 
-      ggplot(aes(x=mindistance, y=pred,color=Year)) +
-        geom_line(aes(frame = frame)) +scale_colour_manual(values=heat.colors(18))+
-      theme(legend.position='none')
+    p <- df_neet_distance %>%
+      mutate(label = sprintf("Current year: %s\nComparison year: %s\nProbability: %s", frame, Year, round(pred, 2))) %>% 
+      arrange(mindistance) %>%
+      ggplot(aes(
+        x = mindistance,
+        y = pred,
+        color = Year
+      )) +
+      geom_line(aes(
+        frame = frame,
+        label = label
+      )) + 
+      scale_colour_manual(values = heat.colors(18))+
+      theme(legend.position = "none")
     
-    neet_distance <- ggplotly(p) %>% 
+    neet_distance <- ggplotly(p, tooltip = "label") %>% 
       layout(
-      title = "Probability of NEET over distance (18-24)",
-      
-      xaxis = list(title = "Log distance from nearest capital city", 
-                   zeroline = FALSE, showgrid = F, range = list(1,6),
-                   hoverformat = ".2f"),
-      yaxis = list(title = "Probability of NEET status", zeroline = FALSE, 
-                   showgrid = F, tickformat = "1%", dtick = 0.02, hoverformat = ".2f"),
-      margin = list(l = 70, r = 50, t = 50, b = 100, autoexpand = T),
-      paper_bgcolor = chart_bg_color,
-      plot_bgcolor= chart_bg_color,
-      font = list(color = chart_text_color)) %>% 
+        title = "Probability of NEET over distance (18-24)",
+        xaxis = list(title = "Log distance from nearest capital city", 
+                     zeroline = FALSE, showgrid = FALSE, range = list(1, 6),
+                     hoverformat = ".2f"),
+        yaxis = list(title = "Probability of NEET status", zeroline = FALSE, 
+                     showgrid = FALSE, tickformat = "1%", dtick = 0.02, hoverformat = ".2f"),
+        margin = list(l = 70, r = 50, t = 50, b = 100, autoexpand = TRUE),
+        paper_bgcolor = chart_bg_color,
+        plot_bgcolor= chart_bg_color,
+        font = list(color = chart_text_color)
+        ) %>% 
       animation_opts(
-        frame = 200, transition = 200,  easing = "linear", redraw = F
+        frame = 200, transition = 200,  easing = "linear", redraw = FALSE
       ) %>%
       animation_slider(
         currentvalue = list(font = list(size = 12, color = "grey")),
@@ -1581,11 +1587,11 @@ server <- function(input, output, session) {
   },
   options = list(
     pageLength = 5,
-    searching = F,
-    paging = F,
+    searching = FALSE,
+    paging = FALSE,
     scrollY = 200,
-    scrollCollapse = T,
-    fixedHeader = T
+    scrollCollapse = TRUE,
+    fixedHeader = TRUE
   ))
  }
 
