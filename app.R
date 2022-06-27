@@ -246,9 +246,12 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
     column(
       width = 4,
       class = "m-2",
-      h6("PENDING REAL DATA: Job mismatches"),
+      h6("Job mismatches"),
       p(
         "Young workers have a greater need to sort into well-matched jobs in the formative years of their careers (Topel and Ward 1992). Young job switchers experience faster wage growth than older job switchers (of around 6.5 percentage points per annum on average). This is consistent with evidence suggesting that 80 per cent of career earnings growth occurs in the first decade of work (Murphy and Welch 1990). Second, disadvantage young workers tend to experience larger wage gains from switching jobs than those that are not disadvantaged."
+      ),
+      p(
+        "Job match quality is measured using an individual’s highest level of educational attainment (measured in discrete buckets: below year 10, years 10-12, advanced diploma, bachelor degree or post-graduate degree) relative to the modal level of education of all workers in the same occupation (using two digit ANZSCO 2013 codes) and age group.  A worker is considered underskilled if their level of educational attainment is below the mode, overskilled if above and matched if equal to the mode.  Multiple modes in an occupation are tie broken by taking the highest level of education as the mode."
       )
     ),
   ),
@@ -274,8 +277,12 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
     column(
       width = 4,
       class = "m-2",
-      h6("PENDING REAL DATA: Beneficial job transitions"),
-      p("The pandemic was associated with a decline in the quality of – or what may be considered “helpful” – job transitions.  That is, the share of young workers transitioning into better matched jobs – from previously mismatched or matched jobs – declined sharply. This marked decline was not observed for older workers, nor was it observed during the GFC.")
+      h6("Beneficial job transitions"),
+      p("Job switching is an important mechanism for improving the productivity of mismatched workers by reallocating their labour to firms where they are more productive. The pandemic resulted in a sharp decline in the rate of job-switching among workers who we considered mis-matched (over- or under-skilled) in their occupation 12 months ago."
+      ),
+      p(
+        "This decline in job switching was particularly pronounced amongst mismatched workers for all age groups. Job switching is particularly important for younger workers, as a failure to switch jobs can hamper their ability to climb the job ladder and increase their incomes.  Fortunately, the rate of job-switching has recovered in the 12 months to February 2022."
+        )
     ),
   ),
 
@@ -307,7 +314,7 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
       class = "m-2",
       h6("Main youth occupations"),
       p("Employment opportunities for young people are primarily in services, specifically in hospitality, food preparation and sales assistant roles. The share of young people in these roles is highest in younger age groups, reflecting young people taking up these jobs part-time alongside further education or as their first jobs after completing secondary education."),
-      p("For 23-25 year olds, the share of employment in these roles is smaller, reflecting a larger share of this cohort having completed tertiary education and working in roles requiring post-secondary qualifications. However, in the lead-up to the pandemic, the share of 23-25 year olds still working in hospitality or sales has been increasing[, potentially driven by a larger share remaining in tertiary education or worse employment prospects in other industries.]")
+      p("For 23-25 year olds, the share of employment in these roles is smaller, reflecting a larger share of this cohort having completed tertiary education and working in roles requiring post-secondary qualifications. However, in the lead-up to the pandemic, the share of 23-25 year olds still working in hospitality or sales has been increasing, potentially driven by a larger share remaining in tertiary education or worse employment prospects in other industries.")
     )
   )
   )
@@ -592,8 +599,9 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
         column(
           width = 4,
           class = "m-2",
-          h6("First takeaway"),
-          p("This graph still needs to be made")
+          h6("More education tends to increase employment"),
+          p("Across age and gender groups, higher levels of education are associated with higher employment rates. People who have not completed high school have the lowest employment rates, whereas people who have completed Bachelor-level or higher qualifications have the strongest rates of employment."),
+          p("Note that the employment rates for 15-24 year old postgraduates is highly variable due to a small sample and the fact that many people in this age group would still be in education rather than having completed postgraduate qualifications.")
         )
       )
 
@@ -620,9 +628,10 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
           div(plotlyOutput("neet_timeseries"),
               br(),
               p("Source: ABS Labour Force, Detailed",
-                class = "source-text")),
+                class = "source-text")
+              ),
           fluidRow(column(
-            width = 6,
+            width = 10,
             radioButtons(
               "neet_dem",
               "Select demographic: ",
@@ -631,7 +640,7 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
               inline = TRUE
             ),
             column(
-              width = 6,
+              width = 10,
               radioButtons(
                 "neet_age",
                 "Select age group: ",
@@ -640,14 +649,14 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
                 inline = TRUE
               )
             ))
-          ),
-          column(
-            width = 9,
-            class = "m-2",
-            h6("Youth NEET tends to increase during economic downturns"),
-            p(
-              "The share of youth who are not in employment, education or training (NEET) has been broadly steady in Australia since 2000. The share tends to increase during economic downturns, such as the Global Financial Crisis in 2008 and the COVID-19 recession in 2020. In the past two years the aggregate NEET rate has declined back towards historic levels."
-            )
+          )
+        ),
+        column(
+          width = 4,
+          class = "m-2",
+          h6("Youth NEET tends to increase during economic downturns"),
+          p(
+            "The share of youth who are not in employment, education or training (NEET) has been broadly steady in Australia since 2000. The share tends to increase during economic downturns, such as the Global Financial Crisis in 2008 and the COVID-19 recession in 2020. In the past two years the aggregate NEET rate has declined back towards historic levels."
           )
         ),
         fluidRow(
