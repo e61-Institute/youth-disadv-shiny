@@ -158,7 +158,7 @@ ui <- shinyUI(
                     "agg_ages",
                     "Select age groups:",
                     choices = unique(df_unemp$age_group),
-                    selected = c("Total", "15-24 years")
+                    selected = c("15-24 years", "25-64 years")
                   )
                 ),
               )
@@ -899,7 +899,7 @@ server <- function(input, output, session) {
     pc_mismatched <- pc_mismatched %>% layout(
       title = "Share of employed people by skill matching status",
       xaxis = list(title = "Year", zeroline = FALSE, showgrid = FALSE),
-      yaxis = list(title = "% mismatched", zeroline = FALSE, showgrid = FALSE,
+      yaxis = list(title = "% of workers", zeroline = FALSE, showgrid = FALSE,
                    ticksuffix = "%", hoverformat = ".2f"),
       margin = list(l = 70, r = 50, t = 50, b = 100),
       paper_bgcolor = chart_bg_color,
@@ -981,45 +981,25 @@ server <- function(input, output, session) {
     dur_graph_1 <- df_duration %>% filter(age_group == input$age_dur_1) %>% 
       plot_ly(x = ~date) %>% 
       add_trace(data = filter(df_duration, age_group == input$age_dur_1,
-                              measure == "10 years or more"), 
+                              measure == "More than 1 year ago"), 
                 x = ~date, y = ~share_of_ue, type = "scatter", mode = "none", 
-                stackgroup = "one", legendgroup = "10 years or more",
-                name = ~measure, showlegend = FALSE, fillcolor = "#db410d") %>% 
+                stackgroup = "one", legendgroup = "More than 1 year ago",
+                name = ~measure, showlegend = FALSE, fillcolor = "#fde725") %>%
       add_trace(data = filter(df_duration, age_group == input$age_dur_1,
-                              measure == "5-9 years ago"), 
+                              measure == "3 months to 1 year ago"), 
                 x = ~date, y = ~share_of_ue, type = "scatter", mode = "none", 
-                stackgroup = "one", legendgroup = "5-9 years ago",
-                name = ~measure, showlegend = FALSE, fillcolor = "#db520d") %>%
-      add_trace(data = filter(df_duration, age_group == input$age_dur_1,
-                              measure == "3-4 years ago"), 
-                x = ~date, y = ~share_of_ue, type = "scatter", mode = "none", 
-                stackgroup = "one", legendgroup = "3-4 years ago",
-                name = ~measure, showlegend = FALSE, fillcolor = "#db6d0d") %>% 
-      add_trace(data = filter(df_duration, age_group == input$age_dur_1,
-                              measure == "1-2 years ago"), 
-                x = ~date, y = ~share_of_ue, type = "scatter", mode = "none", 
-                stackgroup = "one", legendgroup = "1-2 years ago", 
-                name = ~measure, showlegend = FALSE, fillcolor = "#db8c0d") %>% 
-      add_trace(data = filter(df_duration, age_group == input$age_dur_1,
-                              measure == "6-12 months ago"), 
-                x = ~date, y = ~share_of_ue, type = "scatter", mode = "none", 
-                stackgroup = "one", legendgroup = "6-12 months ago",
-                name = ~measure, showlegend = FALSE, fillcolor = "#d9a53f") %>%
-      add_trace(data = filter(df_duration, age_group == input$age_dur_1,
-                              measure == "3-6 months ago"), 
-                x = ~date, y = ~share_of_ue, type = "scatter", mode = "none", 
-                stackgroup = "one", legendgroup = "3-6 months ago",
-                name = ~measure, showlegend = FALSE, fillcolor = "#e3ca84") %>%
+                stackgroup = "one", legendgroup = "3 months to 1 year ago",
+                name = ~measure, showlegend = FALSE, fillcolor = "#21918c") %>%
       add_trace(data = filter(df_duration, age_group == input$age_dur_1,
                               measure == "Less than 3 months ago"), 
                 x = ~date, y = ~share_of_ue, type = "scatter", mode = "none", 
                 stackgroup = "one", legendgroup = "Less than 3 months ago",
-                name = ~measure, showlegend = FALSE, fillcolor = "#e8dc9e") %>%
+                name = ~measure, showlegend = FALSE, fillcolor = "#3b528b") %>%
       add_trace(data = filter(df_duration, age_group == input$age_dur_1,
                               measure == "Never worked before"), 
                 x = ~date, y = ~share_of_ue, type = "scatter", mode = "none", 
                 stackgroup = "one", legendgroup = "Never worked before",
-                name = ~measure, showlegend = FALSE, fillcolor = "#9a9c9b")
+                name = ~measure, showlegend = FALSE, fillcolor = "#440154")
     
     
     dur_graph_1 <- dur_graph_1 %>% layout(
@@ -1038,46 +1018,26 @@ server <- function(input, output, session) {
     dur_graph_2 <- df_duration %>% filter(age_group == input$age_dur_2) %>% 
       plot_ly(x = ~date) %>% 
       add_trace(data = filter(df_duration, age_group == input$age_dur_2,
-                              measure == "10 years or more"), 
+                              measure == "More than 1 year ago"), 
                 x = ~date, y = ~share_of_ue, type = "scatter", mode = "none", 
-                stackgroup = "one", legendgroup = "10 years or more",
-                name = ~measure, showlegend = TRUE, fillcolor = "#db410d") %>% 
+                stackgroup = "one", legendgroup = "More than 1 year ago",
+                name = ~measure, showlegend = TRUE, fillcolor = "#fde725") %>%
       add_trace(data = filter(df_duration, age_group == input$age_dur_2,
-                              measure == "5-9 years ago"), 
+                              measure == "3 months to 1 year ago"), 
                 x = ~date, y = ~share_of_ue, type = "scatter", mode = "none", 
-                stackgroup = "one", legendgroup = "5-9 years ago",
-                name = ~measure, showlegend = TRUE, fillcolor = "#db520d") %>%
-      add_trace(data = filter(df_duration, age_group == input$age_dur_2,
-                              measure == "3-4 years ago"), 
-                x = ~date, y = ~share_of_ue, type = "scatter", mode = "none", 
-                stackgroup = "one", legendgroup = "3-4 years ago",
-                name = ~measure, showlegend = TRUE, fillcolor = "#db6d0d") %>% 
-      add_trace(data = filter(df_duration, age_group == input$age_dur_2,
-                              measure == "1-2 years ago"), 
-                x = ~date, y = ~share_of_ue, type = "scatter", mode = "none", 
-                stackgroup = "one", legendgroup = "1-2 years ago", 
-                name = ~measure, showlegend = TRUE, fillcolor = "#db8c0d") %>% 
-      add_trace(data = filter(df_duration, age_group == input$age_dur_2,
-                              measure == "6-12 months ago"), 
-                x = ~date, y = ~share_of_ue, type = "scatter", mode = "none", 
-                stackgroup = "one", legendgroup = "6-12 months ago",
-                name = ~measure, showlegend = TRUE, fillcolor = "#d9a53f") %>%
-      add_trace(data = filter(df_duration, age_group == input$age_dur_2,
-                              measure == "3-6 months ago"), 
-                x = ~date, y = ~share_of_ue, type = "scatter", mode = "none", 
-                stackgroup = "one", legendgroup = "3-6 months ago",
-                name = ~measure, showlegend = TRUE, fillcolor = "#e3ca84") %>%
+                stackgroup = "one", legendgroup = "3 months to 1 year ago",
+                name = ~measure, showlegend = TRUE, fillcolor = "#21918c") %>%
       add_trace(data = filter(df_duration, age_group == input$age_dur_2,
                               measure == "Less than 3 months ago"), 
                 x = ~date, y = ~share_of_ue, type = "scatter", mode = "none", 
                 stackgroup = "one", legendgroup = "Less than 3 months ago",
-                name = ~measure, showlegend = TRUE, fillcolor = "#e8dc9e") %>%
+                name = ~measure, showlegend = TRUE, fillcolor = "#3b528b") %>%
       add_trace(data = filter(df_duration, age_group == input$age_dur_2,
                               measure == "Never worked before"), 
                 x = ~date, y = ~share_of_ue, type = "scatter", mode = "none", 
                 stackgroup = "one", legendgroup = "Never worked before",
-                name = ~measure, showlegend = TRUE, fillcolor = "#9a9c9b")
-      
+                name = ~measure, showlegend = TRUE, fillcolor = "#440154")
+    
 
     dur_graph_2 <- dur_graph_2 %>% layout(
       title = "Duration of unemployment by age group",
