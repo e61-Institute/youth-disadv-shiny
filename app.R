@@ -59,7 +59,7 @@ df_neet_distance <- read_csv("data/neet_distance_fitted_values.csv")
 # utils
 
 breakerfn <- function(x){
-  df <- subset(df_neet_distance,wave %in% c(4,seq(max(c(x-3,3)),x,1)))
+  df <- subset(df_neet_distance,wave %in% c(3,seq(max(c(x-3,3)),x,1)))
   df$frame <- x+2000
   df$Year <- as.character(df$wave +2000)
   return(setDT(df))
@@ -699,7 +699,7 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
         fluidRow(
           ### Pr(NEET) by distance from CC ####
           column(
-            width = 7,
+            width = 5,
             class = "m-2",
             plotlyOutput("neet_distance"),
             br(),
@@ -707,7 +707,7 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
               class = "source-text"),
           ),
           column(
-            width = 4,
+            width = 6,
             class = "m-2",
             h6("Youth in regional areas experience higher probabilities of being NEET"),
             p(
