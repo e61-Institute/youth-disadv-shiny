@@ -59,7 +59,7 @@ df_neet_distance <- read_csv("data/neet_distance_fitted_values.csv")
 # utils
 
 breakerfn <- function(x){
-  df <- subset(df_neet_distance,wave %in% (seq(max(c(x-3,3)),x,1)))
+  df <- subset(df_neet_distance,wave %in% c(4,seq(max(c(x-3,3)),x,1)))
   df$frame <- x+2000
   df$Year <- as.character(df$wave +2000)
   return(setDT(df))
