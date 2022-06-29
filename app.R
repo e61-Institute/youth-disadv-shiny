@@ -406,7 +406,7 @@ ui <- shinyUI(
           )
         )
       ),
-      
+
       fluidRow(
         ### U/E regaining employment ####
         column(
@@ -480,11 +480,11 @@ ui <- shinyUI(
           animate = animationOptions(interval = 1000, loop = FALSE)
           # Note that animation needs to be fixed - it currently causes the map to reload, which takes too much time
         )
-      ), 
+      ),
       ),
     )
     )
-  ), 
+  ),
   
   
   ## Section 4 - Disadv areas ####
@@ -610,7 +610,7 @@ ui <- shinyUI(
           )
         )
       )
-
+)
     )
   )
   ),
