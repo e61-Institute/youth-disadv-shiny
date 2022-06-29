@@ -1409,7 +1409,8 @@ server <- function(input, output, session) {
         frame = frame,
         label = label
       )) + 
-      scale_colour_manual(values = heat.colors(18))+
+      scale_colour_manual(values = heat.colors(18)) +
+      scale_y_continuous(limits = c(0, 0.2), expand = expansion()) +
       theme(legend.position = "none")
     
     neet_distance <- ggplotly(p, tooltip = "label") %>% 
