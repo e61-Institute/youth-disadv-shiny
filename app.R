@@ -46,7 +46,8 @@ df_duration <- read_csv("data/duration unemployed shares.csv")
 df_occupation <- read_csv("data/two_digit_occupation_by_age.csv")
 df_youth_unem <- read_csv("data/youth-ihad-unemployment.csv")
 df_neet <- read_csv("data/aggregate_neet_rate_sa.csv")
-df_neet_2 <- read_csv("data/neet-entry-exit-rates.csv")
+df_neet_2 <- read_csv("data/neet-entry-exit-rates.csv") %>% 
+  mutate(exit = -exit)
 df_duration_v_ue <- read_csv("data/duration_v_rates_unemployment.csv")
 df_pc_mismatched <- read_csv("data/distribution_of_skill_mismatch_by_age.csv")
 df_jobswitchers <- read_csv("data/jobswitchers_by_mismatch_status.csv")
@@ -887,12 +888,11 @@ server <- function(input, output, session) {
         y = ~ share,
         color = ~skill_level,
         colors = c("#1b9e77", "#d95f02", "#7570b3"),
-        type = "scatter",
-        mode = "lines",
-        fill = ~""
+        type = "bar"
       )
     
     pc_mismatched <- pc_mismatched %>% layout(
+      barmode = "stack",
       title = "Share of employed people by skill matching status",
       xaxis = list(title = "Year", zeroline = FALSE, showgrid = FALSE),
       yaxis = list(title = "% of workers", zeroline = FALSE, showgrid = FALSE,
@@ -1364,8 +1364,6 @@ server <- function(input, output, session) {
   ### NEET entry and exit rates ####
   output$neet_entry_exit <- renderPlotly({
     
-    df_neet_2$exit <- -df_neet_2$exit
-    
     neet_entry_exit <-
       df_neet_2 %>% filter(demo_split == input$neet_entry_exit_dem) %>%
       plot_ly(
@@ -1373,14 +1371,14 @@ server <- function(input, output, session) {
         y = ~ neet_flow,
         type = "scatter",
         mode = "lines",
-        name = "NEET flow", 
+        name = "Net change in NEET", 
         fill = ~""
       ) %>%
       rangeslider(start = min(df_neet_2$date), end = max(df_neet_2$date))
     
     neet_entry_exit <- neet_entry_exit %>% 
-      add_trace(x = ~date, y = ~entry, type = 'scatter', fill = 'tozeroy', name = "Entries") %>% 
-      add_trace(x = ~date, y = ~exit, type = 'scatter', fill = 'tozeroy', name = "Exits") 
+      add_trace(x = ~date, y = ~entry, type = 'scatter', fill = 'tozeroy', fillcolor = "#fd7e1432", name = "Entries") %>% 
+      add_trace(x = ~date, y = ~exit, type = 'scatter', fill = 'tozeroy', fillcolor = "#19875432", name = "Exits") 
     
     neet_entry_exit <- neet_entry_exit %>% layout(
       
@@ -1388,7 +1386,7 @@ server <- function(input, output, session) {
       xaxis = list(title = "Date", 
                    zeroline = FALSE, showgrid = FALSE, margin = list(b = 100)),
       yaxis = list(title = "NEET rate", zeroline = FALSE, showgrid = FALSE,
-                   tickformat = "1%", hoverformat = ".2f"),
+                   tickformat = "1%", hoverformat = ".2%"),
       margin = list(l = 70, r = 50, t = 50, b = 100, autoexpand = TRUE),
       paper_bgcolor = chart_bg_color,
       plot_bgcolor= chart_bg_color,
@@ -1416,7 +1414,7 @@ server <- function(input, output, session) {
     
     neet_distance <- ggplotly(p, tooltip = "label") %>% 
       layout(
-        title = "Probability of NEET over distance (18-24)",
+        title = "Chance of being NEET and distance from nearest capital city",
         xaxis = list(title = "Log distance from nearest capital city", 
                      zeroline = FALSE, showgrid = FALSE, range = list(1, 6),
                      hoverformat = ".2f"),
