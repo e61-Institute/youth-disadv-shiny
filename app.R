@@ -595,7 +595,7 @@ ui <- shinyUI(
                    "sex_educ_v_emp",
                    "Select Sex: ",
                    choices = unique(df_educ_emp$Sex),
-                   selected = "Males"
+                   selected = "Total"
                  ),
                  div(class = "m-2",
                      p("Source: ABS Detailed Labour Force Survey", class = "source-text"),),
@@ -607,7 +607,7 @@ ui <- shinyUI(
           h6("More education tends to increase employment"),
           tags$ul(
             tags$li("Across age and gender groups, higher levels of education are associated with higher employment rates. People who have not completed high school have the lowest employment rates, whereas people who have completed Bachelor-level or higher qualifications have the strongest rates of employment."),
-            tags$li("Note that the employment rates for 15-24 year old postgraduates is highly variable due to a small sample and the fact that many people in this age group would still be in education rather than having completed postgraduate qualifications.")
+            tags$li("Note: 15-24 year old Bachelor's degree and postgraduates are combined due to issues with small sample sizes.")
           )
         )
       )
