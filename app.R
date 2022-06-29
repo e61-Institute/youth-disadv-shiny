@@ -46,7 +46,8 @@ df_duration <- read_csv("data/duration unemployed shares.csv")
 df_occupation <- read_csv("data/two_digit_occupation_by_age.csv")
 df_youth_unem <- read_csv("data/youth-ihad-unemployment.csv")
 df_neet <- read_csv("data/aggregate_neet_rate_sa.csv")
-df_neet_2 <- read_csv("data/neet-entry-exit-rates.csv")
+df_neet_2 <- read_csv("data/neet-entry-exit-rates.csv") %>% 
+  mutate(exit = -exit)
 df_duration_v_ue <- read_csv("data/duration_v_rates_unemployment.csv")
 df_pc_mismatched <- read_csv("data/distribution_of_skill_mismatch_by_age.csv")
 df_jobswitchers <- read_csv("data/jobswitchers_by_mismatch_status.csv")
@@ -129,9 +130,7 @@ ui <- shinyUI(
       column(
         width = 12,
         class = "card m-2",
-        h3(
-          "The recovery from the pandemic has been uneven for vulnerable groups"
-        ),
+        h3("The recovery from the pandemic has been uneven for vulnerable groups"),
         br(),
         fluidRow(
           width = 12,
@@ -158,7 +157,7 @@ ui <- shinyUI(
                     "agg_ages",
                     "Select age groups:",
                     choices = unique(df_unemp$age_group),
-                    selected = c("Total", "15-24 years")
+                    selected = c("15-24 years", "25-64 years")
                   )
                 ),
               )
@@ -167,18 +166,16 @@ ui <- shinyUI(
           column(
             width = 4,
             class = "m-2",
-            h6("Aggregate labour market measures indicate a strong recovery"),
-            p(
-              "In aggregate terms the recovery has been strong, unemployment is at historic lows, while the employment-to-population ratio is well above pre-pandemic levels. Although aggregate labour market indicators show that as a whole, the labour market is strong, including for young Australians, the recovery has been uneven for some groups of vulnerable young people, which this data visualisation will explore.
-"
-            ),
-h6("The employment-to-population ratio is high and unemployment is low"),
-p(
-  "The employment-to-population ratio for young Australians aged between 15-24 years is now higher than that of the total population after being below the total population rate throughout the 2010s.
-
-However, the unemployment rate for 15-24 year olds continues to be significantly higher than that for the total population, although the absolute rate has declined sharply from pandemic highs to be at the lowest level since 2008. This reflected the overrepresentation of young people in industries -- hospitality and arts and recreation services -- that were most affected by the pandemic.
-"
-)
+            h6("The labour market is in a strong recovery phase "),
+            tags$ul(
+              tags$li("The Australian labour market has rebounded strongly from the initial shock of the COVID-19 pandemic, with the unemployment rate at historic lows and the employment-to-population ratio well above pre-pandemic levels."), 
+              tags$li("These aggregate labour market indicators partly mask the fact that the recovery has been somewhat uneven with some evidence that certain groups of vulnerable young people have been left behind – a situation this data visualisation will explore.")
+              ),
+            h6("The employment-to-population ratio is high and unemployment is low"),
+            tags$ul(
+              tags$li("The employment-to-population ratio for young Australians aged between 15-24 years has increased well above pre-pandemic levels. This improvement has been stronger than that of the 25-64 year old population."),
+              tags$li("Labour market outcomes for young people are more sensitive to economic downturns and recoveries, as shown by the sharp increase and rapid decline in the unemployment rate for 15-24 year olds during the pandemic.") 
+            )
           ),
         ),
       ),
@@ -221,9 +218,11 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
           column(
             width = 4,
             class = "m-2",
-            h6("Job mobility has recovered from COVID-19 levels"),
-            p("Recessions cause a decrease in the quality of job matches for two reasons. The relative shortage of high-quality jobs in a downturn forces workers to shift down the job quality ladder and potentially take jobs to which they are less well matched. In addition, recessions often damage labour mobility prospects, which can lead recent entrants to be trapped in poorly matched jobs.  Thus, the incidence of mismatch is likely to be greater following a sustained period of weakness in the labour market."),
-            p("Job mobility (the share of workers changing jobs in the past year) has increased in 2022, following declines in 2020 and 2021 relative to pre-pandemic levels. The pandemic constrained the ability of workers to move location and switch to better matched jobs, hampering their ability to climb the job ladder. This effect appears to have eased, although part of the increase in mobility may represent a partial catch-up on previous years.")
+            h6("Job mobility in the youth labour market has recovered from the initial shock of the COVID-19 pandemic, though it remains below pre-GFC levels"),
+            tags$ul(
+              tags$li("The ability to move between jobs allows workers to find work that better matches their skills and interests and this, in turn, typically leads to higher pay. In the early days of the pandemic, opportunities to move to better matched jobs were limited and many workers stayed with their employers."),
+              tags$li("Job mobility has recovered to be higher than the rates observed over the past decade, though the rate of job mobility for young workers remains below the levels observed in the period before the Global Financial Crisis.")
+            )
           ),
         ),
 
@@ -247,12 +246,10 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
     column(
       width = 4,
       class = "m-2",
-      h6("Job mismatch rates are broadly unchanged"),
-      p(
-        "Young workers have a greater need to sort into well-matched jobs in the formative years of their careers (Topel and Ward 1992). Young job switchers experience faster wage growth than older job switchers (of around 6.5 percentage points per annum on average). This is consistent with evidence suggesting that 80 per cent of career earnings growth occurs in the first decade of work (Murphy and Welch 1990). Second, disadvantage young workers tend to experience larger wage gains from switching jobs than those that are not disadvantaged."
-      ),
-      p(
-        "Job match quality is measured using an individual’s highest level of educational attainment (measured in discrete buckets: below year 10, years 10-12, advanced diploma, bachelor degree or post-graduate degree) relative to the modal level of education of all workers in the same occupation (using two digit ANZSCO 2013 codes) and age group.  A worker is considered underskilled if their level of educational attainment is below the mode, overskilled if above and matched if equal to the mode.  Multiple modes in an occupation are tie broken by taking the highest level of education as the mode."
+      h6("A significant share of young workers report being mismatched to their jobs"),
+      tags$ul(
+        tags$li("Job mismatch is especially concerning for young workers, with evidence suggesting that 80 per cent of career earnings growth occurs in the first decade of work (Murphy and Welch 1990) and the ability to switch jobs to `find the right fit’ is important in generating faster earnings growth."),
+        tags$li("The share of young workers that report being mismatched has not changed much over recent years and the COVID-19 recession had limited effects on mismatch rates.")
       )
     ),
   ),
@@ -278,12 +275,10 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
     column(
       width = 4,
       class = "m-2",
-      h6("The rate of beneficial job transitions is steady"),
-      p("Job switching is an important mechanism for improving the productivity of mismatched workers by reallocating their labour to firms where they are more productive. The pandemic resulted in a sharp decline in the rate of job-switching among workers who we considered mis-matched (over- or under-skilled) in their occupation 12 months ago."
-      ),
-      p(
-        "This decline in job switching was particularly pronounced amongst mismatched workers for all age groups. Job switching is particularly important for younger workers, as a failure to switch jobs can hamper their ability to climb the job ladder and increase their incomes.  Fortunately, the rate of job-switching has recovered in the 12 months to February 2022."
-        )
+      h6("The rate of 'helpful’ job transitions for mismatched workers is steady"),
+      tags$ul(
+        tags$li("Higher rates of job switching are particularly important for young workers in the wrong jobs (mismatched workers). The pandemic initially caused a sharp decline in the rate of job-switching for mismatched workers, though the rate of switching has recovered since then.")
+      )
     ),
   ),
 
@@ -314,8 +309,10 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
       width = 4,
       class = "m-2",
       h6("Young people increasingly work in lower-skilled services roles"),
-      p("Employment opportunities for young people are primarily in services, specifically in hospitality, food preparation and sales assistant roles. The share of young people in these roles is highest in younger age groups, reflecting young people taking up these jobs part-time alongside further education or as their first jobs after completing secondary education."),
-      p("For 23-25 year olds, the share of employment in these roles is smaller, reflecting a larger share of this cohort having completed tertiary education and working in roles requiring post-secondary qualifications. However, in the lead-up to the pandemic, the share of 23-25 year olds still working in hospitality or sales has been increasing, potentially driven by a larger share remaining in tertiary education or worse employment prospects in other industries.")
+      tags$ul(
+        tags$li("Employment opportunities for young people are primarily in services, specifically in hospitality, food preparation and sales assistant roles. The share of young people in these roles is highest in younger age groups, reflecting young people taking up these jobs part-time alongside further education or as their first jobs after completing secondary education."),
+        tags$li("For 23-25 year olds, the share of employment in these roles is smaller, reflecting a larger share of this cohort having completed tertiary education and working in roles requiring post-secondary qualifications. However, in the lead-up to the pandemic, the share of 23-25 year olds still working in hospitality or sales has been increasing, potentially driven by a larger share remaining in tertiary education or worse employment prospects in other industries.")
+      )
     )
   )
   )
@@ -368,9 +365,9 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
       fluidRow(column(
         width = 6,
         class = "m-2",
-        h6("A large share of unemployed youth have been unemployed long-term"),
-        p(
-          "Long periods of time out of employment make it more difficult to transition back into employment. An elevated share of 15-24 year olds have been unemployed for 1 year or more relative to the total population. Although the COVID-19 recession exacerbated this problem, this was an ongoing concern well before the pandemic."
+        h6("There is some evidence of a growing share of young people that have been out of work for a lengthy period of time"),
+        tags$ul(
+          tags$li("Since the pandemic there has been a significant increase in the share of young workers that have been unemployed for more than a year. The pandemic has exacerbated the long-term youth unemployment problem that has been apparent since the GFC.")
         )
       )),
       ### U/E duration vs rate ####
@@ -391,7 +388,7 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
             "dur_v_ue_year_2",
             "Select second year: ",
             choices = unique(df_duration_v_ue$year),
-            selected = min(df_duration_v_ue$year)
+            selected = max(df_duration_v_ue$year)
           ),
           radioButtons(
             "dur_v_ue_age",
@@ -404,12 +401,13 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
         column(
           width = 4,
           class = "m-2",
-          h6("Unemployment rates and duration are positively correlated"),
-          p("This graph shows the relationship between the unemployment rate and the median time since previous employment across different areas of Australia. Areas with a higher unemployment rates tend to have longer median unemployment durations, reflecting the difficulty that the long-term unemployed have when searching for employment. As the unemployment rate declines, the median time between jobs will decline if a greater number of long term unemployed enter employment relative to the newly unemployed."),
-          p("To overcome small cell counts, geographic areas are a custom mix of states, GCCSA areas and SA4s, with higher granularity taken where the sample size allowed. The line of best fit for each selected year highlights the relationship between the two variables.  A steeper line indicates a stronger relationship between the variables.")
+          h6("The regions of Australia with the highest rates of unemployment are also those in which people are spending the most time out of work"),
+          tags$ul(
+            tags$li("The positive correlation between unemployment rates and unemployment duration across regions indicates that some regions are particularly susceptible to long-term scarring effects from the pandemic-induced recession.")
+          )
         )
       ),
-      
+
       fluidRow(
         ### U/E regaining employment ####
         column(
@@ -422,7 +420,7 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
             "ue_to_emp_measure",
             "Select measure: ",
             choices = unique(df_ue_gained$measure),
-            selected = "Geography",
+            selected = "Duration of job search",
             inline = TRUE
           ),
           radioButtons(
@@ -437,16 +435,17 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
           width = 4,
           class = "m-2",
           h6("The long-term unemployed face greater difficulty finding work"),
-          p("This graph visualises the rate of churn amongst the unemployed, plotting the percentage of unemployed who enter employment by age group as well as geographic area, duration of job search and duration since last employed."),
-          p("The share of unemployed workers finding employment in a given month is broadly similar across urban and regional areas, with unemployed workers in urban and regional areas benefiting from the strong labour market recovery. Workers who have been searching for work for more than six months face greater difficulty transitioning back into employment. Similarly, people who have never worked or have not worked in over 6 months, also have lower probabilities of entering employment compared to people who have worked more recently. These trends have remained consistent over the past 15 years.")
+          tags$ul(
+            tags$li("This graph shows the proportion of unemployed individuals who managed to get a job over time. There are three key areas where there is a risk that job finding may have become more difficult: for those in regional areas, for those who have been searching for work for a long time, and for those who have never worked."),
+            tags$li("There are concerns that labour markets in regional areas are weaker than in cities. However, Tthe share of unemployed workers finding employment in a given month is broadly similar across urban and regional areas, with unemployed workers in urban and regional areas benefiting from the strong labour market recovery."),
+            tags$li("Workers who have been searching for work for more than six months face greater difficulty transitioning back into employment. Similarly, people who have never worked or have not worked in over 6 months, also have lower probabilities of entering employment compared to people who have worked more recently. These trends have remained consistent over the past 15 years.")
+          )
         )
       ),
       div(
         class = "m-2",
         br(),
-        h5(
-          "Relative intensity of Jobseeker recipients share for 18-24 year olds"
-        )
+        h5("Relative intensity of Jobseeker recipients share for 18-24 year olds")
       ),
       fluidRow(
         ### JS relative intensity from illion ####
@@ -455,12 +454,10 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
         column(
           width = 4,
           class = "m-2",
-          h6("Jobseeker recipient share for 18-24 year olds"),
-          p(
-            "This map uses illion data to estimate the relative shares of Jobseeker and Youth Allowance (for job seekers) payments in regions across Australia. The data are presented as an index between 0 and 100, with higher numbers indicating a greater relative share of the population in that region are on support payments compared to the rest of Australia."
-          ),
-          p(
-            "Whilst the share of individuals on support payments change over time, areas that are associated with greater disadvantage such as outer suburban and regional Australia tend to have larger relative shares of individuals on support payments."
+          h6("Young Jobseeker recipients are highly concentrated in disadvantaged regions"),
+          tags$ul(
+            tags$li("The share of young people that are receiving JobSeeker payments is concentrated in areas associated with greater disadvantage, such as outer suburban and regional Australia."),
+            tags$li("This map uses illion data to estimate the relative shares of Jobseeker and Youth Allowance (for job seekers) payments in regions across Australia. The data are presented as an index between 0 and 100, with higher numbers indicating a greater relative share of the population in that region are on support payments compared to the rest of Australia.")
           )
         )
       ),
@@ -484,11 +481,11 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
           animate = animationOptions(interval = 1000, loop = FALSE)
           # Note that animation needs to be fixed - it currently causes the map to reload, which takes too much time
         )
-      ), 
+      ),
       ),
     )
     )
-  ), 
+  ),
   
   
   ## Section 4 - Disadv areas ####
@@ -535,8 +532,8 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
           width = 4,
           class = "m-2",
           h6("Unemployment is higher in disadvantaged areas"),
-          p(
-            "Young Australians living in areas with greater household disadvantage (as measured by the ABS Index of Household Advantage and Disadvantage) tend to have more difficulty finding employment, with unemployment rates in these areas higher than in more advantaged areas. These disadvantaged areas tend to be clustered in regional Australia or the outer rings of the capital cities."
+          tags$ul(
+            tags$li("Young Australians living in areas with greater household disadvantage tend to have more difficulty finding employment, with unemployment rates in these areas higher than in more advantaged areas. These disadvantaged areas tend to be clustered in regional Australia or the outer rings of the capital cities.")
           )
         )
       ),
@@ -552,8 +549,9 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
           width = 4,
           class = "m-2",
           h6("Unemployment is higher for youth"),
-          p("Across Australia, youth unemployment is higher than that of the total labour market. This trend holds in both capital cities and regional Australia, and across time.")
-        )
+          tags$ul(
+            tags$li("Across Australia, youth unemployment is higher than that of the total labour market. This trend holds in both capital cities and regional Australia, and across time.")
+            )
       ),
       div(class = "m-2",
           p("Source: ABS Labour Force, Detailed", class = "source-text")),
@@ -607,11 +605,13 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
           width = 4,
           class = "m-2",
           h6("More education tends to increase employment"),
-          p("Across age and gender groups, higher levels of education are associated with higher employment rates. People who have not completed high school have the lowest employment rates, whereas people who have completed Bachelor-level or higher qualifications have the strongest rates of employment."),
-          p("Note that the employment rates for 15-24 year old postgraduates is highly variable due to a small sample and the fact that many people in this age group would still be in education rather than having completed postgraduate qualifications.")
+          tags$ul(
+            tags$li("Across age and gender groups, higher levels of education are associated with higher employment rates. People who have not completed high school have the lowest employment rates, whereas people who have completed Bachelor-level or higher qualifications have the strongest rates of employment."),
+            tags$li("Note that the employment rates for 15-24 year old postgraduates is highly variable due to a small sample and the fact that many people in this age group would still be in education rather than having completed postgraduate qualifications.")
+          )
         )
       )
-
+)
     )
   )
   ),
@@ -623,9 +623,7 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
     column(
       width = 12,
       class = "card m-2",
-      h3(
-        "Youth not in employment, education or training living in disadvantaged areas are a concern"
-      ),
+      h3("Youth not in employment, education or training living in disadvantaged areas are a concern"),
       br(),
       fluidRow(
         ### Youth NEET by age/demo time series ####
@@ -661,9 +659,11 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
         column(
           width = 4,
           class = "m-2",
-          h6("Youth NEET tends to increase during economic downturns"),
-          p("This graph plots the percentage of young people who are currently in NEET status in each month, breaking it down by gender and age group.  The rate of NEET status is a key indicator of engagement in the labour market, tending to grow during economic downturns such as the GFC."),
-          p("The share of youth who are not in employment, education or training (NEET) has been broadly steady in Australia since 2000. The share tends to increase during economic downturns, such as the Global Financial Crisis in 2008 and the COVID-19 recession in 2020. After increasing during the pandemic, the aggregate NEET rate has declined back towards pre-pandemic levels.")
+          h6("The share of young men that are not working or studying full-time has been elevated since the start of the pandemic"),
+          tags$ul(
+            tags$li("The share of youth that are not working or in full-time study increased sharply during the pandemic and remains somewhat elevated, most notably for men aged 20-24 years."),
+            tags$li("This graph plots the percentage of young people who are currently not in employment, education or training (NEET) in each month, breaking it down by gender and age group.  The NEET rate (percentage of individuals in NEET out of the population) is a key indicator of engagement in the labour market, tending to grow during economic downturns such as the GFC.")
+          )
         ),
         fluidRow(
           ### NEET entry and exit rates ####
@@ -690,8 +690,11 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
             width = 4,
             class = "m-2",
             h6("The COVID-19 recession drove a large increase in NEET"),
-            p("This graph breaks down the flow of entry and exit from NEET status by gender and geographic area. The orange area plots the percentage of young people who enter NEET status in any given month, the green area plots the percentage of young people who exit NEET status, and the NEET flow line plots the net entry rate."),
-            p("The flow of people into NEET increased sharply in 2020, driven by the COVID-19 recession. The subsequent rapid recovery in the labour market saw a large flow out of NEET status. This flow was common across capital cities and regions, and across both males and females")
+            tags$ul(
+              tags$li("The increase in the share of young people that are NEET is due to both more people becoming NEET and more people staying NEET."),
+              tags$li("This graph breaks down the monthly entry and exit from NEET status by gender and geographic area as a proportion of the population. The NEET flow rate represents the difference between NEET entry and exit."),
+              tags$li("The flow of people into NEET increased sharply in 2020, driven by the COVID-19 recession. The subsequent rapid recovery in the labour market saw a large flow out of NEET status. This flow was common across capital cities and regions, and across both males and females.")
+            )
         )
         ),
 
@@ -709,11 +712,11 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
           column(
             width = 6,
             class = "m-2",
-            h6("Youth in regional areas experience higher probabilities of being NEET"),
-            p(
-              "The likelihood of young Australians not being in employment, education or training increases with distance from Australia's capital cities. This suggests that economic opportunities are concentrated in the capital cities, and disadvantaged areas are being further left behind."
+            h6("Young people living in regional areas are increasingly not studying or working"),
+            tags$ul(
+              tags$li("The probability of a young Australian being NEET increases with distance from Australia's capital cities. Furthermore, this difference has increased through time. This suggests that economic opportunities are concentrated in capital cities, and young people from disadvantaged backgrounds living in regional areas are being increasingly left behind in the labour market recovery.")
             )
-          )
+            )
         ),
 
       )
@@ -726,9 +729,7 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
     column(
       width = 12,
       class = "card m-2",
-      h3(
-        "Where are the opportunities to exit disadvantage and vulnerability?"
-      ),
+      h3("Opportunities to limit scarring effects"),
       fluidRow(
         ### Map: Change in jobs by industry/location ####
         column(
@@ -736,9 +737,7 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
           class = "m-2",
           div(
             h5("Net change in jobs by industry and location"),
-            p(em(
-              "Change in jobs per 1000 workers between 2002 - 2021"
-            )),
+            p(em("Change in jobs per 1000 workers between 2002 - 2021")),
             selectInput("name",
                         "Select industry",
                         unique(df_map$industry)),
@@ -756,9 +755,11 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
           class = "m-2",
           br(),
           h6("Employment opportunities vary by region and industry"),
-          p("Employment opportunities vary by industry and across Australia. Young people living in more disadvantaged regions may have to relocate to find opportunities that best match their interests and skills."),
-          p("The graph shows net changes in jobs by industry. A net increase in jobs indicates that the industry is growing in a region, while a decrease indicates a decline. The table supplements this with a gross measure that shows how many new jobs were created in an industry, without taking into account job destruction."),
-          p("The most common occupation and industries for young people (under 25 years) tend to be in hospitality, sales and carers positions. This is true across most regions, and these industries make up a larger share of employment. In contrast, the most common occupations and industry for older workers vary much more across regions and are less concentrated.")
+          tags$ul(
+            tags$li("The job opportunities available to young people have changed significantly, both overall and across regions and industries, over the past 20 years."),
+            tags$li("The graph shows net changes in jobs by industry. A net increase in jobs indicates that the industry is growing in a region, while a decrease indicates a decline. The table supplements this with a gross measure that shows how many new jobs were created in an industry, without taking into account job destruction."),
+            tags$li("The most common occupation and industries for young people (under 25 years) tend to be in hospitality, sales and carers positions. This is true across most regions, and these industries make up a larger share of employment. In contrast, the most common occupations and industry for older workers vary much more across regions and are less concentrated.")
+          )
         ),
       ),
       ### Table: Change in jobs by industry/location ####
@@ -768,19 +769,15 @@ However, the unemployment rate for 15-24 year olds continues to be significantly
                  class = "m-2",
                  div(
                    h5("Table: change in jobs by industry and location"),
-                   p(em(
-                     "Change in jobs per 1000 workers between 2002 - 2021"
-                   )),
+                   p(em("Change in jobs per 1000 workers between 2002 - 2021")),
                    selectInput("name_area",
                                "Select location",
                                unique(df_map$sa3_name_16)),
                    dataTableOutput("change_jobs_industry_table")
                  ),
                  br(),
-                 p(
-                   "Source: BLADE Data Industries with less than 10 firms excluded",
-                   class = "source-text"
-                 )
+                 p("Source: BLADE Data Industries with less than 10 firms excluded",
+                   class = "source-text")
                ),),
       ### Top 3 youth occupations ####
       fluidRow(
@@ -825,7 +822,7 @@ server <- function(input, output, session) {
   
     ue_graph <-
       df_unemp %>% filter(measure == input$agg_measure,
-                          age_group == input$agg_ages) %>%
+                          age_group %in% input$agg_ages) %>%
       plot_ly(
         x = ~ date,
         y = ~ value,
@@ -891,15 +888,14 @@ server <- function(input, output, session) {
         y = ~ share,
         color = ~skill_level,
         colors = c("#1b9e77", "#d95f02", "#7570b3"),
-        type = "scatter",
-        mode = "lines",
-        fill = ~""
+        type = "bar"
       )
     
     pc_mismatched <- pc_mismatched %>% layout(
+      barmode = "stack",
       title = "Share of employed people by skill matching status",
       xaxis = list(title = "Year", zeroline = FALSE, showgrid = FALSE),
-      yaxis = list(title = "% mismatched", zeroline = FALSE, showgrid = FALSE,
+      yaxis = list(title = "% of workers", zeroline = FALSE, showgrid = FALSE,
                    ticksuffix = "%", hoverformat = ".2f"),
       margin = list(l = 70, r = 50, t = 50, b = 100),
       paper_bgcolor = chart_bg_color,
@@ -981,45 +977,25 @@ server <- function(input, output, session) {
     dur_graph_1 <- df_duration %>% filter(age_group == input$age_dur_1) %>% 
       plot_ly(x = ~date) %>% 
       add_trace(data = filter(df_duration, age_group == input$age_dur_1,
-                              measure == "10 years or more"), 
+                              measure == "More than 1 year ago"), 
                 x = ~date, y = ~share_of_ue, type = "scatter", mode = "none", 
-                stackgroup = "one", legendgroup = "10 years or more",
-                name = ~measure, showlegend = FALSE, fillcolor = "#db410d") %>% 
+                stackgroup = "one", legendgroup = "More than 1 year ago",
+                name = ~measure, showlegend = FALSE, fillcolor = "#fde725") %>%
       add_trace(data = filter(df_duration, age_group == input$age_dur_1,
-                              measure == "5-9 years ago"), 
+                              measure == "3 months to 1 year ago"), 
                 x = ~date, y = ~share_of_ue, type = "scatter", mode = "none", 
-                stackgroup = "one", legendgroup = "5-9 years ago",
-                name = ~measure, showlegend = FALSE, fillcolor = "#db520d") %>%
-      add_trace(data = filter(df_duration, age_group == input$age_dur_1,
-                              measure == "3-4 years ago"), 
-                x = ~date, y = ~share_of_ue, type = "scatter", mode = "none", 
-                stackgroup = "one", legendgroup = "3-4 years ago",
-                name = ~measure, showlegend = FALSE, fillcolor = "#db6d0d") %>% 
-      add_trace(data = filter(df_duration, age_group == input$age_dur_1,
-                              measure == "1-2 years ago"), 
-                x = ~date, y = ~share_of_ue, type = "scatter", mode = "none", 
-                stackgroup = "one", legendgroup = "1-2 years ago", 
-                name = ~measure, showlegend = FALSE, fillcolor = "#db8c0d") %>% 
-      add_trace(data = filter(df_duration, age_group == input$age_dur_1,
-                              measure == "6-12 months ago"), 
-                x = ~date, y = ~share_of_ue, type = "scatter", mode = "none", 
-                stackgroup = "one", legendgroup = "6-12 months ago",
-                name = ~measure, showlegend = FALSE, fillcolor = "#d9a53f") %>%
-      add_trace(data = filter(df_duration, age_group == input$age_dur_1,
-                              measure == "3-6 months ago"), 
-                x = ~date, y = ~share_of_ue, type = "scatter", mode = "none", 
-                stackgroup = "one", legendgroup = "3-6 months ago",
-                name = ~measure, showlegend = FALSE, fillcolor = "#e3ca84") %>%
+                stackgroup = "one", legendgroup = "3 months to 1 year ago",
+                name = ~measure, showlegend = FALSE, fillcolor = "#21918c") %>%
       add_trace(data = filter(df_duration, age_group == input$age_dur_1,
                               measure == "Less than 3 months ago"), 
                 x = ~date, y = ~share_of_ue, type = "scatter", mode = "none", 
                 stackgroup = "one", legendgroup = "Less than 3 months ago",
-                name = ~measure, showlegend = FALSE, fillcolor = "#e8dc9e") %>%
+                name = ~measure, showlegend = FALSE, fillcolor = "#3b528b") %>%
       add_trace(data = filter(df_duration, age_group == input$age_dur_1,
                               measure == "Never worked before"), 
                 x = ~date, y = ~share_of_ue, type = "scatter", mode = "none", 
                 stackgroup = "one", legendgroup = "Never worked before",
-                name = ~measure, showlegend = FALSE, fillcolor = "#9a9c9b")
+                name = ~measure, showlegend = FALSE, fillcolor = "#440154")
     
     
     dur_graph_1 <- dur_graph_1 %>% layout(
@@ -1038,46 +1014,26 @@ server <- function(input, output, session) {
     dur_graph_2 <- df_duration %>% filter(age_group == input$age_dur_2) %>% 
       plot_ly(x = ~date) %>% 
       add_trace(data = filter(df_duration, age_group == input$age_dur_2,
-                              measure == "10 years or more"), 
+                              measure == "More than 1 year ago"), 
                 x = ~date, y = ~share_of_ue, type = "scatter", mode = "none", 
-                stackgroup = "one", legendgroup = "10 years or more",
-                name = ~measure, showlegend = TRUE, fillcolor = "#db410d") %>% 
+                stackgroup = "one", legendgroup = "More than 1 year ago",
+                name = ~measure, showlegend = TRUE, fillcolor = "#fde725") %>%
       add_trace(data = filter(df_duration, age_group == input$age_dur_2,
-                              measure == "5-9 years ago"), 
+                              measure == "3 months to 1 year ago"), 
                 x = ~date, y = ~share_of_ue, type = "scatter", mode = "none", 
-                stackgroup = "one", legendgroup = "5-9 years ago",
-                name = ~measure, showlegend = TRUE, fillcolor = "#db520d") %>%
-      add_trace(data = filter(df_duration, age_group == input$age_dur_2,
-                              measure == "3-4 years ago"), 
-                x = ~date, y = ~share_of_ue, type = "scatter", mode = "none", 
-                stackgroup = "one", legendgroup = "3-4 years ago",
-                name = ~measure, showlegend = TRUE, fillcolor = "#db6d0d") %>% 
-      add_trace(data = filter(df_duration, age_group == input$age_dur_2,
-                              measure == "1-2 years ago"), 
-                x = ~date, y = ~share_of_ue, type = "scatter", mode = "none", 
-                stackgroup = "one", legendgroup = "1-2 years ago", 
-                name = ~measure, showlegend = TRUE, fillcolor = "#db8c0d") %>% 
-      add_trace(data = filter(df_duration, age_group == input$age_dur_2,
-                              measure == "6-12 months ago"), 
-                x = ~date, y = ~share_of_ue, type = "scatter", mode = "none", 
-                stackgroup = "one", legendgroup = "6-12 months ago",
-                name = ~measure, showlegend = TRUE, fillcolor = "#d9a53f") %>%
-      add_trace(data = filter(df_duration, age_group == input$age_dur_2,
-                              measure == "3-6 months ago"), 
-                x = ~date, y = ~share_of_ue, type = "scatter", mode = "none", 
-                stackgroup = "one", legendgroup = "3-6 months ago",
-                name = ~measure, showlegend = TRUE, fillcolor = "#e3ca84") %>%
+                stackgroup = "one", legendgroup = "3 months to 1 year ago",
+                name = ~measure, showlegend = TRUE, fillcolor = "#21918c") %>%
       add_trace(data = filter(df_duration, age_group == input$age_dur_2,
                               measure == "Less than 3 months ago"), 
                 x = ~date, y = ~share_of_ue, type = "scatter", mode = "none", 
                 stackgroup = "one", legendgroup = "Less than 3 months ago",
-                name = ~measure, showlegend = TRUE, fillcolor = "#e8dc9e") %>%
+                name = ~measure, showlegend = TRUE, fillcolor = "#3b528b") %>%
       add_trace(data = filter(df_duration, age_group == input$age_dur_2,
                               measure == "Never worked before"), 
                 x = ~date, y = ~share_of_ue, type = "scatter", mode = "none", 
                 stackgroup = "one", legendgroup = "Never worked before",
-                name = ~measure, showlegend = TRUE, fillcolor = "#9a9c9b")
-      
+                name = ~measure, showlegend = TRUE, fillcolor = "#440154")
+    
 
     dur_graph_2 <- dur_graph_2 %>% layout(
       title = "Duration of unemployment by age group",
@@ -1118,7 +1074,7 @@ server <- function(input, output, session) {
         mode = "markers",
         fill = ~""
         ) %>% 
-      add_lines(x = ~ue, y = ~fitted, split = ~year, name = "Trendline")
+      add_lines(x = ~ue, y = ~fitted, split = ~year, name = ~year)
 
     duration_v_ue <- duration_v_ue %>% layout(
       title = "Median unemployment duration v unemployment rate",
@@ -1408,8 +1364,6 @@ server <- function(input, output, session) {
   ### NEET entry and exit rates ####
   output$neet_entry_exit <- renderPlotly({
     
-    df_neet_2$exit <- -df_neet_2$exit
-    
     neet_entry_exit <-
       df_neet_2 %>% filter(demo_split == input$neet_entry_exit_dem) %>%
       plot_ly(
@@ -1417,14 +1371,14 @@ server <- function(input, output, session) {
         y = ~ neet_flow,
         type = "scatter",
         mode = "lines",
-        name = "NEET flow", 
+        name = "Net change in NEET", 
         fill = ~""
       ) %>%
       rangeslider(start = min(df_neet_2$date), end = max(df_neet_2$date))
     
     neet_entry_exit <- neet_entry_exit %>% 
-      add_trace(x = ~date, y = ~entry, type = 'scatter', fill = 'tozeroy', name = "Entries") %>% 
-      add_trace(x = ~date, y = ~exit, type = 'scatter', fill = 'tozeroy', name = "Exits") 
+      add_trace(x = ~date, y = ~entry, type = 'scatter', fill = 'tozeroy', fillcolor = "#fd7e1432", name = "Entries") %>% 
+      add_trace(x = ~date, y = ~exit, type = 'scatter', fill = 'tozeroy', fillcolor = "#19875432", name = "Exits") 
     
     neet_entry_exit <- neet_entry_exit %>% layout(
       
@@ -1432,7 +1386,7 @@ server <- function(input, output, session) {
       xaxis = list(title = "Date", 
                    zeroline = FALSE, showgrid = FALSE, margin = list(b = 100)),
       yaxis = list(title = "NEET rate", zeroline = FALSE, showgrid = FALSE,
-                   tickformat = "1%", hoverformat = ".2f"),
+                   tickformat = "1%", hoverformat = ".2%"),
       margin = list(l = 70, r = 50, t = 50, b = 100, autoexpand = TRUE),
       paper_bgcolor = chart_bg_color,
       plot_bgcolor= chart_bg_color,
@@ -1460,7 +1414,7 @@ server <- function(input, output, session) {
     
     neet_distance <- ggplotly(p, tooltip = "label") %>% 
       layout(
-        title = "Probability of NEET over distance (18-24)",
+        title = "Chance of being NEET and distance from nearest capital city",
         xaxis = list(title = "Log distance from nearest capital city", 
                      zeroline = FALSE, showgrid = FALSE, range = list(1, 6),
                      hoverformat = ".2f"),
