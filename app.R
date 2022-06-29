@@ -1188,12 +1188,12 @@ server <- function(input, output, session) {
       plot_ly(x = ~share_decile_1) %>% 
       add_trace(x = ~share_decile_1, y = ~ue_rate, 
                 split = ~age,
-                type = "scatter",
                 size = ~total,
-                mode = "markers", 
                 frame = ~Date,
+                type = "scatter",
+                mode = "markers", 
                 fill = ~"") %>% 
-      add_lines(x = ~share_decile_1, y = ~fv, split = ~age, frame = ~Date, name = "Trendline")
+      add_lines(x = ~share_decile_1, y = ~fv, split = ~age, frame = ~Date, name = ~age)
     
     youth_unem_graph <- youth_unem_graph %>% layout(
       showlegend = TRUE,
