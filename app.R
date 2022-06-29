@@ -221,7 +221,7 @@ ui <- shinyUI(
             h6("Job mobility in the youth labour market has recovered from the initial shock of the COVID-19 pandemic, though it remains below pre-GFC levels"),
             tags$ul(
               tags$li("The ability to move between jobs allows workers to find work that better matches their skills and interests and this, in turn, typically leads to higher pay. In the early days of the pandemic, opportunities to move to better matched jobs were limited and many workers stayed with their employers."),
-              tags$li("Job mobility has recovered more recently, though the rate of job mobility for young workers remains below the levels observed in the period before the Global Financial Crisis.")
+              tags$li("Job mobility has recovered to be higher than the rates observed over the past decade, though the rate of job mobility for young workers remains below the levels observed in the period before the Global Financial Crisis.")
             )
           ),
         ),
@@ -756,7 +756,7 @@ ui <- shinyUI(
           br(),
           h6("Employment opportunities vary by region and industry"),
           tags$ul(
-            tags$li("Employment opportunities vary by industry and across Australia. Young people living in more disadvantaged regions may have to relocate to find opportunities that best match their interests and skills."),
+            tags$li("The job opportunities available to young people have changed significantly, both overall and across regions and industries, over the past 20 years."),
             tags$li("The graph shows net changes in jobs by industry. A net increase in jobs indicates that the industry is growing in a region, while a decrease indicates a decline. The table supplements this with a gross measure that shows how many new jobs were created in an industry, without taking into account job destruction."),
             tags$li("The most common occupation and industries for young people (under 25 years) tend to be in hospitality, sales and carers positions. This is true across most regions, and these industries make up a larger share of employment. In contrast, the most common occupations and industry for older workers vary much more across regions and are less concentrated.")
           )
