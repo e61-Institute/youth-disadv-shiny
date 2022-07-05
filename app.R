@@ -1149,16 +1149,23 @@ server <- function(input, output, session) {
     
     leaflet(js) %>%
       addPolygons(
-        stroke = FALSE,
-        smoothFactor = 0.2,
-        color = ~ pal(js$rel_prop),
+        weight = 1,
+        color = "#444444",
+        opacity = 1,
+        fillOpacity = 0.7,
+        fillColor = ~ pal(js$rel_prop),
         label = labels,
         labelOptions = labelOptions(
           style = list("font-weight" = "normal", padding = "3px 8px"),
           textsize = "15px",
           direction = "auto"
         ),
-        fillOpacity = 0.7
+        highlightOptions = highlightOptions(
+          weight = 3,
+          color = "#ececec",
+          fillOpacity = 0.7,
+          bringToFront = TRUE
+        )
       ) %>%
       addProviderTiles(providers$Esri.WorldGrayCanvas) %>%
       addLegend(
@@ -1242,16 +1249,23 @@ server <- function(input, output, session) {
     
     leaflet(Unemployment) %>%
       addPolygons(
-        stroke = FALSE,
-        smoothFactor = 0.2,
-        color = ~ pal(Unemployment$value),
+        weight = 1,
+        color = "#444444",
+        opacity = 1,
+        fillOpacity = 0.7,
+        fillColor = ~ pal(Unemployment$value),
         label = labels,
         labelOptions = labelOptions(
           style = list("font-weight" = "normal", padding = "3px 8px"),
           textsize = "15px",
           direction = "auto"
         ),
-        fillOpacity = 0.7
+        highlightOptions = highlightOptions(
+          weight = 3,
+          color = "#ececec",
+          fillOpacity = 0.7,
+          bringToFront = TRUE
+        )
       ) %>%
       addProviderTiles(providers$Esri.WorldGrayCanvas) %>%
       addLegend(
@@ -1464,15 +1478,22 @@ server <- function(input, output, session) {
     
     leaflet(data_map) %>%
       addPolygons(
-        stroke = FALSE,
-        smoothFactor = 0.2,
-        color = ~ pal2(data_map$Net),
+        weight = 1,
+        color = "#444444",
+        opacity = 1,
         fillOpacity = 0.7,
+        fillColor = ~ pal2(data_map$Net),
         label = labels,
         labelOptions = labelOptions(
           style = list("font-weight" = "normal", padding = "3px 8px"),
           textsize = "15px",
           direction = "auto"
+        ),
+        highlightOptions = highlightOptions(
+          weight = 3,
+          color = "#ececec",
+          fillOpacity = 0.7,
+          bringToFront = TRUE
         )
       ) %>%
       addProviderTiles(providers$Esri.WorldGrayCanvas) %>%
@@ -1505,15 +1526,22 @@ server <- function(input, output, session) {
     
     leaflet(data_map) %>%
       addPolygons(
-        stroke = FALSE,
-        smoothFactor = 0.2,
-        color = ~ pal(Percent),
+        weight = 1,
+        color = "#444444",
+        opacity = 1,
         fillOpacity = 0.7,
+        fillColor = ~ pal(Percent),
         label = labels,
         labelOptions = labelOptions(
           style = list("font-weight" = "normal", padding = "3px 8px"),
           textsize = "15px",
           direction = "auto"
+        ),
+        highlightOptions = highlightOptions(
+          weight = 3,
+          color = "#ececec",
+          fillOpacity = 0.7,
+          bringToFront = TRUE
         )
       ) %>%
       addProviderTiles(providers$Esri.WorldGrayCanvas) %>%
