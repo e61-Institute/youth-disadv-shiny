@@ -81,8 +81,6 @@ ui <- shinyUI(
     ),
     
     
-    
-    
     ## Title and subtitle ####
     fluidRow(column(
       fluidRow(column(
@@ -113,7 +111,8 @@ ui <- shinyUI(
       tags$li(a(href = "#section-3", "Long-term unemployed"), class = "nav-bar-element"),
       tags$li(a(href = "#section-4", "Disadvantaged areas"), class = "nav-bar-element"),
       tags$li(a(href = "#section-5", "Youth NEET"), class = "nav-bar-element"),
-      tags$li(a(href = "#section-6", "Where are the opportunities?"), class = "nav-bar-element"),
+      tags$li(a(href = "#section-6", "Opportunities"), class = "nav-bar-element"),
+      tags$li(actionButton("glossary", "Glossary"), class = "nav-bar-element"),
       class = "nav-bar-container"
     ),
     
@@ -814,6 +813,20 @@ server <- function(input, output, session) {
 
   chart_bg_color <- "black"
   chart_text_color <- "white"
+  
+  ## Glossary pop-up ####
+  glossary_text <- "Job match quality is measured using an individual’s highest level of educational attainment (measured in discrete buckets: below year 10, years 10-12, advanced diploma, bachelor degree or post-graduate degree) relative to the modal level of education of all workers in the same occupation (using two digit ANZSCO 2013 codes) and age group. A worker is considered underskilled if their level of educational attainment is below the mode, overskilled if above and matched if equal to the mode. Multiple modes in an occupation are tie broken by taking the highest level of education as the mode."
+  
+  observeEvent(input$glossary, {
+    showModal(
+      modalDialog(
+        title = "Glossary",
+        glossary_text,
+        easyClose = TRUE, 
+        footer = NULL,
+        id = "glossary-modal-text"
+      ))
+  })
   
   ## Section 1 ####
  
