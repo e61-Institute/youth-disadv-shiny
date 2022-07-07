@@ -112,7 +112,6 @@ ui <- shinyUI(
       tags$li(a(href = "#section-4", "Disadvantaged areas"), class = "nav-bar-element"),
       tags$li(a(href = "#section-5", "Youth NEET"), class = "nav-bar-element"),
       tags$li(a(href = "#section-6", "Opportunities"), class = "nav-bar-element"),
-      tags$li(actionButton("glossary", "Glossary"), class = "nav-bar-element"),
       class = "nav-bar-container"
     ),
     
@@ -129,8 +128,17 @@ ui <- shinyUI(
       column(
         width = 12,
         class = "card m-2",
-        h3("The recovery from the pandemic has been uneven for vulnerable groups"),
-        br(),
+        fluidRow(
+          width = 12,
+          column(
+            width = 11,
+            h3("The recovery from the pandemic has been uneven for vulnerable groups")
+          ),
+          column(
+            width = 1,
+            div(actionButton("glossary_1", "Glossary"), class = "glossary-button")
+          )
+        ),
         fluidRow(
           width = 12,
           column(
@@ -190,8 +198,17 @@ ui <- shinyUI(
       column(
         width = 12,
         class = "card m-2",
-        h3("Recessions make it harder to find the best match between workers and jobs"),
-        br(),
+        fluidRow(
+          width = 12,
+          column(
+            width = 11,
+            h3("Recessions make it harder to find the best match between workers and jobs")
+          ),
+          column(
+            width = 1,
+            div(actionButton("glossary_2", "Glossary"), class = "glossary-button")
+          )
+        ),
         fluidRow(
           ### Job mobility by age group ####
           column(
@@ -326,8 +343,17 @@ ui <- shinyUI(
     column(
       width = 12,
       class = "m-2 card",
-      h3("Labour market outcomes are worse for the long-term unemployed..."),
-      br(),
+      fluidRow(
+        width = 12,
+        column(
+          width = 11,
+          h3("Labour market outcomes are worse for the long-term unemployed...")
+        ),
+        column(
+          width = 1,
+          div(actionButton("glossary_3", "Glossary"), class = "glossary-button")
+        )
+      ),
       ### Duration of unemployment by age ####
       fluidRow(column(
         width = 12,
@@ -494,8 +520,17 @@ ui <- shinyUI(
     column(
       width = 12,
       class = "card m-2",
-      h3("... and for those in disadvantaged areas"),
-      br(),
+      fluidRow(
+        width = 12,
+        column(
+          width = 11,
+          h3("... and for those in disadvantaged areas"),
+        ),
+        column(
+          width = 1,
+          div(actionButton("glossary_4", "Glossary"), class = "glossary-button")
+        )
+      ),
       fluidRow(
         ### U/E rate vs IHAD disadvantage ####
         column(
@@ -622,8 +657,17 @@ ui <- shinyUI(
     column(
       width = 12,
       class = "card m-2",
-      h3("Youth not in employment, education or training living in disadvantaged areas are a concern"),
-      br(),
+      fluidRow(
+        width = 12,
+        column(
+          width = 11,
+          h3("Youth not in employment, education or training living in disadvantaged areas are a concern"),
+        ),
+        column(
+          width = 1,
+          div(actionButton("glossary_5", "Glossary"), class = "glossary-button")
+        )
+      ),
       fluidRow(
         ### Youth NEET by age/demo time series ####
         column(
@@ -728,7 +772,17 @@ ui <- shinyUI(
     column(
       width = 12,
       class = "card m-2",
-      h3("Opportunities to limit scarring effects"),
+      fluidRow(
+        width = 12,
+        column(
+          width = 11,
+          h3("Opportunities to limit scarring effects"),
+        ),
+        column(
+          width = 1,
+          div(actionButton("glossary_6", "Glossary"), class = "glossary-button")
+        )
+      ),
       fluidRow(
         ### Map: Change in jobs by industry/location ####
         column(
@@ -814,14 +868,89 @@ server <- function(input, output, session) {
   chart_bg_color <- "black"
   chart_text_color <- "white"
   
-  ## Glossary pop-up ####
-  glossary_text <- "Job match quality is measured using an individual’s highest level of educational attainment (measured in discrete buckets: below year 10, years 10-12, advanced diploma, bachelor degree or post-graduate degree) relative to the modal level of education of all workers in the same occupation (using two digit ANZSCO 2013 codes) and age group. A worker is considered underskilled if their level of educational attainment is below the mode, overskilled if above and matched if equal to the mode. Multiple modes in an occupation are tie broken by taking the highest level of education as the mode."
+  ## Glossary pop-up buttons ####
   
-  observeEvent(input$glossary, {
+  ### Section 1 ####
+  observeEvent(input$glossary_1, {
     showModal(
       modalDialog(
         title = "Glossary",
-        glossary_text,
+        p(strong("Unemployment rate"), " measures the number of unemployed workers as a proportion of the labour force (unemployed and employed workers."),
+        p(strong("Employment-to-population ratio"), " measures the number of employed workers as a proportion of the total population."),
+        easyClose = TRUE, 
+        footer = NULL,
+        id = "glossary-modal-text"
+      ))
+  })
+  
+  ### Section 2 ####
+  observeEvent(input$glossary_2, {
+    showModal(
+      modalDialog(
+        title = "Glossary",
+        p(strong("Job mobility:"), " measures the share of workers who have changed jobs over the past 12 months."),
+        p(strong("Skill match:"), " a worker is considered underskilled, overskilled or matched based on their highest level of educational attainment relative to other workers in their occupation.  A worker is considered under-skilled if their level of educational attainment is below the modal level of education of all workers in their occupation, overskilled if above and matched if equal to the mode.  Multiple modes in an occupation are broken by taking the highest level of education as the mode."),
+        p(strong("Mismatched:"), " a worker is considered mismatched if they are under-skilled or over-skilled in their current role."),
+        p(strong("Job switching rate:"), " percentage of workers who changed jobs in the last 12 months."),
+        p(strong("Helpful job transition:"), " when a worker moves from a job where they are mis-matched in the last period to one where they are matched in the current period."),
+        p(strong("Top occupations by age group:"), "	occupations are derived from what an individual reports on their tax return. For individuals who work multiple occupations, they report the occupation they spent the most time in."),
+        easyClose = TRUE, 
+        footer = NULL,
+        id = "glossary-modal-text"
+      ))
+  })
+  
+  ### Section 3 ####
+  observeEvent(input$glossary_3, {
+    showModal(
+      modalDialog(
+        title = "Glossary",
+        p(strong("Median time since last job"), " includes time where the worker was actively searching for work or not in the labour force."),
+        p("In the ", strong("Median time out of work graph"), " to overcome small cell counts, geographic areas are a custom mix of states, GCCSA areas and SA4s, with higher granularity taken where the sample size allowed."),
+        easyClose = TRUE, 
+        footer = NULL,
+        id = "glossary-modal-text"
+      ))
+  })
+  
+  ### Section 4 ####
+  observeEvent(input$glossary_4, {
+    showModal(
+      modalDialog(
+        title = "Glossary",
+        p(strong("Disadvantage"), " is measured using the ABS Index of Household Advantage and Disadvantage."),
+        easyClose = TRUE, 
+        footer = NULL,
+        id = "glossary-modal-text"
+      ))
+  })
+  
+  ### Section 5 ####
+  observeEvent(input$glossary_5, {
+    showModal(
+      modalDialog(
+        title = "Glossary",
+        p(strong("NEET rate:"), " percentage of youth who are not engaged in employment, education or training.  We measure this by the proportion of young people in a given period who report not working and are not engaged in full time study."),
+        p(strong("NEET entry:"), " a person is considered to have entered NEET if they reported not being NEET in the last period and are observed as NEET in the current period."),
+        p(strong("NEET exit:"), " a person is considered to have exited NEET if they reported being NEET in the last period and are observed working or engaged in full time study in the current period."),
+        p("In the ", strong("Chance of being NEET and distance from nearest capital city "), "graph, we observe the natural logarithm of distance from an individual’s nearest capital city in a given year and predict their probability of being NEET that year through a weighted average of employment outcomes for individuals living a similar distance from capital cities."),
+        easyClose = TRUE, 
+        footer = NULL,
+        id = "glossary-modal-text"
+      ))
+  })
+  
+  ### Section 6 ####
+  observeEvent(input$glossary_6, {
+    showModal(
+      modalDialog(
+        title = "Glossary",
+        p(strong("Net change in jobs by industry and location map and table")),
+        p("Job change is measured by the net increase in jobs created by businesses expanding their employees minus the decrease in jobs from businesses contracting over the period 2002-2020 for a given industry and area."),
+        p("This map and table shows the net change in jobs per 1000 workers in the area."),
+        p(strong("Top 3 occupations worked by youth in a region")),
+        p("This chart displays the top 3 occupations (as reported on their personal income tax return) worked by youth in a given region."),
+        p("% Total employment plots the share of these top three occupations for total youth employment in the area to illustrate how concentrated these occupations are in an area."),
         easyClose = TRUE, 
         footer = NULL,
         id = "glossary-modal-text"
@@ -1090,7 +1219,7 @@ server <- function(input, output, session) {
       add_lines(x = ~ue, y = ~fitted, split = ~year, name = ~year)
 
     duration_v_ue <- duration_v_ue %>% layout(
-      title = "Median unemployment duration v unemployment rate",
+      title = "Median time out of work vs unemployment rate",
       xaxis = list(
         title = "Unemployment rate",
         zeroline = FALSE,
@@ -1099,7 +1228,7 @@ server <- function(input, output, session) {
         hoverformat = ".2f"
       ),
       yaxis = list(
-        title = "Median duration unemployed (months)",
+        title = "Median time since last job (weeks)",
         zeroline = FALSE,
         showgrid = FALSE,
         hoverformat = ".2f"
