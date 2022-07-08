@@ -13,6 +13,12 @@ section {
     padding: 40px 0 0;
 }
 
+/* Source text formatting */
+p.source-text {
+  font-size: 10pt; 
+  color: grey;
+}
+
 /* Nav bar background */
 ul.nav-bar-container {
   list-style-type: none;
@@ -26,7 +32,7 @@ ul.nav-bar-container {
   left: 0;
   top: 0;
   width: 100%;
-  z-index: +10000;
+  z-index: 100;
   box-shadow: 0 4px 8px 0 #00000033, 0 6px 20px 0 #00000032;
 }
 
@@ -43,24 +49,35 @@ li.nav-bar-element a {
 }
 
 /* Change the link color on hover */
-li.nav-bar-element a:hover {
+li.nav-bar-element a:hover, li.nav-bar-element button#glossary:hover {
   background-color: #60b0b0;
   color: white;
 }
 
 /* Changes the box colour on click */
-li.nav-bar-element a:active {
+li.nav-bar-element a:active, li.nav-bar-element button#glossary:active {
   background-color: #003039;
 }
 
-/* Source text formatting */
-p.source-text {
-  font-size: 10pt; 
-  color: grey;
+/* Glossary button - replicate styling of rest of nav bar */
+li.nav-bar-element button#glossary {
+  height: 52px;
+  position: absolute;
+  background-color: transparent;
+  border-color: transparent;
+  -webkit-border-radius: 0px;
 }
 
-/* Source text formatting */
-p.source-text {
-  font-size: 10pt; 
-  color: grey;
+/* Glossary modal dialog box styling*/
+.glossary-button {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  overflow: hidden;
+}
+
+/* Preamble styling */
+.preamble-box {
+  padding: 2rem 10rem;
 }

@@ -81,8 +81,6 @@ ui <- shinyUI(
     ),
     
     
-    
-    
     ## Title and subtitle ####
     fluidRow(column(
       fluidRow(column(
@@ -113,13 +111,24 @@ ui <- shinyUI(
       tags$li(a(href = "#section-3", "Long-term unemployed"), class = "nav-bar-element"),
       tags$li(a(href = "#section-4", "Disadvantaged areas"), class = "nav-bar-element"),
       tags$li(a(href = "#section-5", "Youth NEET"), class = "nav-bar-element"),
-      tags$li(a(href = "#section-6", "Where are the opportunities?"), class = "nav-bar-element"),
+      tags$li(a(href = "#section-6", "Opportunities"), class = "nav-bar-element"),
       class = "nav-bar-container"
     ),
     
+    ## Section 0 - Preamble ####
     
-    
-    
+    a(id = "section-0"),
+    tags$section(fluidRow(
+      class = "m-3 justify-content-center",
+      column(
+        width = 12,
+        class = "card preamble-box",
+        p("The COVID-19 pandemic hit the Australian economy hard in 2020, ending nearly three decades of growth and causing serious disruption to the Australian labour market. The recession also occurred on the back of a decade of high unemployment and stagnant earnings for young workers that followed the Global Financial Crisis (GFC)."),
+        p("Young workers always suffer more than older workers during recessions, but the COVID-19 economic shock was particularly bad. Many young people work in contact-intensive sectors, such as hospitality, arts and recreation services, which serve as important ports for labour market entry. With these sectors being partially closed, it was hard for young people to get a foot onto the first rung of the job ladder."),
+        p("Since the economic shock in 2020, however, the Australian labour market has rebounded strongly. Macroeconomic forecasters expect the unemployment rate to fall to levels not seen in half a century and remain there for some time. Many young Australian workers have benefited from this recovery, with the youth unemployment rate declining significantly. But not all young Australians have shared in the economic recovery and some have been left behind."),
+        p("The labour market needs to remain very strong for a sustained period to allow more young people to benefit from the recovery. This data visualisation tracks the key data that will show whether this is the case.")
+      )
+    )),
     
     ## Section 1 - Intro ####
     
@@ -130,8 +139,17 @@ ui <- shinyUI(
       column(
         width = 12,
         class = "card m-2",
-        h3("The recovery from the pandemic has been uneven for vulnerable groups"),
-        br(),
+        fluidRow(
+          width = 12,
+          column(
+            width = 11,
+            h3("The recovery from the pandemic has been uneven for vulnerable groups")
+          ),
+          column(
+            width = 1,
+            div(actionButton("glossary_1", "Glossary"), class = "glossary-button")
+          )
+        ),
         fluidRow(
           width = 12,
           column(
@@ -191,8 +209,17 @@ ui <- shinyUI(
       column(
         width = 12,
         class = "card m-2",
-        h3("Recessions make it harder to find the best match between workers and jobs"),
-        br(),
+        fluidRow(
+          width = 12,
+          column(
+            width = 11,
+            h3("Recessions make it harder to find the best match between workers and jobs")
+          ),
+          column(
+            width = 1,
+            div(actionButton("glossary_2", "Glossary"), class = "glossary-button")
+          )
+        ),
         fluidRow(
           ### Job mobility by age group ####
           column(
@@ -327,8 +354,17 @@ ui <- shinyUI(
     column(
       width = 12,
       class = "m-2 card",
-      h3("Labour market outcomes are worse for the long-term unemployed..."),
-      br(),
+      fluidRow(
+        width = 12,
+        column(
+          width = 11,
+          h3("Labour market outcomes are worse for the long-term unemployed...")
+        ),
+        column(
+          width = 1,
+          div(actionButton("glossary_3", "Glossary"), class = "glossary-button")
+        )
+      ),
       ### Duration of unemployment by age ####
       fluidRow(column(
         width = 12,
@@ -495,8 +531,17 @@ ui <- shinyUI(
     column(
       width = 12,
       class = "card m-2",
-      h3("... and for those in disadvantaged areas"),
-      br(),
+      fluidRow(
+        width = 12,
+        column(
+          width = 11,
+          h3("... and for those in disadvantaged areas"),
+        ),
+        column(
+          width = 1,
+          div(actionButton("glossary_4", "Glossary"), class = "glossary-button")
+        )
+      ),
       fluidRow(
         ### U/E rate vs IHAD disadvantage ####
         column(
@@ -595,7 +640,7 @@ ui <- shinyUI(
                    "sex_educ_v_emp",
                    "Select Sex: ",
                    choices = unique(df_educ_emp$Sex),
-                   selected = "Males"
+                   selected = "Total"
                  ),
                  div(class = "m-2",
                      p("Source: ABS Detailed Labour Force Survey", class = "source-text"),),
@@ -607,7 +652,7 @@ ui <- shinyUI(
           h6("More education tends to increase employment"),
           tags$ul(
             tags$li("Across age and gender groups, higher levels of education are associated with higher employment rates. People who have not completed high school have the lowest employment rates, whereas people who have completed Bachelor-level or higher qualifications have the strongest rates of employment."),
-            tags$li("Note that the employment rates for 15-24 year old postgraduates is highly variable due to a small sample and the fact that many people in this age group would still be in education rather than having completed postgraduate qualifications.")
+            tags$li("Note: 15-24 year old Bachelor's degree and postgraduates are combined due to issues with small sample sizes.")
           )
         )
       )
@@ -623,8 +668,17 @@ ui <- shinyUI(
     column(
       width = 12,
       class = "card m-2",
-      h3("Youth not in employment, education or training living in disadvantaged areas are a concern"),
-      br(),
+      fluidRow(
+        width = 12,
+        column(
+          width = 11,
+          h3("Youth not in employment, education or training living in disadvantaged areas are a concern"),
+        ),
+        column(
+          width = 1,
+          div(actionButton("glossary_5", "Glossary"), class = "glossary-button")
+        )
+      ),
       fluidRow(
         ### Youth NEET by age/demo time series ####
         column(
@@ -729,7 +783,17 @@ ui <- shinyUI(
     column(
       width = 12,
       class = "card m-2",
-      h3("Opportunities to limit scarring effects"),
+      fluidRow(
+        width = 12,
+        column(
+          width = 11,
+          h3("Opportunities to limit scarring effects"),
+        ),
+        column(
+          width = 1,
+          div(actionButton("glossary_6", "Glossary"), class = "glossary-button")
+        )
+      ),
       fluidRow(
         ### Map: Change in jobs by industry/location ####
         column(
@@ -814,6 +878,95 @@ server <- function(input, output, session) {
 
   chart_bg_color <- "black"
   chart_text_color <- "white"
+  
+  ## Glossary pop-up buttons ####
+  
+  ### Section 1 ####
+  observeEvent(input$glossary_1, {
+    showModal(
+      modalDialog(
+        title = "Glossary",
+        p(strong("Unemployment rate"), " measures the number of unemployed workers as a proportion of the labour force (unemployed and employed workers."),
+        p(strong("Employment-to-population ratio"), " measures the number of employed workers as a proportion of the total population."),
+        easyClose = TRUE, 
+        footer = NULL,
+        id = "glossary-modal-text"
+      ))
+  })
+  
+  ### Section 2 ####
+  observeEvent(input$glossary_2, {
+    showModal(
+      modalDialog(
+        title = "Glossary",
+        p(strong("Job mobility:"), " measures the share of workers who have changed jobs over the past 12 months."),
+        p(strong("Skill match:"), " a worker is considered underskilled, overskilled or matched based on their highest level of educational attainment relative to other workers in their occupation.  A worker is considered under-skilled if their level of educational attainment is below the modal level of education of all workers in their occupation, overskilled if above and matched if equal to the mode.  Multiple modes in an occupation are broken by taking the highest level of education as the mode."),
+        p(strong("Mismatched:"), " a worker is considered mismatched if they are under-skilled or over-skilled in their current role."),
+        p(strong("Job switching rate:"), " percentage of workers who changed jobs in the last 12 months."),
+        p(strong("Helpful job transition:"), " when a worker moves from a job where they are mis-matched in the last period to one where they are matched in the current period."),
+        p(strong("Top occupations by age group:"), "	occupations are derived from what an individual reports on their tax return. For individuals who work multiple occupations, they report the occupation they spent the most time in."),
+        easyClose = TRUE, 
+        footer = NULL,
+        id = "glossary-modal-text"
+      ))
+  })
+  
+  ### Section 3 ####
+  observeEvent(input$glossary_3, {
+    showModal(
+      modalDialog(
+        title = "Glossary",
+        p(strong("Median time since last job"), " includes time where the worker was actively searching for work or not in the labour force."),
+        p("In the ", strong("Median time out of work graph"), " to overcome small cell counts, geographic areas are a custom mix of states, GCCSA areas and SA4s, with higher granularity taken where the sample size allowed."),
+        easyClose = TRUE, 
+        footer = NULL,
+        id = "glossary-modal-text"
+      ))
+  })
+  
+  ### Section 4 ####
+  observeEvent(input$glossary_4, {
+    showModal(
+      modalDialog(
+        title = "Glossary",
+        p(strong("Disadvantage"), " is measured using the ABS Index of Household Advantage and Disadvantage."),
+        easyClose = TRUE, 
+        footer = NULL,
+        id = "glossary-modal-text"
+      ))
+  })
+  
+  ### Section 5 ####
+  observeEvent(input$glossary_5, {
+    showModal(
+      modalDialog(
+        title = "Glossary",
+        p(strong("NEET rate:"), " percentage of youth who are not engaged in employment, education or training.  We measure this by the proportion of young people in a given period who report not working and are not engaged in full time study."),
+        p(strong("NEET entry:"), " a person is considered to have entered NEET if they reported not being NEET in the last period and are observed as NEET in the current period."),
+        p(strong("NEET exit:"), " a person is considered to have exited NEET if they reported being NEET in the last period and are observed working or engaged in full time study in the current period."),
+        p("In the ", strong("Chance of being NEET and distance from nearest capital city "), "graph, we observe the natural logarithm of distance from an individual’s nearest capital city in a given year and predict their probability of being NEET that year through a weighted average of employment outcomes for individuals living a similar distance from capital cities."),
+        easyClose = TRUE, 
+        footer = NULL,
+        id = "glossary-modal-text"
+      ))
+  })
+  
+  ### Section 6 ####
+  observeEvent(input$glossary_6, {
+    showModal(
+      modalDialog(
+        title = "Glossary",
+        p(strong("Net change in jobs by industry and location map and table")),
+        p("Job change is measured by the net increase in jobs created by businesses expanding their employees minus the decrease in jobs from businesses contracting over the period 2002-2020 for a given industry and area."),
+        p("This map and table shows the net change in jobs per 1000 workers in the area."),
+        p(strong("Top 3 occupations worked by youth in a region")),
+        p("This chart displays the top 3 occupations (as reported on their personal income tax return) worked by youth in a given region."),
+        p("% Total employment plots the share of these top three occupations for total youth employment in the area to illustrate how concentrated these occupations are in an area."),
+        easyClose = TRUE, 
+        footer = NULL,
+        id = "glossary-modal-text"
+      ))
+  })
   
   ## Section 1 ####
  
@@ -1077,7 +1230,7 @@ server <- function(input, output, session) {
       add_lines(x = ~ue, y = ~fitted, split = ~year, name = ~year)
 
     duration_v_ue <- duration_v_ue %>% layout(
-      title = "Median unemployment duration v unemployment rate",
+      title = "Median time out of work vs unemployment rate",
       xaxis = list(
         title = "Unemployment rate",
         zeroline = FALSE,
@@ -1086,7 +1239,7 @@ server <- function(input, output, session) {
         hoverformat = ".2f"
       ),
       yaxis = list(
-        title = "Median duration unemployed (months)",
+        title = "Median time since last job (weeks)",
         zeroline = FALSE,
         showgrid = FALSE,
         hoverformat = ".2f"
@@ -1149,16 +1302,23 @@ server <- function(input, output, session) {
     
     leaflet(js) %>%
       addPolygons(
-        stroke = FALSE,
-        smoothFactor = 0.2,
-        color = ~ pal(js$rel_prop),
+        weight = 1,
+        color = "#444444",
+        opacity = 1,
+        fillOpacity = 0.7,
+        fillColor = ~ pal(js$rel_prop),
         label = labels,
         labelOptions = labelOptions(
           style = list("font-weight" = "normal", padding = "3px 8px"),
           textsize = "15px",
           direction = "auto"
         ),
-        fillOpacity = 0.7
+        highlightOptions = highlightOptions(
+          weight = 3,
+          color = "#ececec",
+          fillOpacity = 0.7,
+          bringToFront = TRUE
+        )
       ) %>%
       addProviderTiles(providers$Esri.WorldGrayCanvas) %>%
       addLegend(
@@ -1188,12 +1348,12 @@ server <- function(input, output, session) {
       plot_ly(x = ~share_decile_1) %>% 
       add_trace(x = ~share_decile_1, y = ~ue_rate, 
                 split = ~age,
-                type = "scatter",
                 size = ~total,
-                mode = "markers", 
                 frame = ~Date,
+                type = "scatter",
+                mode = "markers", 
                 fill = ~"") %>% 
-      add_lines(x = ~share_decile_1, y = ~fv, split = ~age, frame = ~Date, name = "Trendline")
+      add_lines(x = ~share_decile_1, y = ~fv, split = ~age, frame = ~Date, name = ~age)
     
     youth_unem_graph <- youth_unem_graph %>% layout(
       showlegend = TRUE,
@@ -1242,16 +1402,23 @@ server <- function(input, output, session) {
     
     leaflet(Unemployment) %>%
       addPolygons(
-        stroke = FALSE,
-        smoothFactor = 0.2,
-        color = ~ pal(Unemployment$value),
+        weight = 1,
+        color = "#444444",
+        opacity = 1,
+        fillOpacity = 0.7,
+        fillColor = ~ pal(Unemployment$value),
         label = labels,
         labelOptions = labelOptions(
           style = list("font-weight" = "normal", padding = "3px 8px"),
           textsize = "15px",
           direction = "auto"
         ),
-        fillOpacity = 0.7
+        highlightOptions = highlightOptions(
+          weight = 3,
+          color = "#ececec",
+          fillOpacity = 0.7,
+          bringToFront = TRUE
+        )
       ) %>%
       addProviderTiles(providers$Esri.WorldGrayCanvas) %>%
       addLegend(
@@ -1409,7 +1576,8 @@ server <- function(input, output, session) {
         frame = frame,
         label = label
       )) + 
-      scale_colour_manual(values = heat.colors(18))+
+      scale_colour_manual(values = heat.colors(18)) +
+      scale_y_continuous(limits = c(0, 0.2), expand = expansion()) +
       theme(legend.position = "none")
     
     neet_distance <- ggplotly(p, tooltip = "label") %>% 
@@ -1463,15 +1631,22 @@ server <- function(input, output, session) {
     
     leaflet(data_map) %>%
       addPolygons(
-        stroke = FALSE,
-        smoothFactor = 0.2,
-        color = ~ pal2(data_map$Net),
+        weight = 1,
+        color = "#444444",
+        opacity = 1,
         fillOpacity = 0.7,
+        fillColor = ~ pal2(data_map$Net),
         label = labels,
         labelOptions = labelOptions(
           style = list("font-weight" = "normal", padding = "3px 8px"),
           textsize = "15px",
           direction = "auto"
+        ),
+        highlightOptions = highlightOptions(
+          weight = 3,
+          color = "#ececec",
+          fillOpacity = 0.7,
+          bringToFront = TRUE
         )
       ) %>%
       addProviderTiles(providers$Esri.WorldGrayCanvas) %>%
@@ -1504,15 +1679,22 @@ server <- function(input, output, session) {
     
     leaflet(data_map) %>%
       addPolygons(
-        stroke = FALSE,
-        smoothFactor = 0.2,
-        color = ~ pal(Percent),
+        weight = 1,
+        color = "#444444",
+        opacity = 1,
         fillOpacity = 0.7,
+        fillColor = ~ pal(Percent),
         label = labels,
         labelOptions = labelOptions(
           style = list("font-weight" = "normal", padding = "3px 8px"),
           textsize = "15px",
           direction = "auto"
+        ),
+        highlightOptions = highlightOptions(
+          weight = 3,
+          color = "#ececec",
+          fillOpacity = 0.7,
+          bringToFront = TRUE
         )
       ) %>%
       addProviderTiles(providers$Esri.WorldGrayCanvas) %>%

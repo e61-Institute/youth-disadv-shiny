@@ -16,3 +16,4 @@ deployApp(
   appFiles = NULL, # you can specify which files to deploy, or keep this NULL to deploy everything
   appName = error_on_missing_name("MASTERNAME"),
   appTitle = "shinyapplication")
+
