@@ -115,9 +115,20 @@ ui <- shinyUI(
       class = "nav-bar-container"
     ),
     
+    ## Section 0 - Preamble ####
     
-    
-    
+    a(id = "section-0"),
+    tags$section(fluidRow(
+      class = "m-3 justify-content-center",
+      column(
+        width = 12,
+        class = "card preamble-box",
+        p("The COVID-19 pandemic hit the Australian economy hard in 2020, ending nearly three decades of growth and causing serious disruption to the Australian labour market. The recession also occurred on the back of a decade of high unemployment and stagnant earnings for young workers that followed the Global Financial Crisis (GFC)."),
+        p("Young workers always suffer more than older workers during recessions, but the COVID-19 economic shock was particularly bad. Many young people work in contact-intensive sectors, such as hospitality, arts and recreation services, which serve as important ports for labour market entry. With these sectors being partially closed, it was hard for young people to get a foot onto the first rung of the job ladder."),
+        p("Since the economic shock in 2020, however, the Australian labour market has rebounded strongly. Macroeconomic forecasters expect the unemployment rate to fall to levels not seen in half a century and remain there for some time. Many young Australian workers have benefited from this recovery, with the youth unemployment rate declining significantly. But not all young Australians have shared in the economic recovery and some have been left behind."),
+        p("The labour market needs to remain very strong for a sustained period to allow more young people to benefit from the recovery. This data visualisation tracks the key data that will show whether this is the case.")
+      )
+    )),
     
     ## Section 1 - Intro ####
     
