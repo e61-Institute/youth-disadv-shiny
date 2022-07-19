@@ -85,7 +85,7 @@ ui <- shinyUI(
     fluidRow(column(
       fluidRow(
         column(
-          fluidRow(a(img(src = "e61-logo.png", id = "e61-logo"), href = "https://e61.in", id = "e61-logo-link")),
+          fluidRow(a(img(src = "e61-logo.png", id = "e61-logo"), href = "https://e61.in/research", id = "e61-logo-link")),
           width = 2
         ),
         column(
