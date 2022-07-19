@@ -4,14 +4,23 @@
   
 }
   
-#main-title {
-  font-weight: 700;
-}
-
 section {
     margin: 0;
     padding: 40px 0 0;
 }
+
+/* Header styling */
+#header-box {
+  margin-top: 2rem;
+}
+
+#main-title {
+    font-weight: 700;
+    top: 30%;
+    margin: 0;
+    position: relative;
+}
+
 
 /* Source text formatting */
 p.source-text {
@@ -80,4 +89,15 @@ li.nav-bar-element button#glossary {
 /* Preamble styling */
 .preamble-box {
   padding: 2rem 10rem;
+}
+
+/* Logo styling */
+a#e61-logo-link, a#prf-logo-link {
+  width: 50%;
+  padding: 0.5rem;
+  margin: 0 auto;
+}
+
+img#e61-logo, img#prf-logo {
+  width: 100%;
 }
