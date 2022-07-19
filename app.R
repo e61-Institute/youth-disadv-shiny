@@ -83,22 +83,23 @@ ui <- shinyUI(
     
     ## Title and subtitle ####
     fluidRow(column(
-      fluidRow(column(
-        h1(
-          "Tracking Australia's vulnerable youth in the COVID-19 recovery",
-          id = "main-title"
+      fluidRow(
+        column(
+          fluidRow(a(img(src = "e61-logo.png", id = "e61-logo"), href = "https://e61.in/research", id = "e61-logo-link")),
+          width = 2
         ),
-        width = 8,
-        offset = 2
-      )),
-      fluidRow(column(
-        h6("e61 Institute and The Paul Ramsay Foundation", id = "author-title"),
-        width = 8,
-        offset = 2
-      )),
+        column(
+          h1(
+            "Tracking Australia's vulnerable youth in the COVID-19 recovery",
+            id = "main-title"
+          ),
+          width = 8
+        )
+        ),
       width = 12
     ),
-    class = "mb-5 radial"),
+    class = "mb-5 radial",
+    id = "header-box"),
     
     
     
