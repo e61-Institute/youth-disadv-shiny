@@ -94,10 +94,6 @@ ui <- shinyUI(
             id = "main-title"
           ),
           width = 8
-        ),
-        column(
-          fluidRow(a(img(src = "prf-logo.png", id = "prf-logo"), href = "https://paulramsayfoundation.org.au/"), id = "prf-logo-link"),
-          width = 2
         )
         ),
       width = 12
