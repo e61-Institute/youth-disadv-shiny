@@ -24,9 +24,6 @@ df_js <- readRDS("data/js-recipient-share-map.rds") %>%
   filter(!is.na(date) & date >= "2021-01-01") %>% 
   mutate(date = as.Date(date, "%Y-%m-%d"))
 
-df_map2 <- readRDS("data/youth unemployment sa4 map.rds") %>% 
-  filter(!is.na(date))
-
 df_occupation_area <- readRDS("data/occupation_area.rds") %>%
   rename(Area = SA3_name, Percent = percent_total, Occupation = two_name) %>%
   group_by(Area, age) %>%
@@ -35,8 +32,8 @@ df_occupation_area <- readRDS("data/occupation_area.rds") %>%
     Percent = sum(Percent),
     Occupation = paste0(Occupation, collapse = ", <br/>"),
     geometry
-  ) %>% 
-  dplyr::ungroup() %>% 
+  ) %>%
+  dplyr::ungroup() %>%
   unique()
 
 df_unemp <- read_csv("data/unemployment and E-to-P aggregates.csv") %>% 
@@ -583,42 +580,6 @@ ui <- shinyUI(
           )
         )
       ),
-      div(class = "m-2",
-          br(),
-          h5("Unemployed share by age group over time")),
-      fluidRow(
-        ### Unemployed share by age group over time ####
-        column(width = 7, class = "m-2",
-               leafletOutput("map2"),
-               ),
-        column(
-          width = 4,
-          class = "m-2",
-          h6("Unemployment is higher for youth"),
-          tags$ul(
-            tags$li("Across Australia, youth unemployment is higher than that of the total labour market. This trend holds in both capital cities and regional Australia, and across time.")
-            )
-      ),
-      div(class = "m-2",
-          p("Source: ABS Labour Force, Detailed", class = "source-text")),
-      fluidRow(column(
-        width = 6,
-        class = "m-2",
-        radioButtons(
-          "age_map",
-          "Select age group: ",
-          choices = unique(df_map2$age),
-          selected = "15-24 years"
-        ),
-        sliderTextInput(
-          "timeline",
-          "Select date: ",
-          choices = seq(min(df_map2$date), max(df_map2$date), by = "months"),
-          selected = min(df_map2$date),
-          animate = animationOptions(interval = 1000, loop = FALSE)
-          # Note that animation needs to be fixed - it currently causes the map to reload, which takes too much time
-        )
-      )),
       fluidRow(
         ### Employment rate by degree level and industry ####
         column(width = 7, class = "m-2",
@@ -657,7 +618,6 @@ ui <- shinyUI(
           )
         )
       )
-)
     )
   )
   ),
@@ -1060,7 +1020,7 @@ server <- function(input, output, session) {
   
   ### Job switching for mismatched workers ####
   output$jobswitchers <- renderPlotly({
-    
+
     jobswitchers <-
       df_jobswitchers %>% filter(age_bucket == input$jobswitch_age) %>%
       plot_ly(
@@ -1073,7 +1033,7 @@ server <- function(input, output, session) {
         fill = ~""
       ) %>%
       rangeslider(start = min(df_jobswitchers$date), end = max(df_jobswitchers$date))
-    
+
     jobswitchers <- jobswitchers %>% layout(
       title = "Job switching for workers with mismatched employment in previous 12 months",
       xaxis = list(title = "Date", zeroline = FALSE, showgrid = FALSE),
@@ -1082,9 +1042,9 @@ server <- function(input, output, session) {
       paper_bgcolor = chart_bg_color,
       plot_bgcolor = chart_bg_color,
       font = list(color = chart_text_color))
-    
+
   })
-  
+
 
   ### Main occupation by age time series ####
   output$occupation_intensity <- renderPlotly({
@@ -1383,56 +1343,6 @@ server <- function(input, output, session) {
     
   })
   
-  ### Unemployed share by age group over time ####
-  output$map2 <- renderLeaflet({
-    Unemployment <- df_map2 %>%
-      filter(age == input$age_map,
-             date == input$timeline,
-             sex == "Total")
-    
-    domain <- c(0, 50)
-    
-    pal <- colorNumeric("OrRd", domain = domain)
-    
-    labels <- sprintf(
-      "<strong>%s</strong><br/>Unemployed share: %.2f",
-      Unemployment$sa4_name, Unemployment$value
-    ) %>% 
-      lapply(htmltools::HTML)
-    
-    
-    leaflet(Unemployment) %>%
-      addPolygons(
-        weight = 1,
-        color = "#444444",
-        opacity = 1,
-        fillOpacity = 0.7,
-        fillColor = ~ pal(Unemployment$value),
-        label = labels,
-        labelOptions = labelOptions(
-          style = list("font-weight" = "normal", padding = "3px 8px"),
-          textsize = "15px",
-          direction = "auto"
-        ),
-        highlightOptions = highlightOptions(
-          weight = 3,
-          color = "#ececec",
-          fillOpacity = 0.7,
-          bringToFront = TRUE
-        )
-      ) %>%
-      addProviderTiles(providers$Esri.WorldGrayCanvas) %>%
-      addLegend(
-        "bottomright",
-        opacity = 1,
-        pal = pal,
-        values =  ~ domain,
-        title = "Unemployed share (%)"
-      ) %>% 
-      addFullscreenControl()
-    
-  })
-  
   ### Employment rate by degree level and industry ####
   
   output$educ_v_emp <- renderPlotly({
@@ -1564,9 +1474,9 @@ server <- function(input, output, session) {
   
   ### Pr(NEET) by distance from CC ####
   output$neet_distance <- renderPlotly({
-    
+
     p <- df_neet_distance %>%
-      mutate(label = sprintf("Current year: %s\nComparison year: %s\nProbability: %s", frame, Year, round(pred, 2))) %>% 
+      mutate(label = sprintf("Current year: %s\nComparison year: %s\nProbability: %s", frame, Year, round(pred, 2))) %>%
       arrange(mindistance) %>%
       ggplot(aes(
         x = mindistance,
@@ -1576,36 +1486,36 @@ server <- function(input, output, session) {
       geom_line(aes(
         frame = frame,
         label = label
-      )) + 
+      )) +
       scale_colour_manual(values = heat.colors(18)) +
       scale_y_continuous(limits = c(0, 0.2), expand = expansion()) +
       theme(legend.position = "none")
-    
-    neet_distance <- ggplotly(p, tooltip = "label") %>% 
+
+    neet_distance <- ggplotly(p, tooltip = "label") %>%
       layout(
         title = "Chance of being NEET and distance from nearest capital city",
-        xaxis = list(title = "Log distance from nearest capital city", 
+        xaxis = list(title = "Log distance from nearest capital city",
                      zeroline = FALSE, showgrid = FALSE, range = list(1, 6),
                      hoverformat = ".2f"),
-        yaxis = list(title = "Probability of NEET status", zeroline = FALSE, 
+        yaxis = list(title = "Probability of NEET status", zeroline = FALSE,
                      showgrid = FALSE, tickformat = "1%", dtick = 0.02, hoverformat = ".2f"),
         margin = list(l = 70, r = 50, t = 50, b = 100, autoexpand = TRUE),
         paper_bgcolor = chart_bg_color,
         plot_bgcolor= chart_bg_color,
         font = list(color = chart_text_color)
-        ) %>% 
+        ) %>%
       animation_opts(
         frame = 200, transition = 200,  easing = "linear", redraw = FALSE
       ) %>%
       animation_slider(
         currentvalue = list(font = list(size = 12, color = "grey")),
         yref = "paper", y = -.3
-      ) %>% 
+      ) %>%
       animation_button(
         yref = "paper", y = -.3
-      ) 
-    
-    
+      )
+
+
   })
   
   
@@ -1664,20 +1574,20 @@ server <- function(input, output, session) {
   
   ### Top 3 youth occupations ####
   output$area_occupation <- renderLeaflet({
-    
-    data_map <- df_occupation_area %>% 
+
+    data_map <- df_occupation_area %>%
       filter(age == input$age_area) %>%
       st_as_sf()
-    
+
     pal <- colorNumeric(
       palette = "Blues",
       domain = data_map$Percent)
-    
+
     labels <- sprintf(
       "<strong>%s</strong><br/>%s",
       data_map$Area, data_map$Occupation
     ) %>% lapply(htmltools::HTML)
-    
+
     leaflet(data_map) %>%
       addPolygons(
         weight = 1,
@@ -1705,9 +1615,9 @@ server <- function(input, output, session) {
         opacity = 0.5,
         title = " % Total Employment",
         position = "bottomright"
-      ) %>% 
+      ) %>%
       addFullscreenControl()
-    
+
   })
   
 
