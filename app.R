@@ -810,7 +810,7 @@ ui <- shinyUI(
                  width = 8,
                  class = "m-2",
                  div(
-                   h5("Top 3 occupations worked by Youth (19-29) in region"),
+                   h5("Top 3 occupations worked by youth (19-29) in region"),
                    p(em("SA3 level")),
                    leafletOutput("area_occupation"),
                    radioButtons(
@@ -1037,7 +1037,7 @@ server <- function(input, output, session) {
     jobswitchers <- jobswitchers %>% layout(
       title = "Job switching for workers with mismatched employment in previous 12 months",
       xaxis = list(title = "Date", zeroline = FALSE, showgrid = FALSE),
-      yaxis = list(title = "% workers", zeroline = FALSE, showgrid = FALSE, ticksuffix = "%", hoverformat = ".2f"),
+      yaxis = list(title = "% of workers", zeroline = FALSE, showgrid = FALSE, ticksuffix = "%", hoverformat = ".2f"),
       margin = list(l = 70, r = 50, t = 50, b = 100),
       paper_bgcolor = chart_bg_color,
       plot_bgcolor = chart_bg_color,
@@ -1237,7 +1237,7 @@ server <- function(input, output, session) {
                   end = max(df_ue_gained$date))
     
     pc_ue_gained <- pc_ue_gained %>% layout(
-      title = paste0("% unemployed who gained employment by ", input$ue_to_emp_measure),
+      title = paste0("% unemployed who gained employment by ", tolower(input$ue_to_emp_measure)),
       xaxis = list(title = "Date", zeroline = FALSE, showgrid = FALSE),
       yaxis = list(title = "% unemployed", zeroline = FALSE, showgrid = FALSE, ticksuffix = "%", hoverformat = ".2f"),
       margin = list(l = 70, r = 50, t = 50, b = 100),
@@ -1264,7 +1264,7 @@ server <- function(input, output, session) {
     leaflet(js) %>%
       addPolygons(
         weight = 1,
-        color = "#444444",
+        color = "#d2d2d2",
         opacity = 1,
         fillOpacity = 0.7,
         fillColor = ~ pal(js$rel_prop),
@@ -1276,7 +1276,7 @@ server <- function(input, output, session) {
         ),
         highlightOptions = highlightOptions(
           weight = 3,
-          color = "#ececec",
+          color = "#9c9c9c",
           fillOpacity = 0.7,
           bringToFront = TRUE
         )
@@ -1543,7 +1543,7 @@ server <- function(input, output, session) {
     leaflet(data_map) %>%
       addPolygons(
         weight = 1,
-        color = "#444444",
+        color = "#d2d2d2",
         opacity = 1,
         fillOpacity = 0.7,
         fillColor = ~ pal2(data_map$Net),
@@ -1555,7 +1555,7 @@ server <- function(input, output, session) {
         ),
         highlightOptions = highlightOptions(
           weight = 3,
-          color = "#ececec",
+          color = "#9c9c9c",
           fillOpacity = 0.7,
           bringToFront = TRUE
         )
@@ -1566,7 +1566,7 @@ server <- function(input, output, session) {
         opacity = 1,
         pal = pal2,
         values = ~ domain,
-        title = "Net Change in Jobs"
+        title = "Net change in Jobs"
       ) %>% 
       addFullscreenControl()
     
@@ -1591,7 +1591,7 @@ server <- function(input, output, session) {
     leaflet(data_map) %>%
       addPolygons(
         weight = 1,
-        color = "#444444",
+        color = "#d2d2d2",
         opacity = 1,
         fillOpacity = 0.7,
         fillColor = ~ pal(Percent),
@@ -1603,7 +1603,7 @@ server <- function(input, output, session) {
         ),
         highlightOptions = highlightOptions(
           weight = 3,
-          color = "#ececec",
+          color = "#9c9c9c",
           fillOpacity = 0.7,
           bringToFront = TRUE
         )
@@ -1613,7 +1613,7 @@ server <- function(input, output, session) {
         pal = pal,
         values = ~ Percent,
         opacity = 0.5,
-        title = " % Total Employment",
+        title = " % total employment",
         position = "bottomright"
       ) %>%
       addFullscreenControl()
